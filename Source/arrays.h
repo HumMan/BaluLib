@@ -379,7 +379,7 @@ public:
 	void Insert(const T &val,int after_index)
 	{
 		assert(v==0||!(&val>=v&&(&val<=v+v_max)));
-		assert(IsInMinMax(after_index,0,v_high));
+		assert(IsInMinMax(after_index, 0, v_high) || after_index==-1);
 		if(NeedResize(v_high+1))Resize(v_high+1);
 		else v_high+=1;
 		if(after_index!=v_high)

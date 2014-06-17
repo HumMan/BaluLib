@@ -52,7 +52,6 @@ bool KeyDown(int key_char)
 
 bool KeyDown(char key_char)
 {
-	assert((key_char>='A'&&key_char<='Z')||(key_char>='0'&&key_char<='9'));
 	return KeyDown(int(key_char));
 }
 
