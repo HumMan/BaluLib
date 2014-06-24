@@ -11,6 +11,15 @@
       <Extensions>
       </Extensions>
     </Filter>
+    <Filter Include="Source Files\BVolumes">
+      <UniqueIdentifier>{bbeddfec-202b-4864-af1e-116546e46ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collisions">
+      <UniqueIdentifier>{1aefb325-4ddb-4132-b489-2a02015b921e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collisions\Common">
+      <UniqueIdentifier>{3b842534-045a-4ee5-98a8-d96213f011e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\baluLib.h">
@@ -22,70 +31,10 @@
     <ClInclude Include="Source\arrays.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\BVolumes\AABB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BVolumes\BVolume.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BVolumes\Capsule.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BVolumes\Frustum.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BVolumes\OBB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BVolumes\Sphere.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\bVolumes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\camera.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\AABBAndAABB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\AABBAndSphere.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\CapsuleAndAABB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\CapsuleAndCapsule.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\CapsuleAndOBB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\CapsuleAndSphere.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\AABB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\Capsule.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\OBB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\Sphere.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\OBBAndAABB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\OBBAndOBB.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\OBBAndSphere.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\SphereAndSphere.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\common.h">
@@ -117,6 +66,66 @@
     </ClInclude>
     <ClInclude Include="Source\vec.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BVolumes\AABB.h">
+      <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\AABB.h">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\AABBAndAABB.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\AABBAndSphere.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\CapsuleAndAABB.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\CapsuleAndCapsule.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\CapsuleAndOBB.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\CapsuleAndSphere.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\OBBAndAABB.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\OBBAndOBB.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\OBBAndSphere.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BVolumes\OBB.h">
+      <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\Capsule.h">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\SphereAndSphere.h">
+      <Filter>Source Files\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BVolumes\Sphere.h">
+      <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\Sphere.h">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\OBB.h">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BVolumes\Capsule.h">
+      <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BVolumes\Frustum.h">
+      <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BVolumes\BVolume.h">
+      <Filter>Source Files\BVolumes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
