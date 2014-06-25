@@ -10,8 +10,8 @@ public:
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const=0;
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const=0;
 
-        virtual void DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices) const=0;
-        virtual void DrawLines(TVector<TVec<T,Size> >& vertices) const=0;
+	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices) const = 0;
+	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices) const = 0;
 
 	//
 	virtual bool CollideWith(const TBVolume<T,Size>& v) const=0;

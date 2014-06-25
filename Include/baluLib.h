@@ -14,6 +14,7 @@
 //#include <string.h>
 //#include <ctype.h>
 #include <assert.h>
+#include <vector>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

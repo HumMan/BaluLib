@@ -3,58 +3,6 @@
 template<class T,int size>
 class TVec;
 
-template<class T>
-class TSmartPointer
-{
-private:
-	T* p;
-public:
-	TSmartPointer()
-	{
-		p=NULL;
-	}
-	TSmartPointer(const TSmartPointer& use_p)
-	{
-		if(use_p.IsNull())p=NULL;
-		else
-			p=new T(*(use_p.p));
-	}
-	TSmartPointer(T* use_p)
-	{
-		p=use_p;
-	}
-	void operator=(const TSmartPointer& use_p)
-	{
-		if(use_p.IsNull())p=NULL;
-		else
-		{
-			assert(p==NULL);
-			p=new T(*(use_p.p));
-		}
-	}
-	~TSmartPointer()
-	{
-		delete p;
-	}
-	T* GetPointer()
-	{
-		return p;
-	}
-	T* operator->()
-	{
-		return p;
-	}
-	bool IsNull()const
-	{
-		return p==NULL;
-	}
-	void operator=(T* use_p)
-	{
-		assert(p==NULL);
-		p=use_p;
-	}
-};
-
 template<class T,int block_size>
 class TAllocator
 {

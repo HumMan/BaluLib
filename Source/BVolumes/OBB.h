@@ -28,8 +28,8 @@ public:
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const;
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const;
 
-        virtual void DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices)const;
-        virtual void DrawLines(TVector<TVec<T,Size> >& vertices)const;
+	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const;
+	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices)const;
 	
 	virtual bool CollideWith(const TBVolume<T,Size>& v)const							{return v.CollideWith(*this);}
 	virtual bool CollideWith(const TFrustum<T,Size>& frustum)const						{return frustum.Overlaps(*this);}
@@ -41,7 +41,7 @@ public:
 };
 
 template<class T,int Size>
-void TOBB<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices)const
+void TOBB<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
 {
 	int vertices_high=vertices.GetHigh()+1;
 	local.DrawTriangles(vertices,indices);
@@ -50,7 +50,7 @@ void TOBB<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsign
 }
 
 template<class T,int Size>
-void TOBB<T,Size>::DrawLines(TVector<TVec<T,Size> >& vertices)const
+void TOBB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	int vertices_high=vertices.GetHigh()+1;
 	local.DrawLines(vertices);

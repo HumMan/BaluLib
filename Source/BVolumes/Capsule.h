@@ -46,8 +46,8 @@ public:
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const;
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const;
 
-        virtual void DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices) const;
-        virtual void DrawLines(TVector<TVec<T,Size> >& vertices) const;
+	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices) const;
+	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices) const;
 
 	//
 	virtual bool CollideWith(const TBVolume<T,Size>& v)const							{return v.CollideWith(*this);}
@@ -60,15 +60,15 @@ public:
 };
 
 template<class T,int Size>
-void TCapsule<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices)const
+void TCapsule<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
 {
 	if(Size==2)
 	{
 	}
 	else if(Size==3)
 	{
-		TVector<TVec2ui> ribs;
-		TVector<TTri> triangles;
+		std::vector<TVec2ui> ribs;
+		std::vector<TTri> triangles;
 
 		int vertices_first=vertices.GetHigh()+1;
 		vertices.Inc(5);
@@ -115,7 +115,7 @@ void TCapsule<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<un
 }
 
 template<class T,int Size>
-void TCapsule<T,Size>::DrawLines(TVector<TVec<T,Size> >& vertices)const
+void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	if(Size==2)
 	{

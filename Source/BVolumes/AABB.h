@@ -66,8 +66,9 @@ public:
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t, TVec<T,Size>& normal) const;
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const;
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const;
-        virtual void DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices)const;
-        virtual void DrawLines(TVector<TVec<T,Size> >& vertices)const;
+
+	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const;
+        virtual void DrawLines(std::vector<TVec<T,Size> >& vertices)const;
 	
 	virtual bool CollideWith(const TBVolume<T,Size>& v)const							{return v.CollideWith(*this);}
 	virtual bool CollideWith(const TFrustum<T,Size>& frustum)const						{return frustum.Overlaps(*this);}
@@ -96,7 +97,7 @@ const bool tri_ribs_of_box[24][3]=
 };
 
 template<class T,int Size>
-void TAABB<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices)const
+void TAABB<T,Size>::DrawTriangles(std::vector<TVec<T,Size> >& vertices,std::vector<unsigned int>& indices)const
 {
 	COMPILE_TIME_ERR(Size>=2&&Size<=3);
 	if(Size==2)
@@ -137,7 +138,7 @@ void TAABB<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsig
 }
 
 template<class T,int Size>
-void TAABB<T,Size>::DrawLines(TVector<TVec<T,Size> >& vertices)const
+void TAABB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	COMPILE_TIME_ERR(Size>=2&&Size<=3);
 	if(Size==2)

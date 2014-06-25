@@ -29,8 +29,8 @@ public:
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const;
 	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const;
 
-        virtual void DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices) const;
-        virtual void DrawLines(TVector<TVec<T,Size> >& vertices) const;
+	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices) const;
+	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices) const;
 
 	//
 	virtual bool CollideWith(const TBVolume<T,Size>& v)const							{return v.CollideWith(*this);}
@@ -59,7 +59,7 @@ struct TTri
 };
 
 template<class T,int Size>
-void Tesselate(TVector<TVec<T,Size> >& vertices, TVector<TVec2ui>& ribs, TVector<TTri>& triangles)
+void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs, std::vector<TTri>& triangles)
 {
 	int ribs_high=ribs.GetHigh();
 	ribs.SetCount(ribs.GetCount()*2);
@@ -108,7 +108,7 @@ void Tesselate(TVector<TVec<T,Size> >& vertices, TVector<TVec2ui>& ribs, TVector
 
 
 template<class T,int Size>
-void TSphere<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<unsigned int>& indices)const
+void TSphere<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
 {
 	if(Size==2)
 	{
@@ -116,8 +116,8 @@ void TSphere<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<uns
 	}
 	else if(Size==3)
 	{
-		TVector<TVec2ui> ribs;
-		TVector<TTri> triangles;
+		std::vector<TVec2ui> ribs;
+		std::vector<TTri> triangles;
 
 		int vertices_first=vertices.GetHigh()+1;
 		vertices.Inc(6);
@@ -173,7 +173,7 @@ void TSphere<T,Size>::DrawTriangles(TVector<TVec<T,Size> >& vertices,TVector<uns
 }
 
 template<class T,int Size>
-void TSphere<T,Size>::DrawLines(TVector<TVec<T,Size> >& vertices)const
+void TSphere<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	if(Size==2)
 	{
