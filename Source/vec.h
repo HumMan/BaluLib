@@ -281,6 +281,15 @@ public:
 		}
 		else return *this;
 	}
+	void Reflect(const TVec& v0)
+	{
+			T t = (this->AbsScalarMul(v0))*2.0f;
+			this->operator-=(v0*t);
+	}
+	void Inverse()
+	{
+		TVEC_BIN_OP(high, v, =- , v);
+	}
 	TVec<T,3> GetHomogen()const 
 	{
 		COMPILE_TIME_ERR(size==4);
