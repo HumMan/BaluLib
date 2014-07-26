@@ -77,14 +77,14 @@ public:
 	}
 	explicit TVec(const TVec<T,2>& v0, T v1)
 	{
-		COMPILE_TIME_ERR(size==3);
+		//COMPILE_TIME_ERR(size==3);
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v1;
 	}
 	explicit TVec(T v0, T v1, T v2, T v3)
 	{
-		COMPILE_TIME_ERR(size==4);
+		//COMPILE_TIME_ERR(size==4);
 		v[0]=v0;
 		v[1]=v1;
 		v[2]=v2;
@@ -92,7 +92,7 @@ public:
 	}
 	explicit TVec(const TVec<T,2>& v0, T v1, T v2)
 	{
-		COMPILE_TIME_ERR(size==4);
+		//COMPILE_TIME_ERR(size==4);
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v1;
@@ -100,7 +100,7 @@ public:
 	}
 	explicit TVec(const TVec<T,3>& v0, T v1)
 	{
-		COMPILE_TIME_ERR(size==4);
+		//static_assert(size == 4);
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v0[2];
@@ -250,7 +250,8 @@ public:
 	}
 	TVec<T,size> Cross(const TVec<T,size>& v1)const			// i     j     k
 	{													// v[0]  v[1]  v[2]
-		assert(size==3);//COMPILE_TIME_ERR(size==3);						// v1[0] v1[1] v1[2]
+		//assert(size==3);//COMPILE_TIME_ERR(size==3);						// v1[0] v1[1] v1[2]
+		static_assert(size == 3, "only 3d vector support");
 		return TVec<T,size>( 
 			v[1]*v1[2]-v[2]*v1[1],
 			-v[0]*v1[2]+v[2]*v1[0],
@@ -258,7 +259,7 @@ public:
 	}
 	TVec<T,2> Cross()const
 	{
-		COMPILE_TIME_ERR(size==2);
+		static_assert(size == 2, "only 2d vector support");
 		return TVec<T,2>( 
 			-v[1],v[0]);
 	}

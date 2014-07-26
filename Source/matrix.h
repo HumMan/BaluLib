@@ -24,20 +24,20 @@ public:
 	}
 	TMatrix(const TVec<T,2>& v0,const TVec<T,2>& v1)
 	{
-		COMPILE_TIME_ERR(Size==2);
+		static_assert(Size == 2, "only 2d matrix constructor");
 		m[0]=v0;
 		m[1]=v1;
 	}
 	TMatrix(const TVec<T,3>& v0,const TVec<T,3>& v1,const TVec<T,3>& v2)
 	{
-		COMPILE_TIME_ERR(Size==3);
+		static_assert(Size == 3, "only 3d matrix constructor");
 		m[0]=v0;
 		m[1]=v1;
 		m[2]=v2;
 	}
 	TMatrix(const TVec<T,4>& v0,const TVec<T,4>& v1,const TVec<T,4>& v2,const TVec<T,4>& v3)
 	{
-		COMPILE_TIME_ERR(Size==4);
+		static_assert(Size == 4, "only 4d matrix supported");
 		m[0]=v0;
 		m[1]=v1;
 		m[2]=v2;
@@ -47,7 +47,7 @@ public:
 		T v0,T v2,
 		T v1,T v3)
 	{
-		COMPILE_TIME_ERR(Size==2);
+		static_assert(Size == 2, "only 2d matrix supported");
 		m[0][0]= v0;m[1][0]= v2;
 		m[0][1]= v1;m[1][1]= v3;
 	}
@@ -56,7 +56,7 @@ public:
 		T v1,T v4,T v7,
 		T v2,T v5,T v8)
 	{
-		COMPILE_TIME_ERR(Size==3);
+		static_assert(Size == 3, "only 3d matrix supported");
 		m[0][0]= v0;m[1][0]= v3;m[2][0]=v6;
 		m[0][1]= v1;m[1][1]= v4;m[2][1]=v7;
 		m[0][2]= v2;m[1][2]= v5;m[2][2]=v8;
@@ -67,7 +67,7 @@ public:
 		T v2,T v6,T v10,T v14,
 		T v3,T v7,T v11,T v15)
 	{
-		COMPILE_TIME_ERR(Size==4);
+		static_assert(Size == 4, "only 4d matrix supported");
 		m[0][0]= v0;m[1][0]= v4;m[2][0]= v8;m[3][0]= v12;
 		m[0][1]= v1;m[1][1]= v5;m[2][1]= v9;m[3][1]= v13;
 		m[0][2]= v2;m[1][2]= v6;m[2][2]=v10;m[3][2]= v14;
@@ -84,7 +84,7 @@ public:
 
 	TVec<T,Size> TransMul(const TVec<T,Size>& v0)const
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TVec<T,Size> t;
 		if(Size>=1)t[0]=m[0]*v0;
 		if(Size>=2)t[1]=m[1]*v0;
@@ -94,7 +94,7 @@ public:
 	}
 	TVec<T,Size> AbsMul(const TVec<T,Size>& v0)const
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TVec<T,Size> t;
 		if(Size==2)
 		{
@@ -119,7 +119,7 @@ public:
 
 	static TMatrix RotateX(const T angle)
 	{
-		COMPILE_TIME_ERR(Size>=3&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		T cosA=cos(angle), sinA=sin(angle);
 		if(Size>=3)
@@ -137,7 +137,7 @@ public:
 	}
 	static TMatrix RotateY(const T angle)
 	{
-		COMPILE_TIME_ERR(Size>=3&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		T cosA=cos(angle), sinA=sin(angle);
 		if(Size>=3)
@@ -155,7 +155,7 @@ public:
 	}
 	static TMatrix RotateZ(const T angle)
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		T cosA=cos(angle), sinA=sin(angle);
 		if(Size>=2)
@@ -181,7 +181,7 @@ public:
 
 	static TMatrix<T,Size> RotateXYZ(const T angle_x,const T angle_y,const T angle_z)
 	{
-		COMPILE_TIME_ERR(Size>=3&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> mat;
 		T A=cos(angle_x);
 		T B=sin(angle_x);
@@ -217,7 +217,7 @@ public:
 
 	static TMatrix GetIdentity()
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		t.SetIdentity();
 		return t;
@@ -225,7 +225,7 @@ public:
 
 	TMatrix GetTransposed()const
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		if(Size==2)
 		{
@@ -249,7 +249,7 @@ public:
 	}
 	void Transpose()
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		T temp;
 #define swap(c,r) temp=m[c][r];m[c][r]=m[r][c];m[r][c]=temp;
 		if(Size>=2)
@@ -284,7 +284,7 @@ public:
 	}
 	friend TVec<T,Size> operator*( const TMatrix &_m,const TVec<T,Size>& _v0)
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TVec<T,Size> _t;
 		T* m=(T*)&_m;
 		T* v=(T*)&_v0;
@@ -313,7 +313,7 @@ public:
 
 	friend TMatrix operator*(const TMatrix &m,const TMatrix &m1)
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix t;
 		if(Size==2)
 		{
@@ -486,7 +486,7 @@ public:
 
 	T GetDet()const
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		if(Size==2)
 		{
 			return m[0][0]*m[1][1]-m[0][1]*m[1][0];
@@ -525,7 +525,7 @@ public:
 	}
 	TMatrix GetInverted()const
 	{
-		COMPILE_TIME_ERR(Size>=2&&Size<=4);
+		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix mat;
 
 		if(Size==2)
