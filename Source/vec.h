@@ -293,7 +293,7 @@ public:
 	}
 	TVec<T,3> GetHomogen()const 
 	{
-		COMPILE_TIME_ERR(size==4);
+		static_assert(size==4,"only 4d vec support");
 		return TVec<T,3>(
 			v[0]/v[3],
 			v[1]/v[3],
