@@ -248,10 +248,9 @@ public:
 		TVEC_ASSIGN_BIN_OP(high,t.v,v,-,v0.v);
 		return t.SqrLength();
 	}
-	TVec<T,size> Cross(const TVec<T,size>& v1)const			// i     j     k
+	TVec<T,size> Cross(const TVec<T,size>& v1)const		// i     j     k
 	{													// v[0]  v[1]  v[2]
-		//assert(size==3);//COMPILE_TIME_ERR(size==3);						// v1[0] v1[1] v1[2]
-		static_assert(size == 3, "only 3d vector support");
+		assert(size == 3, "only 3d vector support");	// v1[0] v1[1] v1[2]
 		return TVec<T,size>( 
 			v[1]*v1[2]-v[2]*v1[1],
 			-v[0]*v1[2]+v[2]*v1[0],
@@ -259,7 +258,7 @@ public:
 	}
 	TVec<T,2> Cross()const
 	{
-		static_assert(size == 2, "only 2d vector support");
+		assert(size == 2, "only 2d vector support");
 		return TVec<T,2>( 
 			-v[1],v[0]);
 	}

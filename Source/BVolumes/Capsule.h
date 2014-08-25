@@ -182,7 +182,7 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 
 		TMatrix<T,Size> orient=GetOrientation();
 
-		for (int i = vertices_last_high - 1; i<vertices.size(); i++)
+		for (int i = vertices_last_high; i<vertices.size(); i++)
 			vertices[i]=p0+orient*vertices[i];
 	}
 }

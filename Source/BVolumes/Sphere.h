@@ -61,19 +61,19 @@ struct TTri
 template<class T,int Size>
 void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs, std::vector<TTri>& triangles)
 {
-	int ribs_high=ribs.GetHigh();
-	ribs.SetCount(ribs.GetCount()*2);
+	int ribs_high=ribs.size()-1;
+	ribs.resize(ribs.size()*2);
 	for(int i=ribs_high;i>=0;i--)
 	{
 		TVec2ui rib=ribs[i];
 		TVec<T,Size> middle=(vertices[rib[0]]+vertices[rib[1]])*0.5;
 		vertices.push_back(middle);
-		ribs[i*2+0]=TVec2ui(rib[0],vertices.GetHigh());
-		ribs[i*2+1]=TVec2ui(vertices.GetHigh(),rib[1]);
+		ribs[i*2+0]=TVec2ui(rib[0],vertices.size()-1);
+		ribs[i*2+1]=TVec2ui(vertices.size()-1,rib[1]);
 	}
 
-	int triangles_high=triangles.GetHigh();
-	triangles.SetCount(triangles.GetCount()*4);
+	int triangles_high = triangles.size()-1;
+	triangles.resize(triangles.size()*4);
 	for(int i=triangles_high;i>=0;i--)
 	{
 		TTri tri=triangles[i];
@@ -85,23 +85,23 @@ void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs
 
 		triangles[i*4+0]=TTri(
 			tri.rib[0]*2+tri.inv_dir[0],
-			ribs.GetHigh()-0,
+			ribs.size()-1-0,
 			tri.rib[2]*2+!tri.inv_dir[2],
 			tri.inv_dir[0],1,tri.inv_dir[2]);
 		triangles[i*4+1]=TTri(
 			tri.rib[0]*2+!tri.inv_dir[0],
 			tri.rib[1]*2+tri.inv_dir[1],
-			ribs.GetHigh()-2,
+			ribs.size()-1-2,
 			tri.inv_dir[0],tri.inv_dir[1],1);
 		triangles[i*4+2]=TTri(
 			tri.rib[1]*2+!tri.inv_dir[1],
 			tri.rib[2]*2+tri.inv_dir[2],
-			ribs.GetHigh()-1,
+			ribs.size()-1-1,
 			tri.inv_dir[1],tri.inv_dir[2],1);
 		triangles[i*4+3]=TTri(
-			ribs.GetHigh()-2,
-			ribs.GetHigh()-1,
-			ribs.GetHigh()-0,
+			ribs.size()-1-2,
+			ribs.size() - 1 - 1,
+			ribs.size() - 1 - 0,
 			0,0,0);
 	}
 }
@@ -141,7 +141,7 @@ void TSphere<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std:
 		ribs[9]=TVec2ui(1, 5);		//9
 		ribs[10]=TVec2ui(2, 5);		//10
 		ribs[11]=TVec2ui(3, 5);		//11
-		for(int i=0;i<=11;i++)ribs[i]+=TVec2ui(vertices_first);
+		for(int i=0;i<12;i++)ribs[i]+=TVec2ui(vertices_first);
 		//
 		triangles.resize(8);
 		triangles[0]=TTri(0, 1, 4,	0,1,1);
@@ -230,7 +230,7 @@ void TSphere<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha0),radius*sin(alpha0)));
 			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha1),radius*sin(alpha1)));
 		}
-		for (int i = vertices_last_size - 1; i<vertices.size(); i++)
+		for (int i = vertices_last_size; i<vertices.size(); i++)
 			vertices[i]=pos+vertices[i];
 	}
 }

@@ -153,7 +153,8 @@ void TAABB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		vertices.push_back(TVec<T, Size>(border[1][0], border[0][1]));
 		vertices.push_back(TVec<T, Size>(border[1][0], border[1][1]));
 
-	}else if(Size==3)
+	}
+	else if(Size==3)
 	{
 		for(int i=0;i<24;i++)
 			vertices.push_back(TVec<T,Size>
