@@ -119,7 +119,7 @@ public:
 
 	static TMatrix RotateX(const T angle)
 	{
-		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
+		static_assert(Size >= 3 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		T cosA=cos(angle), sinA=sin(angle);
 		if(Size>=3)
@@ -137,7 +137,7 @@ public:
 	}
 	static TMatrix RotateY(const T angle)
 	{
-		static_assert(Size >= 2 && Size <= 4, "only 2d,3d,4d matrix supported");
+		static_assert(Size >= 3 && Size <= 4, "only 2d,3d,4d matrix supported");
 		TMatrix<T,Size> t;
 		T cosA=cos(angle), sinA=sin(angle);
 		if(Size>=3)

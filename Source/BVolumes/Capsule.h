@@ -70,15 +70,15 @@ void TCapsule<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std
 		std::vector<TVec2ui> ribs;
 		std::vector<TTri> triangles;
 
-		int vertices_first=vertices.GetHigh()+1;
-		vertices.Inc(5);
+		int vertices_first=vertices.size();
+		vertices.resize(vertices.size()+5);
 		vertices[vertices_first+0]=TVec<T,Size>(0, 0, radius);		//0
 		vertices[vertices_first+1]=TVec<T,Size>(-radius, 0, 0);		//1
 		vertices[vertices_first+2]=TVec<T,Size>(0, 0, -radius);		//2
 		vertices[vertices_first+3]=TVec<T,Size>(radius, 0, 0);		//3
 		vertices[vertices_first+4]=TVec<T,Size>(0, radius, 0);		//4
 		//
-		ribs.SetHigh(7);
+		ribs.resize(8);
 		ribs[0]=TVec2ui(0, 4);		//0
 		ribs[1]=TVec2ui(1, 4);		//1
 		ribs[2]=TVec2ui(2, 4);		//2
@@ -89,7 +89,7 @@ void TCapsule<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std
 		ribs[7]=TVec2ui(3, 0);		//7
 		for(int i=0;i<=7;i++)ribs[i]+=TVec2ui(vertices_first);
 		//
-		triangles.SetHigh(3);
+		triangles.resize(4);
 		triangles[0]=TTri(0, 1, 4,	0,1,1);
 		triangles[1]=TTri(7, 3, 0,	1,0,1);
 		triangles[2]=TTri(2, 5, 1,	1,1,0);
@@ -100,12 +100,12 @@ void TCapsule<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std
 
 		TMatrix<T,Size> orient=GetOrientation();
 
-		for(int i=vertices_first;i<=vertices.GetHigh();i++)
+		for(int i=vertices_first;i<vertices.size();i++)
 			vertices[i]=p0+orient*vertices[i];
 
-		int indices_first=indices.GetHigh()+1;
-		indices.Inc(triangles.GetCount()*3);
-		for(int i=0;i<=triangles.GetHigh();i++)
+		int indices_first=indices.size();
+		indices.resize(indices.size()+triangles.size()*3);
+		for(int i=0;i<triangles.size();i++)
 		{
 			indices[indices_first+i*3+0]=ribs[triangles[i].rib[0]][triangles[i].inv_dir[0]];
 			indices[indices_first+i*3+1]=ribs[triangles[i].rib[1]][triangles[i].inv_dir[1]];
@@ -132,29 +132,29 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		int v_count=20;
 		T step=M_PI/v_count;
 		T alpha0,alpha1;
-		int vertices_last_high=vertices.GetHigh()+1;
+		int vertices_last_high=vertices.size();
 		for(int i=0;i<v_count;i++)
 		{
 			alpha0=i*step+M_PI*0.5;
 			alpha1=alpha0+step;
-			vertices.Push(TVec<T,Size>(radius*cos(alpha0),radius*sin(alpha0),0));
-			vertices.Push(TVec<T,Size>(radius*cos(alpha1),radius*sin(alpha1),0));
+			vertices.push_back(TVec<T,Size>(radius*cos(alpha0),radius*sin(alpha0),0));
+			vertices.push_back(TVec<T,Size>(radius*cos(alpha1),radius*sin(alpha1),0));
 		}
 		for(int i=0;i<v_count;i++)
 		{
 			alpha0=i*step+M_PI*0.5;
 			alpha1=alpha0+step;
-			vertices.Push(TVec<T,Size>(radius*cos(alpha0),0,radius*sin(alpha0)));
-			vertices.Push(TVec<T,Size>(radius*cos(alpha1),0,radius*sin(alpha1)));
+			vertices.push_back(TVec<T,Size>(radius*cos(alpha0),0,radius*sin(alpha0)));
+			vertices.push_back(TVec<T,Size>(radius*cos(alpha1),0,radius*sin(alpha1)));
 		}
 
-		int vertices_high=vertices.GetHigh();
+		int vertices_size = vertices.size();
 		T size=p0.Distance(p1);
-		for(int i=vertices_last_high;i<=vertices_high;i++)
+		for (int i = vertices_last_high; i < vertices_size; i++)
 		{
 			TVec<T,Size> temp(vertices[i]);
 			temp[0]=size-temp[0];
-			vertices.Push(temp);
+			vertices.push_back(temp);
 		}
 
 		v_count=v_count*2;
@@ -163,10 +163,10 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		{
 			alpha0=i*step;
 			alpha1=alpha0+step;
-			vertices.Push(TVec<T,Size>(0,radius*cos(alpha0),radius*sin(alpha0)));
-			vertices.Push(TVec<T,Size>(0,radius*cos(alpha1),radius*sin(alpha1)));
-			vertices.Push(TVec<T,Size>(size,radius*cos(alpha0),radius*sin(alpha0)));
-			vertices.Push(TVec<T,Size>(size,radius*cos(alpha1),radius*sin(alpha1)));
+			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha0),radius*sin(alpha0)));
+			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha1),radius*sin(alpha1)));
+			vertices.push_back(TVec<T,Size>(size,radius*cos(alpha0),radius*sin(alpha0)));
+			vertices.push_back(TVec<T,Size>(size,radius*cos(alpha1),radius*sin(alpha1)));
 		}
 
 		v_count=4;
@@ -176,13 +176,13 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		{
 			alpha0=i*step;
 			alpha1=alpha0+step;
-			vertices.Push(TVec<T,Size>(0,radius*cos(alpha1),radius*sin(alpha1)));
-			vertices.Push(TVec<T,Size>(size,radius*cos(alpha1),radius*sin(alpha1)));
+			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha1),radius*sin(alpha1)));
+			vertices.push_back(TVec<T,Size>(size,radius*cos(alpha1),radius*sin(alpha1)));
 		}
 
 		TMatrix<T,Size> orient=GetOrientation();
 
-		for(int i=vertices_last_high;i<=vertices.GetHigh();i++)
+		for (int i = vertices_last_high - 1; i<vertices.size(); i++)
 			vertices[i]=p0+orient*vertices[i];
 	}
 }

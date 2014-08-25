@@ -22,68 +22,68 @@ bool TCapsule<T,Size>::CollideWith(const TRay<T,Size> &ray) const
 {
 	if(false)
 	{
-		//TODO частично работает
-		//проверяется пересечение по SAT
-		TVec<T,Size> _p0=p0-ray.pos;
-		TVec<T,Size> _p1=p1-ray.pos;
-		TVec<T,Size> middle=(_p0+_p1)*0.5;//middle of capsule
-		TVec<T,Size> size=_p1-middle;//half vector of capsule segment
-		TVec<T,Size> caps_dir=size.GetNormalized();
+		////TODO частично работает
+		////проверяется пересечение по SAT
+		//TVec<T,Size> _p0=p0-ray.pos;
+		//TVec<T,Size> _p1=p1-ray.pos;
+		//TVec<T,Size> middle=(_p0+_p1)*0.5;//middle of capsule
+		//TVec<T,Size> size=_p1-middle;//half vector of capsule segment
+		//TVec<T,Size> caps_dir=size.GetNormalized();
 
-		//проекции на ось луча
-		if(ray.dir*middle+radius+abs(size*ray.dir)<0)
-			return false;
+		////проекции на ось луча
+		//if(ray.dir*middle+radius+abs(size*ray.dir)<0)
+		//	return false;
 
-		//проекции на ось капсулы
-		T p=-(caps_dir*middle);
-		if(caps_dir*ray.dir>0){
-			if(p>size.Length()+radius)return false;
-		}else if(p<-size.Length()-radius)return false;
+		////проекции на ось капсулы
+		//T p=-(caps_dir*middle);
+		//if(caps_dir*ray.dir>0){
+		//	if(p>size.Length()+radius)return false;
+		//}else if(p<-size.Length()-radius)return false;
 
-		//проекции на cross(ось луча, ось капсулы)
-		TVec<T,Size> cross_dir=ray.dir.Cross(caps_dir).GetNormalized();
-		if(abs(cross_dir*middle)>radius/*+size.AbsScalarMul(cross_dir)*/)return false;
+		////проекции на cross(ось луча, ось капсулы)
+		//TVec<T,Size> cross_dir=ray.dir.Cross(caps_dir).GetNormalized();
+		//if(abs(cross_dir*middle)>radius/*+size.AbsScalarMul(cross_dir)*/)return false;
 
-		//
-		TVec<T,Size> n0;
-		T t;
+		////
+		//TVec<T,Size> n0;
+		//T t;
 
-		//DistanceBetweenLinePoint(ray.pos,middle-size,middle+size,t,n0);
-		//if(t>0.00001&&t<1.0-0.00001)
-		//{
-		//}
+		////DistanceBetweenLinePoint(ray.pos,middle-size,middle+size,t,n0);
+		////if(t>0.00001&&t<1.0-0.00001)
+		////{
+		////}
 
-		T l=DistanceBetweenRayPoint(_p0,TVec<T,Size>(0),ray.dir,t,n0);
-		if(t>0.00001)
-		{
-			T temp=(size*2)*((n0-_p0).GetNormalized());
-			if(temp<0)
-			{
-				if(radius<l)return false;
-			}else
-				if(radius+temp<l)return false;
-		}
-
-		l=DistanceBetweenRayPoint(_p1,TVec<T,Size>(0),ray.dir,t,n0);
-		if(t>0.00001)
-		{
-			T temp=(size*(-2))*((n0-_p1).GetNormalized());
-			if(temp<0)
-			{
-				if(radius<l)return false;
-			}else
-				if(radius+temp<l)return false;
-		}
-
-		//v=middle+size;
-		//DistanceBetweenRayPoint(v,ray.pos,ray.dir,t,n0);
+		//T l=DistanceBetweenRayPoint(_p0,TVec<T,Size>(0),ray.dir,t,n0);
 		//if(t>0.00001)
 		//{
-		//	if(abs((n0-v).GetNormalized()*(-size*2))+radius<(n0-v).Length())
-		//		return false;
+		//	T temp=(size*2)*((n0-_p0).GetNormalized());
+		//	if(temp<0)
+		//	{
+		//		if(radius<l)return false;
+		//	}else
+		//		if(radius+temp<l)return false;
 		//}
 
-		return true;
+		//l=DistanceBetweenRayPoint(_p1,TVec<T,Size>(0),ray.dir,t,n0);
+		//if(t>0.00001)
+		//{
+		//	T temp=(size*(-2))*((n0-_p1).GetNormalized());
+		//	if(temp<0)
+		//	{
+		//		if(radius<l)return false;
+		//	}else
+		//		if(radius+temp<l)return false;
+		//}
+
+		////v=middle+size;
+		////DistanceBetweenRayPoint(v,ray.pos,ray.dir,t,n0);
+		////if(t>0.00001)
+		////{
+		////	if(abs((n0-v).GetNormalized()*(-size*2))+radius<(n0-v).Length())
+		////		return false;
+		////}
+
+		//return true;
 	}else
 	{
 		//TODO сделать именно расстояние между лучом и отрезком а не 2мя отрезками

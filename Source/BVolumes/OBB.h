@@ -43,17 +43,17 @@ public:
 template<class T,int Size>
 void TOBB<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
 {
-	int vertices_high=vertices.GetHigh()+1;
+	int vertices_high=vertices.size();
 	local.DrawTriangles(vertices,indices);
-	for(int i=vertices_high;i<=vertices.GetHigh();i++)
+	for(int i=vertices_high;i<vertices.size();i++)
 		vertices[i]=orient*vertices[i]+pos;
 }
 
 template<class T,int Size>
 void TOBB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
-	int vertices_high=vertices.GetHigh()+1;
+	int vertices_high=vertices.size();
 	local.DrawLines(vertices);
-	for(int i=vertices_high;i<=vertices.GetHigh();i++)
+	for(int i=vertices_high;i<vertices.size();i++)
 		vertices[i]=orient*vertices[i]+pos;
 }

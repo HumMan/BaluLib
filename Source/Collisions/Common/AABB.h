@@ -33,7 +33,7 @@ bool TAABB<T,Size>::Contain(const TVec<T,Size>& point,T& distance, TVec<T,Size>&
 template<class T,int Size>
 bool TAABB<T,Size>::CollideWith(const TRay<T,Size> &ray) const
 {
-	COMPILE_TIME_ERR(Size>=2&&Size<=3);
+	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
 	if(Size==2)
 	{
 		if(ray.dir[0]>0){

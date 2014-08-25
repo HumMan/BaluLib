@@ -1,7 +1,7 @@
 template<class T,int Size>
 bool Collide(const TOBB<T,Size>& v0,const TAABB<T,Size>& v1)
 {
-	COMPILE_TIME_ERR(Size>=2&&Size<=3);
+	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
 	TVec<T,Size> a=v1.GetSize(),
 		b=v0.local.GetSize(),
 		pos_a=v1.GetCenter(),
