@@ -78,6 +78,7 @@ inline T AngleFromDir(const TVec<T,2>& v)
 	return (v[1]>=0?1:-1)*acos(v[0]);
 }
 
+///t - от 0 до 1 (где 0 это p0, 1 это p1)
 template<class T,int Size>
 inline T DistanceBetweenLinePoint(TVec<T,Size> v, TVec<T,Size> p0, TVec<T,Size> p1, T& t, TVec<T,Size>& nearest_point)
 {

@@ -138,6 +138,7 @@ bool TAABB<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const
 			lmin=l_cut_min;
 		}
 	}
+	//TODO обработка случая когда начало луча внутри объема
 	if(result)assert(fcut!=-1||lcut!=-1);
 	t0=cf;
 	t1=cl;
