@@ -17,8 +17,10 @@ public:
 		:pos(use_pos),orient(use_orient),local(use_aabb){}
 	void SetPos(const TVec<T,Size>& use_pos)					{pos=use_pos;}
 	void SetOrient(const TMatrix<T,Size>& use_orient)			{orient=use_orient;}
+	void SetAABB(const TAABB<T, Size>& use_aabb)				{ local = use_aabb; }
 	TVec<T,Size> GetPos()const									{return pos;}
 	TAABB<T,Size> GetAABB()const								{return TAABB<T,Size>(pos,orient.AbsMul(local.GetSize()));}
+	TMatrix<T, Size> GetOrient()const							{ return orient; }
 
 	//Common virtual methods
 	virtual bool Contain(const TVec<T,Size>& point) const;
