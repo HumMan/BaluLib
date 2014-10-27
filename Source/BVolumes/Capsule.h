@@ -135,14 +135,14 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		int vertices_last_high=vertices.size();
 		for(int i=0;i<v_count;i++)
 		{
-			alpha0=i*step+M_PI*0.5;
+			alpha0=i*step+(T)(M_PI*0.5);
 			alpha1=alpha0+step;
 			vertices.push_back(TVec<T,Size>(radius*cos(alpha0),radius*sin(alpha0),0));
 			vertices.push_back(TVec<T,Size>(radius*cos(alpha1),radius*sin(alpha1),0));
 		}
 		for(int i=0;i<v_count;i++)
 		{
-			alpha0=i*step+M_PI*0.5;
+			alpha0 = i*step + (T)(M_PI*0.5);
 			alpha1=alpha0+step;
 			vertices.push_back(TVec<T,Size>(radius*cos(alpha0),0,radius*sin(alpha0)));
 			vertices.push_back(TVec<T,Size>(radius*cos(alpha1),0,radius*sin(alpha1)));
@@ -158,7 +158,7 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		}
 
 		v_count=v_count*2;
-		step=2*M_PI/v_count;
+		step=2*(T)M_PI/v_count;
 		for(int i=0;i<v_count;i++)
 		{
 			alpha0=i*step;
@@ -170,7 +170,7 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 		}
 
 		v_count=4;
-		step=2*M_PI/v_count;
+		step = 2 * (T)M_PI / v_count;
 
 		for(int i=0;i<v_count;i++)
 		{
