@@ -5,13 +5,16 @@
 template<class T,int size>
 struct TPlane
 {
+	//эквивалентно уравнению плоскости ax + by + cz + d = 0 т.е. normal*v + dist = 0
 	TVec<T,size> normal;
-	T dist;//расстояние от плоскости до начала координат в направлении нормали
+	T dist;
+
 	TPlane(){}
 
-	TPlane(const TVec<T,4>& v)//TODO используется в Tfrustum непонятно что делает
+	TPlane(const TVec<T,4>& v)//используется в TFrustum - создание плоскости из не нормализованного уравнения ax+by+cz+d=0, где вектор v соответствует (a,b,c,d)
 	{
 		COMPILE_TIME_ERR(size==3);
+		//вектор нормали плоскости (a,b,c) необходимо нормализовать
 		T t=sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
 		normal[0]=v[0]/t;
 		normal[1]=v[1]/t;
@@ -27,12 +30,8 @@ struct TPlane
 		COMPILE_TIME_ERR(size==3);
 	}
 
-	TPlane(const TVec<T,size>& use_normal,
-		T use_dist)//по нормали и расстоянию
-		:normal(use_normal),dist(use_dist){}
-
 	TPlane(const TVec<T,size>& use_pos,
-		const TVec<T,size>& use_normal)//по нормали и точке принадлежащей вершине
+		const TVec<T,size>& use_normal)//по нормали и точке принадлежащей плоскости
 		:normal(use_normal),dist(-use_pos*use_normal){}
 
 	T DistanceTo(const TVec<T,size>& v)const
@@ -273,7 +272,7 @@ struct TRay
 	TRay(const TVec<T,size>& use_pos,const TVec<T,size>& use_dir)//по точке и направлению(должно быть нормализованным - чтобы работали все методы)
 		:pos(use_pos),dir(use_dir)
 	{
-		//assert(IsIn((T)use_dir.Length(),(T)0.999,(T)1.001));
+		assert(abs(use_dir.Length()-1)<(T)0.00001));
 	}
 	bool RayPlaneInters(const TRay& ray,const TPlane<T,size>& plane,TVec<T,size>& x)
 	{
@@ -288,7 +287,7 @@ struct TRay
 	}
 	TVec<T,size> RayInters(const TRay& ray)
 	{
-		COMPILE_TIME_ERR(size==2);//only for 2d rays
+		assert(size == 2);//only for 2d rays
 		T k=(pos[1]*dir[0]-ray.pos[1]*dir[0]+dir[1]*(ray.pos[0]-pos[0]))/
 			(ray.dir[1]*dir[0]-ray.dir[0]*dir[1]);
 		return ray.dir*k+ray.pos;

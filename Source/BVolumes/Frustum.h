@@ -9,6 +9,7 @@ class TFrustum
 	friend class TOBB<T,Size>;
 	friend class TSphere<T,Size>;
 private:
+	// плоскости области видимости left, right, bottom, top, near, far
 	TPlane<T,Size> frustum[planes_count];
 public:
 	TFrustum(){}
@@ -28,36 +29,47 @@ public:
 template<class T,int Size>
 TFrustum<T,Size>::TFrustum(const TMatrix<T,4>& clip)
 {
-	COMPILE_TIME_ERR(Size==3);
-	TVec<T,4> v0,v1;
-	v0=TVec<T,4>(clip[0][3],
-				clip[1][3],
-				clip[2][3],
-				clip[3][3]);
-	//right
-	v1=TVec<T,4>(clip[0][0],
-				clip[1][0],
-				clip[2][0],
-				clip[3][0]);
-	frustum[0]=TPlane<T,3>(v0-v1);
+	//извлечение уравнений плоскостей из матрицы проекции
+	//http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
+
+	COMPILE_TIME_ERR(Size == 3);
+	TVec<T, 4> v0, v1;
+	v0 = TVec<T, 4>(clip[0][3],
+		clip[1][3],
+		clip[2][3],
+		clip[3][3]);
+
+	//right, left common
+	v1 = TVec<T, 4>(clip[0][0],
+		clip[1][0],
+		clip[2][0],
+		clip[3][0]);
 	//left
-	frustum[1]=TPlane<T,3>(v0+v1);
-	//down
-	v1=TVec<T,4>(clip[0][1],
-				clip[1][1],
-				clip[2][1],
-				clip[3][1]);
-	frustum[2]=TPlane<T,3>(v0+v1);
-	//up
-	frustum[3]=TPlane<T,3>(v0-v1);
-	//backward
-	v1=TVec<T,4>(clip[0][2],
-				clip[1][2],
-				clip[2][2],
-				clip[3][2]);
-	frustum[4]=TPlane<T,3>(v0-v1);
-	//forward
-	frustum[5]=TPlane<T,3>(v0+v1);
+	frustum[0] = TPlane<T, 3>(v0 + v1);
+	//right
+	frustum[1] = TPlane<T, 3>(v0 - v1);
+
+	//bottom, top common
+	v1 = TVec<T, 4>(clip[0][1],
+		clip[1][1],
+		clip[2][1],
+		clip[3][1]);
+
+	//bottom
+	frustum[2] = TPlane<T, 3>(v0 + v1);
+	//top
+	frustum[3] = TPlane<T, 3>(v0 - v1);
+
+	//near, far common
+	v1 = TVec<T, 4>(clip[0][2],
+		clip[1][2],
+		clip[2][2],
+		clip[3][2]);
+	//near
+	frustum[4] = TPlane<T, 3>(v0 + v1);
+	//far
+	frustum[5] = TPlane<T, 3>(v0 - v1);
+
 }
 
 template<class T,int Size>
