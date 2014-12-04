@@ -1,3 +1,5 @@
+#include "../../BVolumes/AABB.h"
+
 template<class T,int Size>
 bool TAABB<T,Size>::Contain(const TVec<T,Size>& point) const
 {
@@ -212,3 +214,8 @@ bool TAABB<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& no
 	}
 	return result;
 }
+
+template class TAABB<float,2>;
+template class TAABB<float,3>;
+template class TAABB<double, 2>;
+template class TAABB<double, 3>;

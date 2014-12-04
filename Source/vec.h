@@ -64,27 +64,27 @@ public:
 	}
 	explicit TVec(T v0, T v1)
 	{
-		//COMPILE_TIME_ERR(size==2);
+		static_assert(size >= 2, "only 2d support");
 		v[0]=v0;
 		v[1]=v1;
 	}
 	explicit TVec(T v0, T v1, T v2)
 	{
-		//COMPILE_TIME_ERR(size==3);
+		static_assert(size >= 3, "only 3d support");
 		v[0]=v0;
 		v[1]=v1;
 		v[2]=v2;
 	}
 	explicit TVec(const TVec<T,2>& v0, T v1)
 	{
-		//COMPILE_TIME_ERR(size==3);
+		static_assert(size >= 3, "only 3d support");
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v1;
 	}
 	explicit TVec(T v0, T v1, T v2, T v3)
 	{
-		//COMPILE_TIME_ERR(size==4);
+		static_assert(size >= 4, "only 4d support");
 		v[0]=v0;
 		v[1]=v1;
 		v[2]=v2;
@@ -92,15 +92,15 @@ public:
 	}
 	explicit TVec(const TVec<T,2>& v0, T v1, T v2)
 	{
-		//COMPILE_TIME_ERR(size==4);
+		static_assert(size >= 4 , "only 4d support");
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v1;
 		v[3]=v2;
 	}
-	explicit TVec(const TVec<T,3>& v0, T v1)
+	explicit TVec(const TVec<T, 3>& v0, T v1)
 	{
-		//static_assert(size == 4);
+		static_assert(size >= 4, "only 4d support");
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v0[2];
@@ -248,17 +248,34 @@ public:
 		TVEC_ASSIGN_BIN_OP(high,t.v,v,-,v0.v);
 		return t.SqrLength();
 	}
+
+	private:
+	template <class T,int size>
+	typename std::enable_if<size != 3>::type CrossSpec(const TVec<T, size>& v1, TVec<T, size>& result)const
+	{
+		static_assert(size == 3, "only 3d support");
+	}
+
+	template <class T, int size>
+	typename std::enable_if<size == 3>::type CrossSpec(const TVec<T, size>& v1, TVec<T, size>& result)const
+	{
+		result = TVec<T, size>(
+			v[1] * v1[2] - v[2] * v1[1],
+			-v[0] * v1[2] + v[2] * v1[0],
+			v[0] * v1[1] - v[1] * v1[0]);
+	}
+
+	public:
 	TVec<T,size> Cross(const TVec<T,size>& v1)const		// i     j     k
 	{													// v[0]  v[1]  v[2]
-		assert(size == 3, "only 3d vector support");	// v1[0] v1[1] v1[2]
-		return TVec<T,size>( 
-			v[1]*v1[2]-v[2]*v1[1],
-			-v[0]*v1[2]+v[2]*v1[0],
-			v[0]*v1[1]-v[1]*v1[0]);
+														// v1[0] v1[1] v1[2]
+		TVec<T, size> result;
+		CrossSpec(v1, result);
+		return result;
 	}
 	TVec<T,2> Cross()const
 	{
-		assert(size == 2, "only 2d vector support");
+		static_assert(size == 2, "only 2d vector support");
 		return TVec<T,2>( 
 			-v[1],v[0]);
 	}

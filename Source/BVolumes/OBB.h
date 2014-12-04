@@ -1,17 +1,13 @@
-template<class T,int Size>
+#pragma once
+
+template<class T, int Size>
 class TOBB:public TBVolume<T,Size>
 {
-	friend class TFrustum<T,Size>;
-
-	friend bool Collide<T,Size>(const TOBB<T,Size>& v0,const TAABB<T,Size>& v1);
-	friend bool Collide<T,Size>(const TOBB<T,Size>& v0,const TAABB<T,Size>& v1, bool& v1_fullin_v0);
-	friend bool Collide<T,Size>(const TOBB<T,Size>& v0,const TOBB<T,Size>& v1);
-	friend bool Collide<T,Size>(const TSphere<T,Size>& v0,const TOBB<T,Size>& v1);
-private:
-	TVec<T,Size> pos;
-	TMatrix<T,Size> orient;
-	TAABB<T,Size> local;
 public:
+	TVec<T, Size> pos;
+	TMatrix<T, Size> orient;
+	TAABB<T, Size> local;
+
 	TOBB(){}
 	TOBB(const TVec<T,Size>& use_pos, const TMatrix<T,Size>& use_orient, const TAABB<T,Size>& use_aabb)
 		:pos(use_pos),orient(use_orient),local(use_aabb){}

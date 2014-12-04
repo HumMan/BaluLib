@@ -51,7 +51,7 @@ public:
 	{
 		v>>=i;
 	}
-	friend TFixedFloat operator+(TFixedFloat v1,TFixedFloat v2)//TODO везде должно быть TFIxedFloat<f_bits>
+	friend TFixedFloat operator+(TFixedFloat v1,TFixedFloat v2)
 	{
 		return TFixedFloat(RAW(v1.v+v2.v));
 	}

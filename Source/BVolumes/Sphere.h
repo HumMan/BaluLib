@@ -1,17 +1,12 @@
+#pragma once
 
 template<class T,int Size>
 class TSphere:public TBVolume<T,Size>
 {
-	friend class TFrustum<T,Size>;
-
-	friend bool Collide<T,Size>(const TAABB<T,Size>& v0,const TSphere<T,Size>& v1, T& sqr_distance);
-	friend bool Collide<T,Size>(const TSphere<T,Size>& v0,const TOBB<T,Size>& v1);
-	friend bool Collide<T,Size>(const TSphere<T,Size>& v0,const TSphere<T,Size>& v1);
-	friend bool Collide<T,Size>(const TAABB<T,Size>& v0,const TSphere<T,Size>& v1);
-private:
-	TVec<T,Size> pos;
-	T radius;
 public:
+	TVec<T, Size> pos;
+	T radius;
+
 	TSphere(){}
 	TSphere(const TVec<T,Size>& use_pos,T use_radius):pos(use_pos),radius(use_radius){}
 	TSphere(T use_radius):radius(use_radius)				{}
@@ -106,131 +101,137 @@ void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs
 	}
 }
 
+template<class T>
+void DrawTrianglesSpecialized(const TSphere<T, 2>& sphere, std::vector<TVec<T, 2> >& vertices, std::vector<unsigned int>& indices)
+{
+}
+
+template<class T>
+void DrawTrianglesSpecialized(const TSphere<T, 3>& sphere, std::vector<TVec<T, 3> >& vertices, std::vector<unsigned int>& indices)
+{
+	std::vector<TVec2ui> ribs;
+	std::vector<TTri> triangles;
+
+	int vertices_first = vertices.size();
+	vertices.resize(vertices.size() + 6);
+	vertices[vertices_first + 0] = TVec<T, 3>(0, 0, sphere.radius);		//0
+	vertices[vertices_first + 1] = TVec<T, 3>(-sphere.radius, 0, 0);		//1
+	vertices[vertices_first + 2] = TVec<T, 3>(0, 0, -sphere.radius);		//2
+	vertices[vertices_first + 3] = TVec<T, 3>(sphere.radius, 0, 0);		//3
+	vertices[vertices_first + 4] = TVec<T, 3>(0, sphere.radius, 0);		//4
+	vertices[vertices_first + 5] = TVec<T, 3>(0, -sphere.radius, 0);		//5
+	//
+	ribs.resize(12);
+	ribs[0] = TVec2ui(0, 4);		//0
+	ribs[1] = TVec2ui(1, 4);		//1
+	ribs[2] = TVec2ui(2, 4);		//2
+	ribs[3] = TVec2ui(3, 4);		//3
+	ribs[4] = TVec2ui(0, 1);		//4
+	ribs[5] = TVec2ui(1, 2);		//5
+	ribs[6] = TVec2ui(2, 3);		//6
+	ribs[7] = TVec2ui(3, 0);		//7
+	ribs[8] = TVec2ui(0, 5);		//8
+	ribs[9] = TVec2ui(1, 5);		//9
+	ribs[10] = TVec2ui(2, 5);		//10
+	ribs[11] = TVec2ui(3, 5);		//11
+	for (int i = 0; i<12; i++)ribs[i] += TVec2ui(vertices_first);
+	//
+	triangles.resize(8);
+	triangles[0] = TTri(0, 1, 4, 0, 1, 1);
+	triangles[1] = TTri(7, 3, 0, 1, 0, 1);
+	triangles[2] = TTri(8, 11, 7, 0, 1, 0);
+	triangles[3] = TTri(4, 9, 8, 0, 0, 1);
+	triangles[4] = TTri(5, 10, 9, 0, 0, 1);
+	triangles[5] = TTri(2, 5, 1, 1, 1, 0);
+	triangles[6] = TTri(6, 2, 3, 1, 0, 1);
+	triangles[7] = TTri(10, 6, 11, 1, 0, 0);
+
+	for (int i = 0; i<4; i++)
+		Tesselate(vertices, ribs, triangles);
+
+	for (int i = vertices_first; i<vertices.size(); i++)
+		vertices[i] = sphere.pos + (vertices[i]).GetNormalized()*sphere.radius;
+
+	int indices_first = indices.size();
+	indices.resize(indices.size() + triangles.size() * 3);
+	for (int i = 0; i<triangles.size(); i++)
+	{
+		indices[indices_first + i * 3 + 0] = ribs[triangles[i].rib[0]][triangles[i].inv_dir[0]];
+		indices[indices_first + i * 3 + 1] = ribs[triangles[i].rib[1]][triangles[i].inv_dir[1]];
+		indices[indices_first + i * 3 + 2] = ribs[triangles[i].rib[2]][triangles[i].inv_dir[2]];
+	}
+}
 
 template<class T,int Size>
 void TSphere<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
 {
-	if(Size==2)
+	DrawTrianglesSpecialized(*this, vertices, indices);
+}
+
+template<class T>
+void DrawLinesSpecialized(const TSphere<T, 2>& sphere, std::vector<TVec<T, 2> >& vertices)
+{
+	const int step = 20;
+	const int v_count = int(360 / step) + 1;
+	for (int i = 0; i<v_count; i++)
 	{
-		//TODO
+		vertices.push_back(TVec<T, 2>(float(radius*sin(i*step*M_PI / 180)), float(radius*cos(i*step*M_PI / 180))) + pos);
+		vertices.push_back(TVec<T, 2>(float(radius*sin((i + 1)*step*M_PI / 180)), float(radius*cos((i + 1)*step*M_PI / 180))) + pos);
 	}
-	else if(Size==3)
+}
+
+template<class T>
+void DrawLinesSpecialized(const TSphere<T, 3>& sphere, std::vector<TVec<T, 3> >& vertices)
+{
+	//const int step=20;
+	//const int v_count=int(360/step)+1;
+	//for(int i=0;i<v_count;i++)
+	//{
+	//	vertices.Push(TVec<T,Size>(float(radius*sin(i*step*M_PI/180)),float(radius*cos(i*step*M_PI/180)),0.0f)+pos);
+	//	vertices.Push(TVec<T,Size>(float(radius*sin((i+1)*step*M_PI/180)),float(radius*cos((i+1)*step*M_PI/180)),0.0f)+pos);
+	//}
+	//for(int i=0;i<v_count;i++)
+	//{
+	//	vertices.Push(TVec<T,Size>(0.0f,float(radius*sin(i*step*M_PI/180)),float(radius*cos(i*step*M_PI/180)))+pos);
+	//	vertices.Push(TVec<T,Size>(0.0f,float(radius*sin((i+1)*step*M_PI/180)),float(radius*cos((i+1)*step*M_PI/180)))+pos);
+	//}
+	//for(int i=0;i<v_count;i++)
+	//{
+	//	vertices.Push(TVec<T,Size>(float(radius*sin(i*step*M_PI/180)),0.0f,float(radius*cos(i*step*M_PI/180)))+pos);
+	//	vertices.Push(TVec<T,Size>(float(radius*sin((i+1)*step*M_PI/180)),0.0f,float(radius*cos((i+1)*step*M_PI/180)))+pos);
+	//}
+
+	int v_count = 20;
+	T step = 2 * M_PI / v_count;
+	T alpha0, alpha1;
+	int vertices_last_size = vertices.size();
+	for (int i = 0; i<v_count; i++)
 	{
-		std::vector<TVec2ui> ribs;
-		std::vector<TTri> triangles;
-
-		int vertices_first=vertices.size();
-		vertices.resize(vertices.size()+6);
-		vertices[vertices_first+0]=TVec<T,Size>(0, 0, radius);		//0
-		vertices[vertices_first+1]=TVec<T,Size>(-radius, 0, 0);		//1
-		vertices[vertices_first+2]=TVec<T,Size>(0, 0, -radius);		//2
-		vertices[vertices_first+3]=TVec<T,Size>(radius, 0, 0);		//3
-		vertices[vertices_first+4]=TVec<T,Size>(0, radius, 0);		//4
-		vertices[vertices_first+5]=TVec<T,Size>(0, -radius, 0);		//5
-		//
-		ribs.resize(12);
-		ribs[0]=TVec2ui(0, 4);		//0
-		ribs[1]=TVec2ui(1, 4);		//1
-		ribs[2]=TVec2ui(2, 4);		//2
-		ribs[3]=TVec2ui(3, 4);		//3
-		ribs[4]=TVec2ui(0, 1);		//4
-		ribs[5]=TVec2ui(1, 2);		//5
-		ribs[6]=TVec2ui(2, 3);		//6
-		ribs[7]=TVec2ui(3, 0);		//7
-		ribs[8]=TVec2ui(0, 5);		//8
-		ribs[9]=TVec2ui(1, 5);		//9
-		ribs[10]=TVec2ui(2, 5);		//10
-		ribs[11]=TVec2ui(3, 5);		//11
-		for(int i=0;i<12;i++)ribs[i]+=TVec2ui(vertices_first);
-		//
-		triangles.resize(8);
-		triangles[0]=TTri(0, 1, 4,	0,1,1);
-		triangles[1]=TTri(7, 3, 0,	1,0,1);
-		triangles[2]=TTri(8, 11, 7,	0,1,0);
-		triangles[3]=TTri(4, 9, 8,	0,0,1);
-		triangles[4]=TTri(5, 10, 9,	0,0,1);
-		triangles[5]=TTri(2, 5, 1,	1,1,0);
-		triangles[6]=TTri(6, 2, 3,	1,0,1);
-		triangles[7]=TTri(10, 6, 11,1,0,0);
-
-		for(int i=0;i<4;i++)
-			Tesselate(vertices,ribs,triangles);
-
-		for(int i=vertices_first;i<vertices.size();i++)
-			vertices[i]=pos+(vertices[i]).GetNormalized()*radius;
-
-		int indices_first=indices.size();
-		indices.resize(indices.size()+triangles.size()*3);
-		for(int i=0;i<triangles.size();i++)
-		{
-			indices[indices_first+i*3+0]=ribs[triangles[i].rib[0]][triangles[i].inv_dir[0]];
-			indices[indices_first+i*3+1]=ribs[triangles[i].rib[1]][triangles[i].inv_dir[1]];
-			indices[indices_first+i*3+2]=ribs[triangles[i].rib[2]][triangles[i].inv_dir[2]];
-		}
-
-		
+		alpha0 = i*step;
+		alpha1 = alpha0 + step;
+		vertices.push_back(TVec<T, 3>(sphere.radius*cos(alpha0), sphere.radius*sin(alpha0), 0));
+		vertices.push_back(TVec<T, 3>(sphere.radius*cos(alpha1), sphere.radius*sin(alpha1), 0));
 	}
+	for (int i = 0; i<v_count; i++)
+	{
+		alpha0 = i*step;
+		alpha1 = alpha0 + step;
+		vertices.push_back(TVec<T, 3>(sphere.radius*cos(alpha0), 0, sphere.radius*sin(alpha0)));
+		vertices.push_back(TVec<T, 3>(sphere.radius*cos(alpha1), 0, sphere.radius*sin(alpha1)));
+	}
+	for (int i = 0; i<v_count; i++)
+	{
+		alpha0 = i*step;
+		alpha1 = alpha0 + step;
+		vertices.push_back(TVec<T, 3>(0, sphere.radius*cos(alpha0), sphere.radius*sin(alpha0)));
+		vertices.push_back(TVec<T, 3>(0, sphere.radius*cos(alpha1), sphere.radius*sin(alpha1)));
+	}
+	for (int i = vertices_last_size; i<vertices.size(); i++)
+		vertices[i] = sphere.pos + vertices[i];
 }
 
 template<class T,int Size>
 void TSphere<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
-	if(Size==2)
-	{
-		const int step=20;
-		const int v_count=int(360/step)+1;
-		for(int i=0;i<v_count;i++)
-		{
-			vertices.push_back(TVec<T,Size>(float(radius*sin(i*step*M_PI/180)),float(radius*cos(i*step*M_PI/180)))+pos);
-			vertices.push_back(TVec<T, Size>(float(radius*sin((i + 1)*step*M_PI / 180)), float(radius*cos((i + 1)*step*M_PI / 180))) + pos);
-		}
-	}
-	else if(Size==3)
-	{
-		//const int step=20;
-		//const int v_count=int(360/step)+1;
-		//for(int i=0;i<v_count;i++)
-		//{
-		//	vertices.Push(TVec<T,Size>(float(radius*sin(i*step*M_PI/180)),float(radius*cos(i*step*M_PI/180)),0.0f)+pos);
-		//	vertices.Push(TVec<T,Size>(float(radius*sin((i+1)*step*M_PI/180)),float(radius*cos((i+1)*step*M_PI/180)),0.0f)+pos);
-		//}
-		//for(int i=0;i<v_count;i++)
-		//{
-		//	vertices.Push(TVec<T,Size>(0.0f,float(radius*sin(i*step*M_PI/180)),float(radius*cos(i*step*M_PI/180)))+pos);
-		//	vertices.Push(TVec<T,Size>(0.0f,float(radius*sin((i+1)*step*M_PI/180)),float(radius*cos((i+1)*step*M_PI/180)))+pos);
-		//}
-		//for(int i=0;i<v_count;i++)
-		//{
-		//	vertices.Push(TVec<T,Size>(float(radius*sin(i*step*M_PI/180)),0.0f,float(radius*cos(i*step*M_PI/180)))+pos);
-		//	vertices.Push(TVec<T,Size>(float(radius*sin((i+1)*step*M_PI/180)),0.0f,float(radius*cos((i+1)*step*M_PI/180)))+pos);
-		//}
-
-		int v_count=20;
-		T step=2*M_PI/v_count;
-		T alpha0,alpha1;
-		int vertices_last_size=vertices.size();
-		for(int i=0;i<v_count;i++)
-		{
-			alpha0=i*step;
-			alpha1=alpha0+step;
-			vertices.push_back(TVec<T,Size>(radius*cos(alpha0),radius*sin(alpha0),0));
-			vertices.push_back(TVec<T,Size>(radius*cos(alpha1),radius*sin(alpha1),0));
-		}
-		for(int i=0;i<v_count;i++)
-		{
-			alpha0=i*step;
-			alpha1=alpha0+step;
-			vertices.push_back(TVec<T,Size>(radius*cos(alpha0),0,radius*sin(alpha0)));
-			vertices.push_back(TVec<T,Size>(radius*cos(alpha1),0,radius*sin(alpha1)));
-		}
-		for(int i=0;i<v_count;i++)
-		{
-			alpha0=i*step;
-			alpha1=alpha0+step;
-			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha0),radius*sin(alpha0)));
-			vertices.push_back(TVec<T,Size>(0,radius*cos(alpha1),radius*sin(alpha1)));
-		}
-		for (int i = vertices_last_size; i<vertices.size(); i++)
-			vertices[i]=pos+vertices[i];
-	}
+	DrawLinesSpecialized(*this, vertices);
 }

@@ -1,4 +1,6 @@
-template<class T,int Size>
+#pragma once
+
+template<class T, int Size>
 class TFrustum
 {
 	enum
@@ -117,8 +119,8 @@ bool TFrustum<T,Size>::Overlaps(const TCapsule<T,Size>& capsule) const
 {
 	int c=0;
 	for(int i=0;i<planes_count;i++){
-		if(frustum[i].DistanceTo(capsule.p0)<-capsule.radius&&
-			frustum[i].DistanceTo(capsule.p1)<-capsule.radius)
+		if(frustum[i].DistanceTo(capsule.segment.p0)<-capsule.radius&&
+			frustum[i].DistanceTo(capsule.segment.p1)<-capsule.radius)
 			return false;
 	}
 	return true;
@@ -184,8 +186,8 @@ bool TFrustum<T,Size>::Overlaps(const TCapsule<T,Size>& capsule,bool& full_in_fr
 	T d0,d1;
 	for(int i=0;i<6;i++)
 	{
-		d0=frustum[i].DistanceTo(capsule.p0);
-		d1=frustum[i].DistanceTo(capsule.p1);
+		d0 = frustum[i].DistanceTo(capsule.segment.p0);
+		d1 = frustum[i].DistanceTo(capsule.segment.p1);
 		if(d0<-capsule.radius&&d1<-capsule.radius)return false;
 		else if(d0>=capsule.radius&&d1>=capsule.radius)c++;
 	}

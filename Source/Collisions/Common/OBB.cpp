@@ -1,3 +1,4 @@
+#include "../../BVolumes/OBB.h"
 
 template<class T,int Size>
 bool TOBB<T,Size>::Contain(const TVec<T,Size>& point) const
@@ -42,3 +43,8 @@ bool TOBB<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& nor
 	normal1=orient*normal1;
 	return result;
 }
+
+template class TOBB<float, 2>;
+template class TOBB<float, 3>;
+template class TOBB<double, 2>;
+template class TOBB<double, 3>;

@@ -1,3 +1,5 @@
+#include "../../BVolumes/Sphere.h"
+
 template<class T,int Size>
 bool TSphere<T,Size>::Contain(const TVec<T,Size>& point) const
 {
@@ -83,3 +85,8 @@ bool TSphere<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& 
 		return true;
 	}else return false;
 }
+
+template class TSphere<float, 2>;
+template class TSphere<float, 3>;
+template class TSphere<double, 2>;
+template class TSphere<double, 3>;

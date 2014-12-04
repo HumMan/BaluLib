@@ -8,16 +8,16 @@ template<class T,int size>class TFrustum;
 
 class TBaluRender;
 
-#include "Collisions\AABBAndAABB.h"
-#include "Collisions\AABBAndSphere.h"
-#include "Collisions\CapsuleAndAABB.h"
-#include "Collisions\CapsuleAndCapsule.h"
-#include "Collisions\CapsuleAndOBB.h"
-#include "Collisions\CapsuleAndSphere.h"
-#include "Collisions\OBBAndAABB.h"
-#include "Collisions\OBBAndOBB.h"
-#include "Collisions\OBBAndSphere.h"
-#include "Collisions\SphereAndSphere.h"
+//#include "Collisions\AABBAndAABB.h"
+//#include "Collisions\AABBAndSphere.h"
+//#include "Collisions\CapsuleAndAABB.h"
+//#include "Collisions\CapsuleAndCapsule.h"
+//#include "Collisions\CapsuleAndOBB.h"
+//#include "Collisions\CapsuleAndSphere.h"
+//#include "Collisions\OBBAndAABB.h"
+//#include "Collisions\OBBAndOBB.h"
+//#include "Collisions\OBBAndSphere.h"
+//#include "Collisions\SphereAndSphere.h"
 
 #include "BVolumes\BVolume.h"
 #include "BVolumes\AABB.h"
@@ -26,7 +26,7 @@ class TBaluRender;
 #include "BVolumes\Capsule.h"
 #include "BVolumes\Frustum.h"
 
-#include "Collisions\Common\AABB.h"
-#include "Collisions\Common\OBB.h"
-#include "Collisions\Common\Sphere.h"
-#include "Collisions\Common\Capsule.h"
+//#include "Collisions\Common\AABB.h"
+//#include "Collisions\Common\OBB.h"
+//#include "Collisions\Common\Sphere.h"
+//#include "Collisions\Common\Capsule.h"

@@ -1,17 +1,11 @@
+#pragma once
 
 template<class T,int Size>
 class TAABB:public TBVolume<T,Size>
 {
-	friend class TFrustum<T,Size>;
-	friend class TOBB<T,Size>;
-
-	friend bool Collide(const TOBB<T,2>& v0,const TAABB<T,2>& v1);
-	friend bool Collide(const TOBB<T, 3>& v0, const TAABB<T, 3>& v1);
-	friend bool Collide<T,Size>(const TAABB<T,Size>& v0,const TAABB<T,Size>& v1);
-	friend bool Collide<T,Size>(const TAABB<T,Size>& v0,const TSphere<T,Size>& v1, T& sqr_distance);
-private:
-	TVec<T,Size> border[2]; //0-min 1-max
 public:
+	
+	TVec<T,Size> border[2]; //0-min 1-max
 
 	TAABB(){}
 	TAABB(const TVec<T,Size>& use_pos,const TVec<T,Size>& use_widths)
@@ -42,7 +36,7 @@ public:
 	//generic for trees
 	void ToSubCube(int i, int k) //i - x min max    k - y min max
 	{
-		COMPILE_TIME_ERR(Size==2);
+		static_assert(Size == 2, "only 2d support");
 		if(i==0)border[1][0]=(border[0][0]+border[1][0])*0.5f;
 		else	border[0][0]=(border[0][0]+border[1][0])*0.5f;
 		if(k==0)border[1][1]=(border[0][1]+border[1][1])*0.5f;
@@ -50,7 +44,7 @@ public:
 	}
 	void ToSubCube(int i, int k,int t)
 	{
-		COMPILE_TIME_ERR(Size==3);
+		static_assert(Size == 3, "only 3d support");
 		if(i==0)border[1][0]=(border[0][0]+border[1][0])*0.5f;
 		else	border[0][0]=(border[0][0]+border[1][0])*0.5f;
 		if(k==0)border[1][1]=(border[0][1]+border[1][1])*0.5f;
@@ -97,71 +91,83 @@ const bool tri_ribs_of_box[24][3]=
         {0,0,0}, {0,0,1}, {1,0,0}, {1,0,1}, {1,1,0}, {1,1,1}, {0,1,0}, {0,1,1},
 };
 
+
+template<class T>
+void DrawTrianglesSpecialized(TAABB<T, 3> aabb, std::vector<TVec<T, 3> >& vertices, std::vector<unsigned int>& indices)
+{
+	int vertices_first = vertices.size();
+
+	for (int i = 7; i >= 0; i--)
+		vertices.push_back(TVec<T, 3>(aabb.border[(i >> 2) & 1][0], aabb.border[(i >> 1) & 1][1], aabb.border[i & 1][2]));
+	indices.resize(indices.size() + 6 * 3 * 2);
+	for (int i = 0; i < 6; i++)
+	{
+		indices[indices.size() - 1 - (i * 3 * 2 + 0)] = vertices_first + (quads_of_box[i][0][2] << 2) + (quads_of_box[i][0][1] << 1) + quads_of_box[i][0][0];
+		indices[indices.size() - 1 - (i * 3 * 2 + 1)] = vertices_first + (quads_of_box[i][1][2] << 2) + (quads_of_box[i][1][1] << 1) + quads_of_box[i][1][0];
+		indices[indices.size() - 1 - (i * 3 * 2 + 2)] = vertices_first + (quads_of_box[i][2][2] << 2) + (quads_of_box[i][2][1] << 1) + quads_of_box[i][2][0];
+
+		indices[indices.size() - 1 - (i * 3 * 2 + 3)] = vertices_first + (quads_of_box[i][0][2] << 2) + (quads_of_box[i][0][1] << 1) + quads_of_box[i][0][0];
+		indices[indices.size() - 1 - (i * 3 * 2 + 4)] = vertices_first + (quads_of_box[i][3][2] << 2) + (quads_of_box[i][3][1] << 1) + quads_of_box[i][3][0];
+		indices[indices.size() - 1 - (i * 3 * 2 + 5)] = vertices_first + (quads_of_box[i][2][2] << 2) + (quads_of_box[i][2][1] << 1) + quads_of_box[i][2][0];
+	}
+}
+
+template<class T>
+void DrawTrianglesSpecialized(TAABB<T, 2> aabb, std::vector<TVec<T, 2> >& vertices, std::vector<unsigned int>& indices)
+{
+	vertices.push_back(TVec<T, 2>(aabb.border[0][0], aabb.border[0][1]));
+	vertices.push_back(TVec<T, 2>(aabb.border[0][0], aabb.border[1][1]));
+	vertices.push_back(TVec<T, 2>(aabb.border[1][0], aabb.border[1][1]));
+	vertices.push_back(TVec<T, 2>(aabb.border[1][0], aabb.border[0][1]));
+
+	indices.push_back(vertices.size() - 4);
+	indices.push_back(vertices.size() - 3);
+	indices.push_back(vertices.size() - 2);
+
+	indices.push_back(vertices.size() - 4);
+	indices.push_back(vertices.size() - 1);
+	indices.push_back(vertices.size() - 2);
+}
+
 template<class T,int Size>
 void TAABB<T,Size>::DrawTriangles(std::vector<TVec<T,Size> >& vertices,std::vector<unsigned int>& indices)const
 {
 	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
-	if(Size==2)
-	{
-		vertices.push_back(TVec<T, Size>(border[0][0], border[0][1]));
-		vertices.push_back(TVec<T, Size>(border[0][0], border[1][1]));
-		vertices.push_back(TVec<T, Size>(border[1][0], border[1][1]));
-		vertices.push_back(TVec<T, Size>(border[1][0], border[0][1]));
+	DrawTrianglesSpecialized(*this, vertices, indices);
+}
 
-		indices.push_back(vertices.size() - 4);
-		indices.push_back(vertices.size() - 3);
-		indices.push_back(vertices.size() - 2);
 
-		indices.push_back(vertices.size() - 4);
-		indices.push_back(vertices.size() - 1);
-		indices.push_back(vertices.size() - 2);
-	}else if(Size==3)
-	{
-		int vertices_first=vertices.size();
+template<class T>
+void DrawLinesSpecialized(TAABB<T, 2> aabb, std::vector<TVec<T, 2> >& vertices)
+{
+	vertices.push_back(TVec<T, 2>(border[0][0], border[0][1]));
+	vertices.push_back(TVec<T, 2>(border[1][0], border[0][1]));
 
-		for (int i = 7; i >= 0; i--)
-			vertices.push_back(TVec<T, Size>(border[(i >> 2) & 1][0], border[(i >> 1) & 1][1], border[i & 1][2]));
-		indices.resize(indices.size() + 6 * 3 * 2);
-		for (int i = 0; i < 6; i++)
-		{
-			indices[indices.size() - 1 - (i * 3 * 2 + 0)] = vertices_first + (quads_of_box[i][0][2] << 2) + (quads_of_box[i][0][1] << 1) + quads_of_box[i][0][0];
-			indices[indices.size() - 1 - (i * 3 * 2 + 1)] = vertices_first + (quads_of_box[i][1][2] << 2) + (quads_of_box[i][1][1] << 1) + quads_of_box[i][1][0];
-			indices[indices.size() - 1 - (i * 3 * 2 + 2)] = vertices_first + (quads_of_box[i][2][2] << 2) + (quads_of_box[i][2][1] << 1) + quads_of_box[i][2][0];
+	vertices.push_back(TVec<T, 2>(border[0][0], border[0][1]));
+	vertices.push_back(TVec<T, 2>(border[0][0], border[1][1]));
 
-			indices[indices.size() - 1 - (i * 3 * 2 + 3)] = vertices_first + (quads_of_box[i][0][2] << 2) + (quads_of_box[i][0][1] << 1) + quads_of_box[i][0][0];
-			indices[indices.size() - 1 - (i * 3 * 2 + 4)] = vertices_first + (quads_of_box[i][3][2] << 2) + (quads_of_box[i][3][1] << 1) + quads_of_box[i][3][0];
-			indices[indices.size() - 1 - (i * 3 * 2 + 5)] = vertices_first + (quads_of_box[i][2][2] << 2) + (quads_of_box[i][2][1] << 1) + quads_of_box[i][2][0];
-		}
-	}
+	vertices.push_back(TVec<T, 2>(border[0][0], border[1][1]));
+	vertices.push_back(TVec<T, 2>(border[1][0], border[1][1]));
+
+	vertices.push_back(TVec<T, 2>(border[1][0], border[0][1]));
+	vertices.push_back(TVec<T, 2>(border[1][0], border[1][1]));
+}
+
+template<class T>
+void DrawLinesSpecialized(TAABB<T, 3> aabb, std::vector<TVec<T, 3> >& vertices)
+{
+	for (int i = 0; i<24; i++)
+		vertices.push_back(TVec<T, 3>
+		(
+		aabb.border[tri_ribs_of_box[i][0]][0],
+		aabb.border[tri_ribs_of_box[i][1]][1],
+		aabb.border[tri_ribs_of_box[i][2]][2]
+		));
 }
 
 template<class T,int Size>
 void TAABB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
-	if(Size==2)
-	{
-		vertices.push_back(TVec<T,Size>(border[0][0],border[0][1]));
-		vertices.push_back(TVec<T, Size>(border[1][0], border[0][1]));
-
-		vertices.push_back(TVec<T, Size>(border[0][0], border[0][1]));
-		vertices.push_back(TVec<T, Size>(border[0][0], border[1][1]));
-
-		vertices.push_back(TVec<T, Size>(border[0][0], border[1][1]));
-		vertices.push_back(TVec<T, Size>(border[1][0], border[1][1]));
-
-		vertices.push_back(TVec<T, Size>(border[1][0], border[0][1]));
-		vertices.push_back(TVec<T, Size>(border[1][0], border[1][1]));
-
-	}
-	else if(Size==3)
-	{
-		for(int i=0;i<24;i++)
-			vertices.push_back(TVec<T,Size>
-			(
-			border[tri_ribs_of_box[i][0]][0],
-			border[tri_ribs_of_box[i][1]][1],
-			border[tri_ribs_of_box[i][2]][2]
-		));
-	}
+	DrawLinesSpecialized(*this, vertices);
 }

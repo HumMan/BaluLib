@@ -70,9 +70,6 @@
     <ClInclude Include="Source\BVolumes\AABB.h">
       <Filter>Source Files\BVolumes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\AABB.h">
-      <Filter>Source Files\Collisions\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collisions\AABBAndAABB.h">
       <Filter>Source Files\Collisions</Filter>
     </ClInclude>
@@ -103,20 +100,11 @@
     <ClInclude Include="Source\BVolumes\OBB.h">
       <Filter>Source Files\BVolumes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\Capsule.h">
-      <Filter>Source Files\Collisions\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collisions\SphereAndSphere.h">
       <Filter>Source Files\Collisions</Filter>
     </ClInclude>
     <ClInclude Include="Source\BVolumes\Sphere.h">
       <Filter>Source Files\BVolumes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\Sphere.h">
-      <Filter>Source Files\Collisions\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collisions\Common\OBB.h">
-      <Filter>Source Files\Collisions\Common</Filter>
     </ClInclude>
     <ClInclude Include="Source\BVolumes\Capsule.h">
       <Filter>Source Files\BVolumes</Filter>
@@ -126,6 +114,18 @@
     </ClInclude>
     <ClInclude Include="Source\BVolumes\BVolume.h">
       <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\AABB.cpp">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\Capsule.cpp">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\OBB.cpp">
+      <Filter>Source Files\Collisions\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions\Common\Sphere.cpp">
+      <Filter>Source Files\Collisions\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
