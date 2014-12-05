@@ -1,5 +1,9 @@
 #include "../../BVolumes/Sphere.h"
 
+#include "../SphereAndSphere.h"
+#include "../OBBAndSphere.h"
+#include "../CapsuleAndSphere.h"
+#include "../AABBAndSphere.h"
 
 #include "../../BVolumes/Frustum.h"
 
@@ -99,9 +103,9 @@ bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const
 }
 
 template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& full_in_frustum)const
+bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const
 {
-	return frustum.Overlaps(*this, full_in_frustum); 
+	return frustum.Overlaps(*this, fully_in_frustum); 
 }
 
 template<class T, int Size>

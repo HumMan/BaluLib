@@ -1,4 +1,6 @@
-template<class T,int Size>
+#pragma once
+
+template<class T, int Size>
 bool Collide(const TSphere<T,Size> &v0,const TSphere<T,Size> &v1)
 {
 	return v0.pos.SqrDistance(v1.pos)<sqr(v0.radius+v1.radius);

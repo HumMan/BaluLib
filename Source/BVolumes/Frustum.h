@@ -19,12 +19,12 @@ public:
 	TFrustum(){}
 	TFrustum(const TMatrix<T,4>& clip);
 	bool Overlaps(const TAABB<T,Size>& use_aabb) const;
-	bool Overlaps(const TAABB<T,Size>& use_aabb,bool& full_in_frustum) const;
+	bool Overlaps(const TAABB<T,Size>& use_aabb,bool& fully_in_frustum) const;
 	bool Overlaps(const TOBB<T,Size>& use_obb) const;
-	bool Overlaps(const TOBB<T,Size>& use_obb,bool& full_in_frustum) const;
+	bool Overlaps(const TOBB<T,Size>& use_obb,bool& fully_in_frustum) const;
 	bool Overlaps(const TSphere<T,Size>& sphere) const;
-	bool Overlaps(const TSphere<T,Size>& sphere,bool& full_in_frustum) const;
+	bool Overlaps(const TSphere<T,Size>& sphere,bool& fully_in_frustum) const;
 	bool Overlaps(const TCapsule<T,Size>& sphere) const;
-	bool Overlaps(const TCapsule<T,Size>& sphere,bool& full_in_frustum) const;
+	bool Overlaps(const TCapsule<T,Size>& sphere,bool& fully_in_frustum) const;
 	bool Overlaps(const TVec<T,Size>& point) const;
 };

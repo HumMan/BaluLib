@@ -70,14 +70,14 @@ public:
 	}
 	explicit TVec(T v0, T v1, T v2)
 	{
-		static_assert(size >= 3, "only 3d support");
+		static_assert(size >= 3, "supports only 3d");
 		v[0]=v0;
 		v[1]=v1;
 		v[2]=v2;
 	}
 	explicit TVec(const TVec<T,2>& v0, T v1)
 	{
-		static_assert(size >= 3, "only 3d support");
+		static_assert(size >= 3, "supports only 3d");
 		v[0]=v0[0];
 		v[1]=v0[1];
 		v[2]=v1;
@@ -253,7 +253,7 @@ public:
 	template <class T,int size>
 	typename std::enable_if<size != 3>::type CrossSpec(const TVec<T, size>& v1, TVec<T, size>& result)const
 	{
-		static_assert(size == 3, "only 3d support");
+		static_assert(size == 3, "supports only 3d");
 	}
 
 	template <class T, int size>

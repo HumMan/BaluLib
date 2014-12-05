@@ -36,23 +36,15 @@ public:
 		border[1] += ext;
 	}
 	//generic for trees
-	void ToSubCube(int i, int k) //i - x min max    k - y min max
+	void ToSubCube(TVec<int,Size> sc) //i - x 0 min 1 max    k - y min max   t - z min max
 	{
-		static_assert(Size == 2, "only 2d support");
-		if (i == 0)border[1][0] = (border[0][0] + border[1][0])*0.5f;
-		else	border[0][0] = (border[0][0] + border[1][0])*0.5f;
-		if (k == 0)border[1][1] = (border[0][1] + border[1][1])*0.5f;
-		else	border[0][1] = (border[0][1] + border[1][1])*0.5f;
-	}
-	void ToSubCube(int i, int k, int t)
-	{
-		static_assert(Size == 3, "only 3d support");
-		if (i == 0)border[1][0] = (border[0][0] + border[1][0])*0.5f;
-		else	border[0][0] = (border[0][0] + border[1][0])*0.5f;
-		if (k == 0)border[1][1] = (border[0][1] + border[1][1])*0.5f;
-		else	border[0][1] = (border[0][1] + border[1][1])*0.5f;
-		if (t == 0)border[1][2] = (border[0][2] + border[1][2])*0.5f;
-		else	border[0][2] = (border[0][2] + border[1][2])*0.5f;
+		for (int i = 0; i < Size; i++)
+		{
+			if (sc[i] == 0)
+				border[1][i] = (border[0][i] + border[1][i])*0.5f;
+			else	
+				border[0][i] = (border[0][i] + border[1][i])*0.5f;
+		}
 	}
 
 	virtual bool PointCollide(const TVec<T, Size>& point) const;
@@ -69,11 +61,16 @@ public:
 	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const;
 	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices)const;
 
-	virtual bool CollideWith(const TBVolume<T, Size>& v)const;
-	virtual bool CollideWith(const TFrustum<T, Size>& frustum)const;
-	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& full_in_frustum)const;
-	virtual bool CollideWith(const TAABB<T, Size>& v)const;
-	virtual bool CollideWith(const TOBB<T, Size>& v)const;
-	virtual bool CollideWith(const TCapsule<T, Size>& v)const;
-	virtual bool CollideWith(const TSphere<T, Size>& v)const;
+	virtual bool CollideWith(const TBVolume<T, Size>& volume) const;
+	virtual bool CollideWith(const TBVolume<T, Size>& volume, bool& fully_in_volume) const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum) const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum) const;
+	virtual bool CollideWith(const TAABB<T, Size>& aabb) const;
+	virtual bool CollideWith(const TAABB<T, Size>& aabb, bool& fully_in_aabb) const;
+	virtual bool CollideWith(const TOBB<T, Size>& obb) const;
+	virtual bool CollideWith(const TOBB<T, Size>& obb, bool& fully_in_obb) const;
+	virtual bool CollideWith(const TCapsule<T, Size>& capsule) const;
+	virtual bool CollideWith(const TCapsule<T, Size>& capsule, bool& fully_in_capsule) const;
+	virtual bool CollideWith(const TSphere<T, Size>& sphere) const;
+	virtual bool CollideWith(const TSphere<T, Size>& sphere, bool& fully_in_sphere) const;
 };

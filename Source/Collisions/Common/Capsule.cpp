@@ -19,13 +19,20 @@ bool TCapsule<T,Size>::Contain(const TVec<T,Size>& point,T& distance, TVec<T,Siz
 }
 
 
-virtual bool CollideWith(const TBVolume<T, Size>& v)const							{ return v.CollideWith(*this); }
-virtual bool CollideWith(const TFrustum<T, Size>& frustum)const						{ return frustum.Overlaps(*this); }
-virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& full_in_frustum)const{ return frustum.Overlaps(*this, full_in_frustum); }
-virtual bool CollideWith(const TAABB<T, Size>& v)const								{ return Collide<T, Size>(*this, v); }
-virtual bool CollideWith(const TOBB<T, Size>& v)const								{ return Collide<T, Size>(*this, v); }
-virtual bool CollideWith(const TCapsule<T, Size>& v) const							{ return Collide<T, Size>(*this, v); }
-virtual bool CollideWith(const TSphere<T, Size>& v) const							{ return Collide<T, Size>(*this, v); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TBVolume<T, Size>& v)const							{ return v.CollideWith(*this); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const						{ return frustum.Overlaps(*this); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const{ return frustum.Overlaps(*this, fully_in_frustum); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TAABB<T, Size>& v)const								{ return Collide<T, Size>(*this, v); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TOBB<T, Size>& v)const								{ return Collide<T, Size>(*this, v); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TCapsule<T, Size>& v) const							{ return Collide<T, Size>(*this, v); }
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TSphere<T, Size>& v) const							{ return Collide<T, Size>(*this, v); }
 
 template<class T,int Size>
 bool TCapsule<T,Size>::CollideWith(const TRay<T,Size> &ray) const

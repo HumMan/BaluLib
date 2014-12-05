@@ -40,7 +40,7 @@ public:
 	
 	virtual bool CollideWith(const TBVolume<T, Size>& v)const;
 	virtual bool CollideWith(const TFrustum<T, Size>& frustum)const;
-	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& full_in_frustum)const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const;
 	virtual bool CollideWith(const TAABB<T, Size>& v)const;
 	virtual bool CollideWith(const TOBB<T, Size>& v)const;
 	virtual bool CollideWith(const TCapsule<T, Size>& v)const;

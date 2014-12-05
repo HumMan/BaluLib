@@ -6,7 +6,7 @@ TFrustum<T, Size>::TFrustum(const TMatrix<T, 4>& clip)
 	//извлечение уравнений плоскостей из матрицы проекции
 	//http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
 
-	COMPILE_TIME_ERR(Size == 3);
+	static_assert(Size == 3,"supports only 3d");
 	TVec<T, 4> v0, v1;
 	v0 = TVec<T, 4>(clip[0][3],
 		clip[1][3],
@@ -100,7 +100,7 @@ bool TFrustum<T, Size>::Overlaps(const TCapsule<T, Size>& capsule) const
 
 
 template<class T, int Size>
-bool TFrustum<T, Size>::Overlaps(const TAABB<T, Size>& use_aabb, bool& full_in_frustum) const
+bool TFrustum<T, Size>::Overlaps(const TAABB<T, Size>& use_aabb, bool& fully_in_frustum) const
 {
 	T s, d;
 	int c = 0;
@@ -115,12 +115,12 @@ bool TFrustum<T, Size>::Overlaps(const TAABB<T, Size>& use_aabb, bool& full_in_f
 		if (d<-s)return false;
 		else if (d >= s)c++;
 	}
-	full_in_frustum = (c == 6);
+	fully_in_frustum = (c == 6);
 	return true;
 }
 
 template<class T, int Size>
-bool TFrustum<T, Size>::Overlaps(const TOBB<T, Size> &use_obb, bool& full_in_frustum) const
+bool TFrustum<T, Size>::Overlaps(const TOBB<T, Size> &use_obb, bool& fully_in_frustum) const
 {
 	T s, d;
 	TVec<T, Size> obb_size(use_obb.local.GetSize());
@@ -132,12 +132,12 @@ bool TFrustum<T, Size>::Overlaps(const TOBB<T, Size> &use_obb, bool& full_in_fru
 		if (d<-s)return false;
 		else if (d >= s)c++;
 	}
-	full_in_frustum = (c == 6);
+	fully_in_frustum = (c == 6);
 	return true;
 }
 
 template<class T, int Size>
-bool TFrustum<T, Size>::Overlaps(const TSphere<T, Size>& sphere, bool& full_in_frustum) const
+bool TFrustum<T, Size>::Overlaps(const TSphere<T, Size>& sphere, bool& fully_in_frustum) const
 {
 	int c = 0;
 	T d;
@@ -147,12 +147,12 @@ bool TFrustum<T, Size>::Overlaps(const TSphere<T, Size>& sphere, bool& full_in_f
 		if (d<-sphere.radius)return false;
 		else if (d >= sphere.radius)c++;
 	}
-	full_in_frustum = (c == 6);
+	fully_in_frustum = (c == 6);
 	return true;
 }
 
 template<class T, int Size>
-bool TFrustum<T, Size>::Overlaps(const TCapsule<T, Size>& capsule, bool& full_in_frustum) const
+bool TFrustum<T, Size>::Overlaps(const TCapsule<T, Size>& capsule, bool& fully_in_frustum) const
 {
 	int c = 0;
 	T d0, d1;
@@ -163,7 +163,7 @@ bool TFrustum<T, Size>::Overlaps(const TCapsule<T, Size>& capsule, bool& full_in
 		if (d0<-capsule.radius&&d1<-capsule.radius)return false;
 		else if (d0 >= capsule.radius&&d1 >= capsule.radius)c++;
 	}
-	full_in_frustum = (c == 6);
+	fully_in_frustum = (c == 6);
 	return true;
 }
 

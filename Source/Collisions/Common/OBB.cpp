@@ -21,9 +21,9 @@ bool TOBB<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const
 }
 
 template<class T, int Size>
-bool TOBB<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& full_in_frustum)const
+bool TOBB<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const
 {
-	return frustum.Overlaps(*this, full_in_frustum);
+	return frustum.Overlaps(*this, fully_in_frustum);
 }
 
 template<class T, int Size>

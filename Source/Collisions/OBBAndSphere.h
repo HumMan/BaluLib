@@ -1,3 +1,5 @@
+#pragma once
+
 #include "AABBAndSphere.h"
 
 template<class T,int Size>

@@ -2,6 +2,9 @@
 
 #include <baluLib.h>
 
+template<class T, int size>
+struct TRay;
+
 template<class T,int size>
 struct TPlane
 {
@@ -13,7 +16,7 @@ struct TPlane
 
 	TPlane(const TVec<T,4>& v)//используется в TFrustum - создание плоскости из не нормализованного уравнения ax+by+cz+d=0, где вектор v соответствует (a,b,c,d)
 	{
-		COMPILE_TIME_ERR(size==3);
+		static_assert(size == 3, "supports only 3d");
 		//вектор нормали плоскости (a,b,c) необходимо нормализовать
 		T t=sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
 		normal[0]=v[0]/t;
@@ -27,7 +30,7 @@ struct TPlane
 		const TVec<T,3>& v2)//плоскость по трем точкам
 		:normal((v1-v0).Cross(v2-v0).GetNormalized()),dist(-(v0*normal))
 	{
-		COMPILE_TIME_ERR(size==3);
+		static_assert(size == 3, "supports only 3d");
 	}
 
 	TPlane(const TVec<T,size>& use_pos,
@@ -57,6 +60,14 @@ struct TSegment
 		this->p0 = p0;
 		this->p1 = p1;
 	}
+	TVec<T, size> GetDir()
+	{
+		return (p1 - p0).GetNormalized();
+	}
+	TRay<T, size> ToRay()
+	{
+		return TRay<T, size>(p0, GetDir());
+	}
 };
 
 template<class T, int size>
@@ -71,6 +82,10 @@ struct TLine
 	{
 		this->p0 = p0;
 		this->dir = (p1-p0).GetNormalized();
+	}
+	TRay<T, size> ToRay()
+	{
+		return TRay<T, size>(p0, dir);
 	}
 };
 
@@ -109,13 +124,13 @@ inline T AngleFromDir(const TVec<T,2>& v)
 
 ///t - от 0 до 1 (где 0 это p0, 1 это p1)
 template<class T,int Size>
-inline T DistanceBetweenPointLine(TVec<T,Size> v, TVec<T,Size> p0, TVec<T,Size> p1, T& t, TVec<T,Size>& nearest_point)
+inline T DistanceBetweenPointSegment(TVec<T,Size> point, TSegment<T,Size> segment, T& t, TVec<T,Size>& nearest_point)
 {
-	TVec<T,Size> p01=p1-p0;
-	t=(p01*(v-p0))/p01.SqrLength();
+	TVec<T, Size> p01 = segment.p1 - segment.p0;
+	t = (p01*(point - segment.p0)) / p01.SqrLength();
 	t=Clamp<T>(0,1,t);
-	nearest_point=p0+p01*t;
-	return nearest_point.Distance(v);
+	nearest_point = segment.p0 + p01*t;
+	return nearest_point.Distance(point);
 }
 
 template<class T,int Size>
