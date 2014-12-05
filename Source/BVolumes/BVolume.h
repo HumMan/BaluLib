@@ -1,3 +1,6 @@
+#pragma once
+
+#include "..\primitives.h"
 
 template < class T, int Size >
 struct TRayCollisionInfo
@@ -27,6 +30,17 @@ struct TPlaneCollisionInfo
 	TVec<T, Size> normal;
 	TVec<T, Size> plane_point;
 };
+
+template<class T,int Size>
+class TFrustum;
+template<class T, int Size>
+class TAABB;
+template<class T, int Size>
+class TOBB;
+template<class T, int Size>
+class TCapsule;
+template<class T, int Size>
+class TSphere;
 
 template<class T,int Size>
 class TBVolume

@@ -1,8 +1,6 @@
 #pragma once
 
-//TODO организовать набор не объемных примитивов как BVolume (линии,отрезки,лучи,окружности,дуги), аможет это хрень
-
-
+#include <baluLib.h>
 
 template<class T,int size>
 struct TPlane

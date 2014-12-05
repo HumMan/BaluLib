@@ -1,3 +1,5 @@
+#include "AABBAndSphere.h"
+
 template<class T,int Size>
 bool Collide(const TSphere<T,Size>& v0,const TOBB<T,Size>& v1)
 {

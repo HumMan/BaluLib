@@ -28,10 +28,6 @@
     <ClInclude Include="Source\Collisions\CapsuleAndCapsule.h" />
     <ClInclude Include="Source\Collisions\CapsuleAndOBB.h" />
     <ClInclude Include="Source\Collisions\CapsuleAndSphere.h" />
-    <ClInclude Include="Source\Collisions\Common\AABB.cpp" />
-    <ClInclude Include="Source\Collisions\Common\Capsule.cpp" />
-    <ClInclude Include="Source\Collisions\Common\OBB.cpp" />
-    <ClInclude Include="Source\Collisions\Common\Sphere.cpp" />
     <ClInclude Include="Source\Collisions\OBBAndAABB.h" />
     <ClInclude Include="Source\Collisions\OBBAndOBB.h" />
     <ClInclude Include="Source\Collisions\OBBAndSphere.h" />
@@ -49,6 +45,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
+    <ClCompile Include="Source\Collisions\Common\Frustum.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Collisions\Common\Sphere.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Collisions\Common\AABB.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Collisions\Common\Capsule.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Collisions\Common\OBB.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Source\common.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

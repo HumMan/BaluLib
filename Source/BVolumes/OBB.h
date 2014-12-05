@@ -1,5 +1,9 @@
 #pragma once
 
+#include "BVolume.h"
+
+#include "AABB.h"
+
 template<class T, int Size>
 class TOBB:public TBVolume<T,Size>
 {
@@ -20,39 +24,27 @@ public:
 	TMatrix<T, Size> GetOrient()const							{ return orient; }
 
 	//Common virtual methods
-	virtual bool Contain(const TVec<T,Size>& point) const;
-	virtual bool Contain(const TVec<T,Size>& point,T& distance, TVec<T,Size>& nearest_point, TVec<T,Size>& normal) const;
-	virtual bool CollideWith(const TRay<T,Size> &ray) const;
-	virtual bool CollideWith(const TRay<T,Size> &ray, T& t, TVec<T,Size>& normal) const;
-	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0,T& t1) const;
-	virtual bool CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const;
+	virtual bool PointCollide(const TVec<T, Size>& point) const;
+	virtual bool PointCollide(const TVec<T, Size>& point, TPointCollisionInfo<T, Size>& collision) const;
+	virtual bool RayCollide(const TRay<T, Size> &ray) const;
+	virtual bool RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const;
+	virtual bool PlaneCollide(const TPlane<T, Size> &plane) const;
+	virtual bool PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const;
+	virtual bool SegmentCollide(const TSegment<T, Size> &segment) const;
+	virtual bool SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const;
+	virtual bool LineCollide(const TLine<T, Size> &line) const;
+	virtual bool LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const;
 
 	virtual void DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const;
 	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices)const;
 	
-	virtual bool CollideWith(const TBVolume<T,Size>& v)const							{return v.CollideWith(*this);}
-	virtual bool CollideWith(const TFrustum<T,Size>& frustum)const						{return frustum.Overlaps(*this);}
-	virtual bool CollideWith(const TFrustum<T,Size>& frustum,bool& full_in_frustum)const{return frustum.Overlaps(*this,full_in_frustum);}
-	virtual bool CollideWith(const TAABB<T,Size>& v)const								{return Collide<T,Size>(*this,v);}
-	virtual bool CollideWith(const TOBB<T,Size>& v)const								{return Collide<T,Size>(v,*this);}
-	virtual bool CollideWith(const TCapsule<T,Size>& v)const							{return Collide(v,*this);}
-	virtual bool CollideWith(const TSphere<T,Size>& v)const								{return Collide<T,Size>(v,*this);}
+	virtual bool CollideWith(const TBVolume<T, Size>& v)const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum)const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& full_in_frustum)const;
+	virtual bool CollideWith(const TAABB<T, Size>& v)const;
+	virtual bool CollideWith(const TOBB<T, Size>& v)const;
+	virtual bool CollideWith(const TCapsule<T, Size>& v)const;
+	virtual bool CollideWith(const TSphere<T, Size>& v)const;
 };
 
-template<class T,int Size>
-void TOBB<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
-{
-	int vertices_high=vertices.size();
-	local.DrawTriangles(vertices,indices);
-	for(int i=vertices_high;i<vertices.size();i++)
-		vertices[i]=orient*vertices[i]+pos;
-}
 
-template<class T,int Size>
-void TOBB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
-{
-	int vertices_high=vertices.size();
-	local.DrawLines(vertices);
-	for(int i=vertices_high;i<vertices.size();i++)
-		vertices[i]=orient*vertices[i]+pos;
-}

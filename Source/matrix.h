@@ -1,5 +1,8 @@
 #pragma once
 
+template<class T, int Size>
+class TPlane;
+
 template<class T,int Size>
 class TMatrix
 {
