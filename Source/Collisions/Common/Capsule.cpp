@@ -67,7 +67,7 @@ bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 }
 
 template<class T, int Size>
-bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ray, TVec<T, Size> p1, TVec<T, Size> p2, TVec<T, Size> n1, TVec<T, Size> n2)
+bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ray, TVec<T, Size>& p1, TVec<T, Size>& p2, TVec<T, Size>& n1, TVec<T, Size>& n2, bool& have_in, bool& have_out)
 {
 	//http://blog.makingartstudios.com/?p=286
 
@@ -101,7 +101,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 	T b = 2.0f * (Q*R);
 	T c = R*R - (capsule.radius * capsule.radius);
 
-	if (false && a == 0.0f)
+	if (a == 0.0f)
 	{
 		// Special case: AB and ray direction are parallel. If there is an intersection it will be on the end spheres...
 		// NOTE: Why is that?
@@ -169,7 +169,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		// On sphere (A, r)... 		
 		TSphere<T, Size> s(capsule.segment.p0, capsule.radius);
 		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax))
+		if (SphereRayCollide(s, ray, stmin, stmax) && stmin>0)
 		{
 			p1 = ray.pos + (ray.dir * stmin);
 			n1 = p1 - capsule.segment.p0;
@@ -184,7 +184,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		TSphere<T, Size> s(capsule.segment.p1, capsule.radius);
 
 		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax))
+		if (SphereRayCollide(s, ray, stmin, stmax) && stmin>0)
 		{
 			p1 = ray.pos + (ray.dir * stmin);
 			n1 = p1 - capsule.segment.p1;
@@ -193,7 +193,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		else
 			return false;
 	}
-	else
+	else if (tmin>0)
 	{
 		// On the cylinder...
 		p1 = ray.pos + (ray.dir * tmin);
@@ -202,6 +202,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		n1 = p1 - k1;
 		n1.Normalize();
 	}
+	else return false;
 
 	T t_k2 = tmax * m + n;
 	if (t_k2 < 0.0f)
@@ -210,7 +211,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		TSphere<T, Size> s(capsule.segment.p0, capsule.radius);
 
 		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax))
+		if (SphereRayCollide(s, ray, stmin, stmax)&& stmax>0)
 		{
 			p2 = ray.pos + (ray.dir * stmax);
 			n2 = p2 - capsule.segment.p0;
@@ -225,7 +226,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		TSphere<T, Size> s(capsule.segment.p1, capsule.radius);
 
 		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax))
+		if (SphereRayCollide(s, ray, stmin, stmax) && stmax>0)
 		{
 			p2 = ray.pos + (ray.dir * stmax);
 			n2 = p2 - capsule.segment.p1;
@@ -234,7 +235,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		else
 			return false;
 	}
-	else
+	else if (tmax>0)
 	{
 		p2 = ray.pos + (ray.dir * tmax);
 
@@ -242,6 +243,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 		n2 = p2 - k2;
 		n2.Normalize();
 	}
+	else return false;
 
 	return true;
 }
@@ -250,7 +252,7 @@ template<class T, int Size>
 bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
 {
 	TVec<T, Size> p0, p1, n0, n1;
-	bool result = CapsuleRayCollide(*this, ray, p0,p1,n0,n1);
+	bool result = CapsuleRayCollide(*this, ray, p0,p1,n0,n1, collision.have_in, collision.have_out);
 	if (result)
 	{
 		collision.have_in = true;

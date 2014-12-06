@@ -126,6 +126,16 @@ inline T AngleFromDir(const TVec<T,2>& v)
 	return (v[1]>=0?1:-1)*acos(v[0]);
 }
 
+template<class T, int Size>
+inline T DistanceBetweenPointLine(TVec<T, Size> point, TLine<T, Size> line)
+{
+	TVec<T, Size> ap = line.p0 - point;
+	T proj_on_line = ap*line.dir;
+	TVec<T, Size> proj_on_line_vector = line.dir * proj_on_line;
+	TVec<T, Size> dist_vector = ap - proj_on_line_vector;
+	return dist_vector.Length();
+}
+
 ///t - от 0 до 1 (где 0 это p0, 1 это p1)
 template<class T,int Size>
 inline T DistanceBetweenPointSegment(TVec<T,Size> point, TSegment<T,Size> segment, T& t, TVec<T,Size>& nearest_point)
