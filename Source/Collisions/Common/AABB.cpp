@@ -199,7 +199,7 @@ bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, S
 template<class T, int Size>
 bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const 
 {
-	TVec<T, Size> plane_pos = plane.normal*(-plane.dist);
+	TVec<T, Size> plane_pos = plane.GetPos();
 	TVec<T, Size> aabb_pos = this->GetCenter();
 	TVec<T, Size> aabb_size = this->GetSize();
 
@@ -209,7 +209,7 @@ bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 template<class T, int Size>
 bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const 
 {
-	TVec<T, Size> plane_pos = plane.normal*(-plane.dist);
+	TVec<T, Size> plane_pos = plane.GetPos();
 	//TVec<T, Size> proj_dir = plane.dist >= 0 ? plane.normal : -plane.normal;
 	TVec<T, Size> aabb_pos = this->GetCenter();
 	TVec<T, Size> aabb_size = this->GetSize();
@@ -336,7 +336,7 @@ template<class T, int Size>
 bool TAABB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const 
 {
 	TRay<T, Size> ray = segment.ToRay();
-	T cf = 0, cl = std::numeric_limits<T>().max();
+	T cf = 0, cl = segment.p0.Distance(segment.p1);
 	return AABBRayCollide(*this, ray, cf, cl, collision);
 }
 
@@ -516,6 +516,7 @@ template<class T>
 bool CollideWithSpecialized(const TAABB<T, 2>& aabb, const TFrustum<T, 2>& frustum)
 {
 	//static_assert(false, "supports only 3d");
+	assert(false);
 	return false;
 }
 template<class T>
@@ -533,6 +534,7 @@ template<class T>
 bool CollideWithSpecialized(const TAABB<T, 2>& aabb, const TFrustum<T, 2>& frustum, bool& fully_in_frustum)
 {
 	//static_assert(false, "supports only 3d");
+	assert(false);
 	return false;
 }
 template<class T>

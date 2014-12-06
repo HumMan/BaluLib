@@ -37,13 +37,17 @@ struct TPlane
 		const TVec<T,size>& use_normal)//по нормали и точке принадлежащей плоскости
 		:normal(use_normal),dist(-use_pos*use_normal){}
 
-	T DistanceTo(const TVec<T,size>& v)const
+	T DistanceTo(const TVec<T,size>& v)const // T>0 если pos со стороны нормали плоскости
 	{
 		return normal*v+dist;
 	}
 	TVec<T,size> Mirror(const TVec<T,size>& v)const//отражение точки относительно плоскости
 	{
 		return v+(normal*(v*normal+dist))*2;
+	}
+	TVec<T, size> GetPos()const
+	{
+		return normal*(-dist);
 	}
 };
 

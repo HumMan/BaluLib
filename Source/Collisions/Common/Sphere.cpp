@@ -46,66 +46,104 @@ bool TSphere<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 }
 
 template<class T, int Size>
-bool TSphere<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
+bool SphereRayCollide(const TSphere<T, Size>& sphere, const TRay<T, Size> &ray, T& t0, T& t1)
 {
 	T a, b, c;
 	TVec<T, Size> t, d;
-	d = ray.pos - pos;
+	d = ray.pos - sphere.pos;
 	a = (ray.dir*ray.dir);
 	b = (ray.dir*d)*2.0f;
-	c = (d*d - radius*radius);
+	c = (d*d - sqr(sphere.radius));
 	T discr = b*b - 4 * a*c;
 	if (discr<0)return false;
 	discr = sqrt(discr);
-	T t0 = (b + discr) / (-2 * a);
-	T t1 = (b - discr) / (-2 * a);
-	assert(t1 >= t0);
-	if (t0<0 && t1<0)return false;
+	t0 = (b + discr) / (-2 * a);
+	t1 = (b - discr) / (-2 * a);
 	return true;
 }
 
-//template<class T, int Size>
-//bool TSphere<T, Size>::CollideWith(const TRay<T, Size> &ray, T& t, TVec<T, Size>& normal) const
-//{
-//	T t0, t1;
-//	if (CollideWith(ray, t0, t1))
-//	{
-//		T t = t0>0 ? t0 : t1;
-//		normal = (ray.pos + ray.dir*t - pos).GetNormalized();
-//		return true;
-//	}
-//	else return false;
-//}
+template<class T, int Size>
+bool SphereRayCollide(const TSphere<T, Size>& sphere, const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision, T min, T max)
+{
+	T t0, t1;
+	if (!SphereRayCollide(sphere, ray, t0, t1))
+		return false;
+
+	bool result = false;
+	if (t0 > min && t0 < max)
+	{
+		collision.have_in = true;
+		collision.in_param = t0;
+		collision.in_pos = ray.pos + ray.dir*t0;
+		collision.in_normal = (collision.in_pos - sphere.pos).GetNormalized();
+		result = true;
+	}
+	if (t1 >min && t1 < max)
+	{
+		collision.have_out = true;
+		collision.out_param = t1;
+		collision.out_pos = ray.pos + ray.dir*t1;
+		collision.out_normal = (collision.out_pos - sphere.pos).GetNormalized();
+		result = true;
+	}
+
+	return result;
+
+}
+
+template<class T, int Size>
+bool TSphere<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
+{
+	T min = 0, max = std::numeric_limits<T>().max();
+	return SphereRayCollide(*this, ray, collision, min, max);
+}
 
 template<class T, int Size>
 bool TSphere<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 {
-	return false;//TODO
+	return plane.normal*pos - plane.dist < radius;
 }
 template<class T, int Size>
 bool TSphere<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	T t = plane.normal*pos - plane.dist;
+	collision.distance = t;
+	collision.nearest_point = pos + plane.normal*radius;
+	collision.plane_point = pos + plane.normal*t;
+	collision.normal = plane.normal;
+	return t < radius;
 }
 template<class T, int Size>
 bool TSphere<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const
 {
-	return false;//TODO
+	T min = 0, max = segment.p0.Distance(segment.p1);
+	TRay<T, Size> ray(segment.p0, (segment.p1- segment.p0)*((T)1/max));
+	T t0, t1;
+	if (!SphereRayCollide(*this, ray, t0, t1))
+		return false;
+	else
+	{
+		return IsIn(t0, min, max) || IsIn(t1, min, max);
+	}
 }
 template<class T, int Size>
 bool TSphere<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	T min = 0, max = segment.p0.Distance(segment.p1);
+	TRay<T, Size> ray(segment.p0, (segment.p1 - segment.p0)*((T)1 / max));
+	return SphereRayCollide(*this, ray, collision, min, max);
 }
 template<class T, int Size>
 bool TSphere<T, Size>::LineCollide(const TLine<T, Size> &line) const
 {
-	return false;//TODO
+	T t0, t1;
+	return SphereRayCollide(*this, line.ToRay(), t0, t1);
 }
 template<class T, int Size>
 bool TSphere<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	T min = std::numeric_limits<T>().lowest(), max = std::numeric_limits<T>().max();
+	return SphereRayCollide(*this, line.ToRay(), collision, min, max);
 }
 
 

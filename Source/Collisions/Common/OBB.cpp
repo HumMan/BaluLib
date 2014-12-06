@@ -33,58 +33,89 @@ bool TOBB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Si
 	if (collision.have_in)
 	{
 		collision.in_normal = orient*collision.in_normal;
-		collision.in_pos = orient*collision.in_pos;
+		collision.in_pos = orient*collision.in_pos + pos;
 	}
 	if (collision.have_out)
 	{
 		collision.out_normal = orient*collision.out_normal;
-		collision.out_pos = orient*collision.out_pos;
+		collision.out_pos = orient*collision.out_pos + pos;
 	}
 	return result;
 }
 template<class T, int Size>
 bool TOBB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 {
-	return false;//TODO
+	TVec<T, Size> new_normal = orient.TransMul(plane.normal);
+	TVec<T, Size> new_pos = orient.TransMul(plane.GetPos() - pos);
+	return local.PlaneCollide(TPlane<T, Size>(new_pos, new_normal));
 }
 template<class T, int Size>
 bool TOBB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	//преобразуем плоскость из глобальной СК в СК OBB
+	TVec<T, Size> new_normal = orient.TransMul(plane.normal);
+	TVec<T, Size> new_pos = orient.TransMul(plane.GetPos() - pos);
+	bool result = local.PlaneCollide(TPlane<T, Size>(new_pos, new_normal));
+	//результаты в СК OBB, необходимо преобразовать в глобальную СК
+	collision.nearest_point = orient* collision.nearest_point + pos;
+	collision.plane_point = orient* collision.plane_point + pos;
+	collision.normal = orient * collision.normal;
+	return result;
 }
 template<class T, int Size>
 bool TOBB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const
 {
-	return false;//TODO
+	TVec<T, Size> p0, p1;
+	p0 = orient.TransMul(segment.p0 - pos);
+	p1 = orient.TransMul(segment.p1 - pos);
+	return local.SegmentCollide(TSegment<T, Size>(p0, p1));
 }
 template<class T, int Size>
 bool TOBB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	TVec<T, Size> p0, p1;
+	p0 = orient.TransMul(segment.p0 - pos);
+	p1 = orient.TransMul(segment.p1 - pos);
+	bool result = local.SegmentCollide(TSegment<T, Size>(p0, p1));
+	if (collision.have_in)
+	{
+		collision.in_normal = orient*collision.in_normal;
+		collision.in_pos = orient*collision.in_pos + pos;
+	}
+	if (collision.have_out)
+	{
+		collision.out_normal = orient*collision.out_normal;
+		collision.out_pos = orient*collision.out_pos + pos;
+	}
+	return result;
 }
 template<class T, int Size>
 bool TOBB<T, Size>::LineCollide(const TLine<T, Size> &line) const
 {
-	return false;//TODO
+	TVec<T, Size> new_pos, new_dir;
+	new_pos = orient.TransMul(line.p0 - pos);
+	new_dir = orient.TransMul(line.dir);
+	return local.LineCollide(TLine<T, Size>(new_pos, new_dir));
 }
 template<class T, int Size>
 bool TOBB<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	TVec<T, Size> new_pos, new_dir;
+	new_pos = orient.TransMul(line.p0 - pos);
+	new_dir = orient.TransMul(line.dir);
+	bool result = local.LineCollide(TLine<T, Size>(new_pos, new_dir));
+	if (collision.have_in)
+	{
+		collision.in_normal = orient*collision.in_normal;
+		collision.in_pos = orient*collision.in_pos + pos;
+	}
+	if (collision.have_out)
+	{
+		collision.out_normal = orient*collision.out_normal;
+		collision.out_pos = orient*collision.out_pos + pos;
+	}
+	return result;
 }
-
-template<class T, int Size>
-bool TOBB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const;
-template<class T, int Size>
-bool TOBB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const;
-template<class T, int Size>
-bool TOBB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const;
-template<class T, int Size>
-bool TOBB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const;
-template<class T, int Size>
-bool TOBB<T, Size>::LineCollide(const TLine<T, Size> &line) const;
-template<class T, int Size>
-bool TOBB<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const;
 
 template<class T, int Size>
 void TOBB<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::vector<unsigned int>& indices)const
@@ -121,6 +152,7 @@ template<class T>
 bool CollideWithSpecialized(const TOBB<T, 2>& aabb, const TFrustum<T, 2>& frustum)
 {
 	//static_assert(false, "supports only 3d");
+	assert(false);
 	return false;
 }
 template<class T>
@@ -138,6 +170,7 @@ template<class T>
 bool CollideWithSpecialized(const TOBB<T, 2>& aabb, const TFrustum<T, 2>& frustum, bool& fully_in_frustum)
 {
 	//static_assert(false, "supports only 3d");
+	assert(false);
 	return false;
 }
 template<class T>

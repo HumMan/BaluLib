@@ -10,7 +10,10 @@
 template<class T>
 TMatrix<T, 2> GetOrientationSpecialized(const TCapsule<T, 2> capsule)
 {
-	assert(false);
+	TMatrix<T, 2> orient;
+	orient[0] = capsule.segment.GetDir();
+	orient[1] = orient[0].Cross();
+	return orient;
 }
 
 template<class T>
@@ -59,7 +62,13 @@ bool TCapsule<T, Size>::PointCollide(const TVec<T, Size>& point, TPointCollision
 template<class T, int Size>
 bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 {
-	return false;//TODO
+	T t0, t1;
+	return SegmentRayDistance(segment, ray, t0, t1) <= radius;
+}
+
+template<class T, int Size>
+bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ray, T& t0, T& t1)
+{
 }
 
 template<class T, int Size>
@@ -71,7 +80,9 @@ bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T
 template<class T, int Size>
 bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 {
-	return false;//TODO
+	T d0 = plane.DistanceTo(segment.p0);
+	T d1 = plane.DistanceTo(segment.p1);
+	return ((d0 > 0 != d1 > 0) || (abs(d0) < radius || abs(d1) < radius));
 }
 template<class T, int Size>
 bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
