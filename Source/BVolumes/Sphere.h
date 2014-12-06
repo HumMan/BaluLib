@@ -47,3 +47,6 @@ public:
 	virtual bool CollideWith(const TSphere<T, Size>& sphere) const;
 	virtual bool CollideWith(const TSphere<T, Size>& sphere, bool& fully_in_sphere) const;
 };
+
+template<class T, int Size>
+bool SphereRayCollide(const TSphere<T, Size>& sphere, const TRay<T, Size> &ray, T& t0, T& t1);
