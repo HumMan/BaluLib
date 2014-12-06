@@ -57,8 +57,8 @@ bool TSphere<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T,
 	T discr = b*b - 4 * a*c;
 	if (discr<0)return false;
 	discr = sqrt(discr);
-	t0 = (b + discr) / (-2 * a);
-	t1 = (b - discr) / (-2 * a);
+	T t0 = (b + discr) / (-2 * a);
+	T t1 = (b - discr) / (-2 * a);
 	assert(t1 >= t0);
 	if (t0<0 && t1<0)return false;
 	return true;
@@ -78,123 +78,36 @@ bool TSphere<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T,
 //}
 
 template<class T, int Size>
-bool TSphere<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const;
-template<class T, int Size>
-bool TSphere<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const;
-template<class T, int Size>
-bool TSphere<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const;
-template<class T, int Size>
-bool TSphere<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const;
-template<class T, int Size>
-bool TSphere<T, Size>::LineCollide(const TLine<T, Size> &line) const;
-template<class T, int Size>
-bool TSphere<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const;
-
-template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TBVolume<T, Size>& v)const							
+bool TSphere<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 {
-	return v.CollideWith(*this);
+	return false;//TODO
 }
-
 template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const						
-{ 
-	return frustum.Overlaps(*this); 
-}
-
-template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const
+bool TSphere<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
 {
-	return frustum.Overlaps(*this, fully_in_frustum); 
+	return false;//TODO
 }
-
 template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TAABB<T, Size>& v)const								
+bool TSphere<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const
 {
-	return Collide<T, Size>(v, *this); 
+	return false;//TODO
 }
-
 template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TOBB<T, Size>& v)const								
-{ 
-	return Collide<T, Size>(*this, v); 
-}
-
-template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TCapsule<T, Size>& v) const							
-{ 
-	return Collide<T, Size>(v, *this); 
-}
-
-template<class T, int Size>
-bool TSphere<T, Size>::CollideWith(const TSphere<T, Size>& v) const							
-{ 
-	return Collide<T, Size>(*this, v); 
-}
-
-struct TTri
+bool TSphere<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const
 {
-	int rib[3];
-	bool inv_dir[3];
-	TTri(){}
-	TTri(int r0, int r1, int r2, bool i0, bool i1, bool i2)
-	{
-		rib[0] = r0;
-		rib[1] = r1;
-		rib[2] = r2;
-		inv_dir[0] = i0;
-		inv_dir[1] = i1;
-		inv_dir[2] = i2;
-	}
-};
-
-template<class T, int Size>
-void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs, std::vector<TTri>& triangles)
-{
-	int ribs_high = ribs.size() - 1;
-	ribs.resize(ribs.size() * 2);
-	for (int i = ribs_high; i >= 0; i--)
-	{
-		TVec2ui rib = ribs[i];
-		TVec<T, Size> middle = (vertices[rib[0]] + vertices[rib[1]])*0.5;
-		vertices.push_back(middle);
-		ribs[i * 2 + 0] = TVec2ui(rib[0], vertices.size() - 1);
-		ribs[i * 2 + 1] = TVec2ui(vertices.size() - 1, rib[1]);
-	}
-
-	int triangles_high = triangles.size() - 1;
-	triangles.resize(triangles.size() * 4);
-	for (int i = triangles_high; i >= 0; i--)
-	{
-		TTri tri = triangles[i];
-
-		//ребра треугольника посередине
-		ribs.push_back(TVec2ui(ribs[tri.rib[0] * 2 + 0][1], ribs[tri.rib[1] * 2 + 0][1]));
-		ribs.push_back(TVec2ui(ribs[tri.rib[1] * 2 + 0][1], ribs[tri.rib[2] * 2 + 0][1]));
-		ribs.push_back(TVec2ui(ribs[tri.rib[2] * 2 + 0][1], ribs[tri.rib[0] * 2 + 0][1]));
-
-		triangles[i * 4 + 0] = TTri(
-			tri.rib[0] * 2 + tri.inv_dir[0],
-			ribs.size() - 1 - 0,
-			tri.rib[2] * 2 + !tri.inv_dir[2],
-			tri.inv_dir[0], 1, tri.inv_dir[2]);
-		triangles[i * 4 + 1] = TTri(
-			tri.rib[0] * 2 + !tri.inv_dir[0],
-			tri.rib[1] * 2 + tri.inv_dir[1],
-			ribs.size() - 1 - 2,
-			tri.inv_dir[0], tri.inv_dir[1], 1);
-		triangles[i * 4 + 2] = TTri(
-			tri.rib[1] * 2 + !tri.inv_dir[1],
-			tri.rib[2] * 2 + tri.inv_dir[2],
-			ribs.size() - 1 - 1,
-			tri.inv_dir[1], tri.inv_dir[2], 1);
-		triangles[i * 4 + 3] = TTri(
-			ribs.size() - 1 - 2,
-			ribs.size() - 1 - 1,
-			ribs.size() - 1 - 0,
-			0, 0, 0);
-	}
+	return false;//TODO
 }
+template<class T, int Size>
+bool TSphere<T, Size>::LineCollide(const TLine<T, Size> &line) const
+{
+	return false;//TODO
+}
+template<class T, int Size>
+bool TSphere<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const
+{
+	return false;//TODO
+}
+
 
 template<class T>
 void DrawTrianglesSpecialized(const TSphere<T, 2>& sphere, std::vector<TVec<T, 2> >& vertices, std::vector<unsigned int>& indices)
@@ -270,8 +183,8 @@ void DrawLinesSpecialized(const TSphere<T, 2>& sphere, std::vector<TVec<T, 2> >&
 	const int v_count = int(360 / step) + 1;
 	for (int i = 0; i<v_count; i++)
 	{
-		vertices.push_back(TVec<T, 2>(float(radius*sin(i*step*M_PI / 180)), float(radius*cos(i*step*M_PI / 180))) + pos);
-		vertices.push_back(TVec<T, 2>(float(radius*sin((i + 1)*step*M_PI / 180)), float(radius*cos((i + 1)*step*M_PI / 180))) + pos);
+		vertices.push_back(TVec<T, 2>(float(sphere.radius*sin(i*step*M_PI / 180)), float(sphere.radius*cos(i*step*M_PI / 180))) + sphere.pos);
+		vertices.push_back(TVec<T, 2>(float(sphere.radius*sin((i + 1)*step*M_PI / 180)), float(sphere.radius*cos((i + 1)*step*M_PI / 180))) + sphere.pos);
 	}
 }
 
@@ -330,6 +243,95 @@ void TSphere<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	DrawLinesSpecialized(*this, vertices);
 }
+
+
+
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TBVolume<T, Size>& v)const
+{
+	return v.CollideWith(*this);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TBVolume<T, Size>& v, bool& fully_in_volume)const
+{
+	return v.CollideWith(*this, fully_in_volume);
+}
+
+template<class T>
+bool CollideWithSpecialized(const TSphere<T, 2>& aabb, const TFrustum<T, 2>& frustum)
+{
+	//static_assert(false, "supports only 3d");
+	return false;
+}
+template<class T>
+bool CollideWithSpecialized(const TSphere<T, 3>& aabb, const TFrustum<T, 3>& frustum)
+{
+	return frustum.Overlaps(aabb);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const
+{
+	return CollideWithSpecialized(*this, frustum);
+}
+
+template<class T>
+bool CollideWithSpecialized(const TSphere<T, 2>& aabb, const TFrustum<T, 2>& frustum, bool& fully_in_frustum)
+{
+	//static_assert(false, "supports only 3d");
+	return false;
+}
+template<class T>
+bool CollideWithSpecialized(const TSphere<T, 3>& aabb, const TFrustum<T, 3>& frustum, bool& fully_in_frustum)
+{
+	return frustum.Overlaps(aabb, fully_in_frustum);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const
+{
+	return CollideWithSpecialized(*this, frustum, fully_in_frustum);
+}
+
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TAABB<T, Size>& v)const
+{
+	return Collide<T, Size>(v, *this);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TAABB<T, Size>& v, bool& fully_in_aabb)const
+{
+	return Collide<T, Size>(*this, v, fully_in_aabb);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TOBB<T, Size>& v)const
+{
+	return Collide<T, Size>(*this, v);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TOBB<T, Size>& v, bool& fully_in_obb)const
+{
+	return Collide<T, Size>(v, *this, fully_in_obb);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TCapsule<T, Size>& v)const
+{
+	return Collide(v, *this);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TCapsule<T, Size>& v, bool& fully_in_capsule)const
+{
+	return Collide(v, *this, fully_in_capsule);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TSphere<T, Size>& v)const
+{
+	return Collide<T, Size>(v, *this);
+}
+template<class T, int Size>
+bool TSphere<T, Size>::CollideWith(const TSphere<T, Size>& v, bool& fully_in_sphere)const
+{
+	return Collide<T, Size>(*this, v, fully_in_sphere);
+}
+
 
 
 template class TSphere<float, 2>;

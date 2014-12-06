@@ -102,9 +102,12 @@ bool CollideAxis(T start, T first, T last, T dir, T& cf, T& cl, bool& f_curr_cut
 {
 	f_curr_cut = false;
 	l_curr_cut = false;
+	if (abs(dir)<0.000000001)
+	{
+		return IsIn(start, first, last);
+	}
 	T f = (first - start) / dir;
 	T l = (last - start) / dir;
-	if (f<0 && l<0)return false;
 	if (dir >= 0)
 	{
 		if (f>cf)
@@ -140,17 +143,16 @@ bool CollideAxis(T start, T first, T last, T dir, T& cf, T& cl, bool& f_curr_cut
 }
 
 template<class T, int Size>
-bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
+bool AABBRayCollide(const TAABB<T, Size>& aabb, const TRay<T, Size> &ray, T cf, T cl, TRayCollisionInfo<T, Size>& collision)
 {
 	bool result = true;
-	T cf = 0, cl = 10e30;
 	int fcut = -1, lcut = -1;
 	bool fmin = false, lmin = false;
 	for (int i = 0; i<Size&&result; i++)
 	{
 		bool f_curr_cut, f_cut_min;
 		bool l_curr_cut, l_cut_min;
-		result = result&&CollideAxis<T>(ray.pos[i], border[0][i], border[1][i], ray.dir[i], cf, cl, f_curr_cut, f_cut_min, l_curr_cut, l_cut_min);
+		result = result&&CollideAxis<T>(ray.pos[i], aabb.border[0][i], aabb.border[1][i], ray.dir[i], cf, cl, f_curr_cut, f_cut_min, l_curr_cut, l_cut_min);
 		if (f_curr_cut)
 		{
 			fcut = i;
@@ -169,7 +171,8 @@ bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, S
 		TVec<T, Size> normal(0);
 		normal[fcut] = fmin ? -1 : 1;
 		collision.in_normal = normal;
-	}else
+	}
+	else
 		collision.have_in = false;
 
 	if (lcut != -1)
@@ -178,12 +181,19 @@ bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, S
 		collision.out_param = cl;
 		TVec<T, Size> normal(0);
 		normal[lcut] = lmin ? -1 : 1;
-		collision.in_normal = normal;
+		collision.out_normal = normal;
 	}
 	else
 		collision.have_out = false;
 	collision.param_direction = ray.dir;
 	return result;
+}
+
+template<class T, int Size>
+bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
+{
+	T cf = 0, cl = std::numeric_limits<T>().max();
+	return AABBRayCollide(*this, ray, cf, cl, collision);
 }
 
 template<class T, int Size>
@@ -221,21 +231,175 @@ bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionI
 	return collision.distance < 0;
 }
 
+template<class T>
+bool SegmentCollideSpecialized(const TAABB<T, 2>& aabb, const TSegment<T, 2> &segment)
+{
+	TVec<T, 2> a = aabb.GetSize(),
+		b_dir = segment.GetDir(),
+		b = ((segment.p1 - segment.p0)*0.5).GetAbs(),
+		pos_a = aabb.GetCenter(),
+		pos_b = (segment.p1 + segment.p0)*0.5;
+
+	TVec<T, 2> TT((pos_b - pos_a));
+	T ra, rb, t;
+	//проекции на оси AABB (т.е. X Y)
+	for (int i = 0; i<2; i++)
+	{
+		//для AABB проекцией будет его размер по соответсвующей оси
+		ra = a[i];
+		//для отрезка проекцией будет его размер по соответсвующей оси
+		rb = b[i];
+		t = abs(TT[i]);
+		if (t > ra + rb)
+			return false;
+	}
+
+	//проекции на направление отрезка повернутое на 90 градусов
+	{
+		TVec<T, 2> proj = b_dir.Cross();
+		ra = a.AbsScalarMul(proj);
+		t = abs(TT*proj);
+		if (t > ra)
+			return false;
+	}
+
+	//проекция на направление отрезка
+	{
+		ra = a.AbsScalarMul(b_dir);
+		rb = b.Length();
+		t = abs(TT * b_dir);
+		if (t > ra + rb)
+			return false;
+	}
+
+	return true;
+}
+
+template<class T>
+bool SegmentCollideSpecialized(const TAABB<T, 3>& aabb, const TSegment<T, 3> &segment)
+{
+	TVec<T, 3> a = aabb.GetSize(),
+		b_dir = segment.GetDir(),
+		b = ((segment.p1 - segment.p0)*0.5).GetAbs(),
+		pos_a = aabb.GetCenter(),
+		pos_b = (segment.p1 + segment.p0)*0.5;
+
+	TVec<T, 3> TT((pos_b - pos_a));
+	T ra, rb, t;
+	//проекции на оси AABB (т.е. X Y Z)
+	for (int i = 0; i<3; i++)
+	{
+		//для AABB проекцией будет его размер по соответсвующей оси
+		ra = a[i];
+		//для отрезка проекцией будет его размер по соответсвующей оси
+		rb = b[i];
+		t = abs(TT[i]);
+		if (t > ra + rb)
+			return false;
+	}
+	
+	//проекции на 3 векторных произведения осей AABB и направления отрезка
+	for (int i = 0; i<3; i++)
+	{
+		TVec<T, 3> temp(0);
+		temp[i] = 1;
+		{
+			TVec<T, 3> proj = temp.Cross(b_dir);
+			ra = a.AbsScalarMul(proj);
+			t = abs(TT*proj);
+			if (t > ra)
+				return false;
+		}
+	}
+
+	//проекция на направление отрезка
+	{
+		ra = a.AbsScalarMul(b_dir);
+		rb = b.Length();
+		t = abs(TT * b_dir);
+		if (t > ra + rb)
+			return false;
+	}
+
+	return true;
+}
+
 template<class T, int Size>
 bool TAABB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const 
 {
+	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
+
+	return SegmentCollideSpecialized(*this, segment);
 }
+
 template<class T, int Size>
 bool TAABB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const 
 {
+	TRay<T, Size> ray = segment.ToRay();
+	T cf = 0, cl = std::numeric_limits<T>().max();
+	return AABBRayCollide(*this, ray, cf, cl, collision);
 }
+
+template<class T>
+bool LineCollideSpecialized(const TAABB<T, 2>& aabb, const TLine<T, 2> &line)
+{
+	TVec<T, 2> a = aabb.GetSize(),
+		b_dir = line.dir,
+		pos_a = aabb.GetCenter();
+
+	TVec<T, 2> TT(line.p0 - pos_a);
+	T ra, t;
+
+	//проекции на направление линии повернутое на 90 градусов
+	{
+		TVec<T, 2> proj = b_dir.Cross();
+		ra = a.AbsScalarMul(proj);
+		t = abs(TT*proj);
+		if (t > ra)
+			return false;
+	}
+
+	return true;
+}
+
+template<class T>
+bool LineCollideSpecialized(const TAABB<T, 3>& aabb, const TLine<T, 3> &line)
+{
+	TVec<T, 3> a = aabb.GetSize(),
+		b_dir = line.dir,
+		pos_a = aabb.GetCenter();
+
+	TVec<T, 3> TT(line.p0 - pos_a);
+	T ra, rb, t;
+
+	//проекции на 3 векторных произведения осей AABB и направления линии
+	for (int i = 0; i<3; i++)
+	{
+		TVec<T, 3> temp(0);
+		temp[i] = 1;
+		{
+			TVec<T, 3> proj = temp.Cross(b_dir);
+			ra = a.AbsScalarMul(proj);
+			t = abs(TT*proj);
+			if (t > ra)
+				return false;
+		}
+	}
+
+	return true;
+}
+
 template<class T, int Size>
 bool TAABB<T, Size>::LineCollide(const TLine<T, Size> &line) const  
 {
+	return LineCollideSpecialized(*this, line);
 }
 template<class T, int Size>
 bool TAABB<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const  
 {
+	TRay<T, Size> ray = line.ToRay();
+	T cf = std::numeric_limits<T>().lowest(), cl = std::numeric_limits<T>().max();
+	return AABBRayCollide(*this, ray, cf, cl, collision);
 }
 
 const bool quads_of_box[6][4][3] =
@@ -347,16 +511,41 @@ bool TAABB<T, Size>::CollideWith(const TBVolume<T, Size>& v, bool& fully_in_volu
 {
 	return v.CollideWith(*this, fully_in_volume);
 }
+
+template<class T>
+bool CollideWithSpecialized(const TAABB<T, 2>& aabb, const TFrustum<T, 2>& frustum)
+{
+	//static_assert(false, "supports only 3d");
+	return false;
+}
+template<class T>
+bool CollideWithSpecialized(const TAABB<T, 3>& aabb, const TFrustum<T, 3>& frustum)
+{
+	return frustum.Overlaps(aabb);
+}
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const
 {
-	return frustum.Overlaps(*this);
+	return CollideWithSpecialized(*this, frustum);
+}
+
+template<class T>
+bool CollideWithSpecialized(const TAABB<T, 2>& aabb, const TFrustum<T, 2>& frustum, bool& fully_in_frustum)
+{
+	//static_assert(false, "supports only 3d");
+	return false;
+}
+template<class T>
+bool CollideWithSpecialized(const TAABB<T, 3>& aabb, const TFrustum<T, 3>& frustum, bool& fully_in_frustum)
+{
+	return frustum.Overlaps(aabb, fully_in_frustum);
 }
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const
 {
-	return frustum.Overlaps(*this, fully_in_frustum);
+	return CollideWithSpecialized(*this, frustum, fully_in_frustum);
 }
+
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TAABB<T, Size>& v)const
 {

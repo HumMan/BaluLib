@@ -34,11 +34,16 @@ public:
 	virtual void DrawLines(std::vector<TVec<T, Size> >& vertices) const;
 
 	//
-	virtual bool CollideWith(const TBVolume<T, Size>& v)const;
-	virtual bool CollideWith(const TFrustum<T, Size>& frustum)const;
-	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const;
-	virtual bool CollideWith(const TAABB<T, Size>& v)const;
-	virtual bool CollideWith(const TOBB<T, Size>& v)const;
-	virtual bool CollideWith(const TCapsule<T, Size>& v) const;
-	virtual bool CollideWith(const TSphere<T, Size>& v) const;
+	virtual bool CollideWith(const TBVolume<T, Size>& volume) const;
+	virtual bool CollideWith(const TBVolume<T, Size>& volume, bool& fully_in_volume) const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum) const;
+	virtual bool CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum) const;
+	virtual bool CollideWith(const TAABB<T, Size>& aabb) const;
+	virtual bool CollideWith(const TAABB<T, Size>& aabb, bool& fully_in_aabb) const;
+	virtual bool CollideWith(const TOBB<T, Size>& obb) const;
+	virtual bool CollideWith(const TOBB<T, Size>& obb, bool& fully_in_obb) const;
+	virtual bool CollideWith(const TCapsule<T, Size>& capsule) const;
+	virtual bool CollideWith(const TCapsule<T, Size>& capsule, bool& fully_in_capsule) const;
+	virtual bool CollideWith(const TSphere<T, Size>& sphere) const;
+	virtual bool CollideWith(const TSphere<T, Size>& sphere, bool& fully_in_sphere) const;
 };

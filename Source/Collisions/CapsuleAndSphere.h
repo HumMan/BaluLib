@@ -13,7 +13,7 @@ bool Collide(const TCapsule<T, Size>& capsule, const TSphere<T, Size>& sphere, b
 {
 	TVec<T, Size> nearest_point;
 	T t;
-	
+	T min_r = (capsule.radius - sphere.radius);
 	capsule_fully_in_sphere =
 		capsule.segment.p0.SqrDistance(sphere.pos) < min_r &&
 		capsule.segment.p1.SqrDistance(sphere.pos) < min_r;
@@ -21,7 +21,7 @@ bool Collide(const TCapsule<T, Size>& capsule, const TSphere<T, Size>& sphere, b
 }
 
 template<class T, int Size>
-bool Collide(const TCapsule<T, Size>& sphere, const TSphere<T, Size>& capsule, bool& sphere_fully_in_capsule)
+bool Collide(const TSphere<T, Size>& sphere, const TCapsule<T, Size>& capsule, bool& sphere_fully_in_capsule)
 {
 	TVec<T, Size> nearest_point;
 	T t;

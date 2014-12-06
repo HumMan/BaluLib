@@ -60,11 +60,11 @@ struct TSegment
 		this->p0 = p0;
 		this->p1 = p1;
 	}
-	TVec<T, size> GetDir()
+	TVec<T, size> GetDir()const
 	{
 		return (p1 - p0).GetNormalized();
 	}
-	TRay<T, size> ToRay()
+	TRay<T, size> ToRay()const
 	{
 		return TRay<T, size>(p0, GetDir());
 	}
@@ -83,7 +83,7 @@ struct TLine
 		this->p0 = p0;
 		this->dir = (p1-p0).GetNormalized();
 	}
-	TRay<T, size> ToRay()
+	TRay<T, size> ToRay()const
 	{
 		return TRay<T, size>(p0, dir);
 	}
@@ -610,4 +610,70 @@ T RayRayDistance(TRay<T, Size> s0, TRay<T, Size> s1)
 	TVec<T, Size>   dP = w + (u*sc) - (v*tc);  // = S1(sc) - S2(tc)
 
 	return dP.Length();
+}
+
+
+
+struct TTri
+{
+	int rib[3];
+	bool inv_dir[3];
+	TTri(){}
+	TTri(int r0, int r1, int r2, bool i0, bool i1, bool i2)
+	{
+		rib[0] = r0;
+		rib[1] = r1;
+		rib[2] = r2;
+		inv_dir[0] = i0;
+		inv_dir[1] = i1;
+		inv_dir[2] = i2;
+	}
+};
+
+template<class T, int Size>
+void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs, std::vector<TTri>& triangles)
+{
+	int ribs_high = ribs.size() - 1;
+	ribs.resize(ribs.size() * 2);
+	for (int i = ribs_high; i >= 0; i--)
+	{
+		TVec2ui rib = ribs[i];
+		TVec<T, Size> middle = (vertices[rib[0]] + vertices[rib[1]])*0.5;
+		vertices.push_back(middle);
+		ribs[i * 2 + 0] = TVec2ui(rib[0], vertices.size() - 1);
+		ribs[i * 2 + 1] = TVec2ui(vertices.size() - 1, rib[1]);
+	}
+
+	int triangles_high = triangles.size() - 1;
+	triangles.resize(triangles.size() * 4);
+	for (int i = triangles_high; i >= 0; i--)
+	{
+		TTri tri = triangles[i];
+
+		//ребра треугольника посередине
+		ribs.push_back(TVec2ui(ribs[tri.rib[0] * 2 + 0][1], ribs[tri.rib[1] * 2 + 0][1]));
+		ribs.push_back(TVec2ui(ribs[tri.rib[1] * 2 + 0][1], ribs[tri.rib[2] * 2 + 0][1]));
+		ribs.push_back(TVec2ui(ribs[tri.rib[2] * 2 + 0][1], ribs[tri.rib[0] * 2 + 0][1]));
+
+		triangles[i * 4 + 0] = TTri(
+			tri.rib[0] * 2 + tri.inv_dir[0],
+			ribs.size() - 1 - 0,
+			tri.rib[2] * 2 + !tri.inv_dir[2],
+			tri.inv_dir[0], 1, tri.inv_dir[2]);
+		triangles[i * 4 + 1] = TTri(
+			tri.rib[0] * 2 + !tri.inv_dir[0],
+			tri.rib[1] * 2 + tri.inv_dir[1],
+			ribs.size() - 1 - 2,
+			tri.inv_dir[0], tri.inv_dir[1], 1);
+		triangles[i * 4 + 2] = TTri(
+			tri.rib[1] * 2 + !tri.inv_dir[1],
+			tri.rib[2] * 2 + tri.inv_dir[2],
+			ribs.size() - 1 - 1,
+			tri.inv_dir[1], tri.inv_dir[2], 1);
+		triangles[i * 4 + 3] = TTri(
+			ribs.size() - 1 - 2,
+			ribs.size() - 1 - 1,
+			ribs.size() - 1 - 0,
+			0, 0, 0);
+	}
 }

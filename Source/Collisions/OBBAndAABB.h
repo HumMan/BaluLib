@@ -92,6 +92,8 @@ bool CollideSpecialization(const TOBB<T, 3>& v0, const TAABB<T, 3>& v1)
 					return false;
 			}
 		}
+
+		return true;
 }
 
 template<class T,int Size>
@@ -99,5 +101,13 @@ bool Collide(const TOBB<T,Size>& v0,const TAABB<T,Size>& v1)
 {
 	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
 
-	CollideSpecialization(v0, v1);
+	return CollideSpecialization(v0, v1);
+}
+
+template<class T, int Size>
+bool Collide(const TOBB<T, Size>& v0, const TAABB<T, Size>& v1, bool& obb_fully_in_aabb)
+{
+	static_assert(Size >= 2 && Size <= 3, "only 2d 3d support");
+
+	return CollideSpecialization(v0, v1);
 }

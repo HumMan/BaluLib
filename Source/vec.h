@@ -249,6 +249,16 @@ public:
 		return t.SqrLength();
 	}
 
+	TVec GetAbs()const
+	{
+		TVec result;
+		if (high >= 0)result[0] = abs(v[0]);
+		if (high >= 1)result[1] = abs(v[1]);
+		if (high >= 2)result[2] = abs(v[2]);
+		if (high >= 3)result[3] = abs(v[3]);
+		return result;
+	}
+
 	private:
 	template <class T,int size>
 	typename std::enable_if<size != 3>::type CrossSpec(const TVec<T, size>& v1, TVec<T, size>& result)const

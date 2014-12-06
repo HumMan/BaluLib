@@ -1,68 +1,104 @@
 #include "../../BVolumes/Capsule.h"
 
-template<class T,int Size>
-bool TCapsule<T,Size>::Contain(const TVec<T,Size>& point) const
+#include "../CapsuleAndAABB.h"
+#include "../CapsuleAndCapsule.h"
+#include "../CapsuleAndOBB.h"
+#include "../CapsuleAndSphere.h"
+
+#include "../../BVolumes/Frustum.h"
+
+template<class T>
+TMatrix<T, 2> GetOrientationSpecialized(const TCapsule<T, 2> capsule)
 {
-	T t;
-	TVec<T,Size> nearest_point;
-	return DistanceBetweenPointLine<T, Size>(point, segment.p0, segment.p1, t, nearest_point)<radius;
+	assert(false);
 }
 
-template<class T,int Size>
-bool TCapsule<T,Size>::Contain(const TVec<T,Size>& point,T& distance, TVec<T,Size>& nearest_point, TVec<T,Size>& normal) const
+template<class T>
+TMatrix<T, 3> GetOrientationSpecialized(const TCapsule<T, 3> capsule)
+{
+	TMatrix<T, 3> orient;
+	TVec<T, 3> temp(0);
+	temp[1] = 1;
+	orient[0] = (capsule.segment.p1 - capsule.segment.p0).GetNormalized();
+	orient[1] = temp.Cross(orient[0]).GetNormalized();
+	if (orient[1].SqrLength()<0.0001)
+	{
+		temp[1] = 0;
+		temp[2] = 1;
+		orient[1] = temp.Cross(orient[0]).GetNormalized();
+	}
+	orient[2] = orient[0].Cross(orient[1]).GetNormalized();
+	return orient;
+}
+
+template<class T, int Size>
+TMatrix<T, Size> TCapsule<T, Size>::GetOrientation()const
+{
+	return GetOrientationSpecialized(*this);
+}
+
+template<class T, int Size>
+bool TCapsule<T, Size>::PointCollide(const TVec<T, Size>& point) const
 {
 	T t;
-	distance = DistanceBetweenPointLine<T, Size>(point, segment.p0, segment.p1, t, nearest_point);
-	bool result=distance<radius;
-	normal=(point-nearest_point)*(1/distance);
+	TVec<T, Size> nearest_point;
+	return DistanceBetweenPointSegment<T, Size>(point, segment, t, nearest_point)<radius;
+}
+
+template<class T, int Size>
+bool TCapsule<T, Size>::PointCollide(const TVec<T, Size>& point, TPointCollisionInfo<T, Size>& collision) const
+{
+	T t;
+	collision.distance = DistanceBetweenPointSegment<T, Size>(point, segment, t, collision.nearest_point);
+	bool result = collision.distance<radius;
+	collision.normal = (point - collision.nearest_point)*(1 / collision.distance);
 	return result;
 }
 
 
 template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TBVolume<T, Size>& v)const							{ return v.CollideWith(*this); }
-template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const						{ return frustum.Overlaps(*this); }
-template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const{ return frustum.Overlaps(*this, fully_in_frustum); }
-template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TAABB<T, Size>& v)const								{ return Collide<T, Size>(*this, v); }
-template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TOBB<T, Size>& v)const								{ return Collide<T, Size>(*this, v); }
-template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TCapsule<T, Size>& v) const							{ return Collide<T, Size>(*this, v); }
-template<class T, int Size>
-bool TCapsule<T, Size>::CollideWith(const TSphere<T, Size>& v) const							{ return Collide<T, Size>(*this, v); }
-
-template<class T,int Size>
-bool TCapsule<T,Size>::CollideWith(const TRay<T,Size> &ray) const
+bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 {
-	T ray_t, capsule_t;
-	return SegmentRayDistance(segment, ray, capsule_t, ray_t)<radius;
+	return false;//TODO
 }
 
-template<class T,int Size>
-bool TCapsule<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t, TVec<T,Size>& normal) const
+template<class T, int Size>
+bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;
+	return false;//TODO
 }
 
-template<class T,int Size>
-bool TCapsule<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t0,T& t1)const
+template<class T, int Size>
+bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 {
-	return false;
+	return false;//TODO
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
+{
+	return false;//TODO
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const
+{
+	return false;//TODO
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const
+{
+	return false;//TODO
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::LineCollide(const TLine<T, Size> &line) const
+{
+	return false;//TODO
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const
+{
+	return false;//TODO
 }
 
-template<class T,int Size>
-bool TCapsule<T,Size>::CollideWith(const TRay<T,Size> &ray, T& t0, TVec<T,Size>& normal0,T& t1, TVec<T,Size>& normal1) const
-{
-	T ray_t, capsule_t;
-	T dist = SegmentRayDistance(segment, ray, capsule_t, ray_t);
-	//TVec<T, Size> ray_pos = ray.pos + ray.dir*ray_t;
-	//TVec<T, Size> seg_pos = segment.p0 + (segment.p1 - segment.p0).GetNormalized()*capsule_t;
-	//normal0 = (ray_pos - seg_pos).GetNormalized();
-	return dist<radius;
-}
 
 
 template<class T>
@@ -126,7 +162,7 @@ void TCapsule<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std
 }
 
 template<class T>
-void DrawLinesSpecialized(const TCapsule<T, 2>& capsule, std::vector<TVec<T, 3> >& vertices)
+void DrawLinesSpecialized(const TCapsule<T, 2>& capsule, std::vector<TVec<T, 2> >& vertices)
 {
 	//const int step=20;
 	//const int v_count=int(360/step)+1;
@@ -202,6 +238,95 @@ void TCapsule<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	DrawLinesSpecialized(*this, vertices);
 }
+
+
+
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TBVolume<T, Size>& v)const
+{
+	return v.CollideWith(*this);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TBVolume<T, Size>& v, bool& fully_in_volume)const
+{
+	return v.CollideWith(*this, fully_in_volume);
+}
+
+template<class T>
+bool CollideWithSpecialized(const TCapsule<T, 2>& aabb, const TFrustum<T, 2>& frustum)
+{
+	//static_assert(false, "supports only 3d");
+	return false;
+}
+template<class T>
+bool CollideWithSpecialized(const TCapsule<T, 3>& aabb, const TFrustum<T, 3>& frustum)
+{
+	return frustum.Overlaps(aabb);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TFrustum<T, Size>& frustum)const
+{
+	return CollideWithSpecialized(*this, frustum);
+}
+
+template<class T>
+bool CollideWithSpecialized(const TCapsule<T, 2>& aabb, const TFrustum<T, 2>& frustum, bool& fully_in_frustum)
+{
+	//static_assert(false, "supports only 3d");
+	return false;
+}
+template<class T>
+bool CollideWithSpecialized(const TCapsule<T, 3>& aabb, const TFrustum<T, 3>& frustum, bool& fully_in_frustum)
+{
+	return frustum.Overlaps(aabb, fully_in_frustum);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TFrustum<T, Size>& frustum, bool& fully_in_frustum)const
+{
+	return CollideWithSpecialized(*this, frustum, fully_in_frustum);
+}
+
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TAABB<T, Size>& v)const
+{
+	return Collide<T, Size>(*this, v);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TAABB<T, Size>& v, bool& fully_in_aabb)const
+{
+	return Collide<T, Size>(*this, v, fully_in_aabb);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TOBB<T, Size>& v)const
+{
+	return Collide<T, Size>(*this, v);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TOBB<T, Size>& v, bool& fully_in_obb)const
+{
+	return Collide<T, Size>(v, *this, fully_in_obb);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TCapsule<T, Size>& v)const
+{
+	return Collide(v, *this);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TCapsule<T, Size>& v, bool& fully_in_capsule)const
+{
+	return Collide(v, *this, fully_in_capsule);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TSphere<T, Size>& v)const
+{
+	return Collide<T, Size>(*this, v);
+}
+template<class T, int Size>
+bool TCapsule<T, Size>::CollideWith(const TSphere<T, Size>& v, bool& fully_in_sphere)const
+{
+	return Collide<T, Size>(*this, v, fully_in_sphere);
+}
+
 
 
 template class TCapsule<float, 2>;

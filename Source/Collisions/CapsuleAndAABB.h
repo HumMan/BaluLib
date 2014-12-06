@@ -5,7 +5,7 @@ bool Collide(const TCapsule<T,Size>& capsule,const TAABB<T,Size>& aabb)
 {
 	TRayCollisionInfo<T, Size> collision;
 	aabb.SegmentCollide(capsule.segment, collision);
-
+	return false;//TODO
 }
 
 template<class T, int Size>

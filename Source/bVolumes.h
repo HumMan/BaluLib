@@ -19,9 +19,9 @@ class TBaluRender;
 //#include "Collisions\OBBAndSphere.h"
 //#include "Collisions\SphereAndSphere.h"
 
-//#include "BVolumes\BVolume.h"
-//#include "BVolumes\AABB.h"
-//#include "BVolumes\OBB.h"
+#include "BVolumes\BVolume.h"
+#include "BVolumes\AABB.h"
+#include "BVolumes\OBB.h"
 //#include "BVolumes\Sphere.h"
 //#include "BVolumes\Capsule.h"
 //#include "BVolumes\Frustum.h"
