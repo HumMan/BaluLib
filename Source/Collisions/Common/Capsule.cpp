@@ -78,7 +78,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 	// m = dot(AB, d) / dot(AB, AB) and 
 	// n = dot(AB, AO) / dot(AB, AB)
 	//
-	TVec<T, Size> AB = capsule.segment.p0 - capsule.segment.p1;
+	TVec<T, Size> AB = capsule.segment.p1 - capsule.segment.p0;
 	TVec<T, Size> AO = ray.pos - capsule.segment.p0;
 
 	T AB_dot_d = AB*ray.dir;
@@ -101,7 +101,7 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 	T b = 2.0f * (Q*R);
 	T c = R*R - (capsule.radius * capsule.radius);
 
-	if (a == 0.0f)
+	if (false && a == 0.0f)
 	{
 		// Special case: AB and ray direction are parallel. If there is an intersection it will be on the end spheres...
 		// NOTE: Why is that?
@@ -161,16 +161,11 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 	}
 	T tmin = (-b - sqrt(discriminant)) / (2.0f * a);
 	T tmax = (-b + sqrt(discriminant)) / (2.0f * a);
-	if (tmin > tmax)
-	{
-		T temp = tmin;
-		tmin = tmax;
-		tmax = temp;
-	}
 
 	// Now check to see if K1 and K2 are inside the line segment defined by A,B
 	float t_k1 = tmin * m + n;
-	if (t_k1 < 0.0f) 	{
+	if (t_k1 < 0.0f) 	
+	{
 		// On sphere (A, r)... 		
 		TSphere<T, Size> s(capsule.segment.p0, capsule.radius);
 		T stmin, stmax;
