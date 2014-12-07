@@ -569,6 +569,58 @@ T SegmentRayDistance(TSegment<T, Size> s0, TRay<T, Size> s1, T& s0_t, T& s1_t)
 	return dP.Length();
 }
 
+
+template<class T, int Size>
+T SegmentLineDistance(TSegment<T, Size> s0, TLine<T, Size> s1, T& s0_t, T& s1_t)
+{
+	//http://www.softsurfer.com/Archive/algorithm_0106/algorithm_0106.htm#dist3D_Segment_to_Segment()
+	const T SMALL_NUM = 0.000001;
+	TVec<T, Size>   u = s0.p1 - s0.p0;
+	TVec<T, Size>   v = s1.dir;
+	TVec<T, Size>   w = s0.p0 - s1.p0;
+	T    a = (u*u);        // always >= 0
+	T    b = (u*v);
+	T    c = (v*v);        // always >= 0
+	T    d = (u*w);
+	T    e = (v*w);
+	T    D = a*c - b*b;       // always >= 0
+	T    sc, sN, sD = D;      // sc = sN / sD, default sD = D >= 0
+	T    tc, tN, tD = D;      // tc = tN / tD, default tD = D >= 0
+
+	// compute the line parameters of the two closest points
+	if (D < SMALL_NUM) { // the lines are almost parallel
+		sN = 0.0;        // force using point P0 on segment S1
+		sD = 1.0;        // to prevent possible division by 0.0 later
+		tN = e;
+		tD = c;
+	}
+	else {                // get the closest points on the infinite lines
+		sN = (b*e - c*d);
+		tN = (a*e - b*d);
+		if (sN < 0.0) {       // sc < 0 => the s=0 edge is visible
+			sN = 0.0;
+			tN = e;
+			tD = c;
+		}
+		else if (sN > sD) {  // sc > 1 => the s=1 edge is visible
+			sN = sD;
+			tN = e + b;
+			tD = c;
+		}
+	}
+	// finally do the division to get sc and tc
+	sc = (abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
+	tc = (abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
+
+	s0_t = sc;
+	s1_t = tc;
+
+	// get the difference of the two closest points
+	TVec<T, Size>   dP = w + (u*sc) - (v*tc);  // = S1(sc) - S2(tc)
+
+	return dP.Length();
+}
+
 template<class T, int Size>
 T RayRayDistance(TRay<T, Size> s0, TRay<T, Size> s1)
 {

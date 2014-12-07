@@ -258,30 +258,109 @@ bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 template<class T, int Size>
 bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	T d0 = plane.DistanceTo(segment.p0);
+	T d1 = plane.DistanceTo(segment.p1);
+	if (abs(d0) < abs(d1))
+	{
+		if (d0 > 0)
+		{
+			collision.plane_point = segment.p0 - plane.normal * d0;
+			collision.nearest_point = segment.p0 - plane.normal * radius;
+		}
+		else
+		{
+			collision.plane_point = segment.p0 + plane.normal * d0;
+			collision.nearest_point = segment.p0 + plane.normal * radius;
+		}
+		collision.normal = plane.normal;
+		collision.distance = abs(d0) - radius;
+		return abs(d0) < radius;
+	}
+	else
+	{
+		if (d1 > 0)
+		{
+			collision.plane_point = segment.p1 - plane.normal * d1;
+			collision.nearest_point = segment.p1 - plane.normal * radius;
+		}
+		else
+		{
+			collision.plane_point = segment.p1 + plane.normal * d1;
+			collision.nearest_point = segment.p1 + plane.normal * radius;
+		}
+		collision.normal = plane.normal;
+		collision.distance = abs(d1) - radius;
+		return abs(d1) < radius;
+	}
 }
 template<class T, int Size>
-bool TCapsule<T, Size>::SegmentCollide(const TSegment<T, Size> &segment) const
+bool TCapsule<T, Size>::SegmentCollide(const TSegment<T, Size> &segment1) const
 {
-	return false;//TODO
+	return SegmentSegmentDistance(segment, segment1) <= radius;
 }
 template<class T, int Size>
-bool TCapsule<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollisionInfo<T, Size>& collision) const
+bool TCapsule<T, Size>::SegmentCollide(const TSegment<T, Size> &segment0, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	TVec<T, Size> p0, p1, n0, n1;
+	T t0, t1;
+	TVec<T, Size> dir = segment0.p1 - segment0.p0;
+	T length = dir.Length();
+	TRay<T, Size> ray(segment0.p0, dir*(1 / length));
+	bool result = CapsuleRayCollide(*this, ray, p0, p1, n0, n1, t0, t1);
+	if (result)
+	{
+		if (t0 > 0 && t0 < length)
+		{
+
+			collision.have_in = true;
+			collision.in_normal = n0;
+			collision.in_pos = p0;
+			collision.in_param = t0;
+		}
+		else
+			collision.have_in = false;
+		if (t1 > 0 && t1 < length)
+		{
+			collision.have_out = true;
+			collision.out_normal = n1;
+			collision.out_pos = p1;
+			collision.out_param = t1;
+		}
+		else
+			collision.have_out = false;
+		return collision.have_in||collision.have_out;
+	}
+	else
+		return false;
 }
 template<class T, int Size>
 bool TCapsule<T, Size>::LineCollide(const TLine<T, Size> &line) const
 {
-	return false;//TODO
+	T t0, t1;
+	return SegmentLineDistance(segment, line, t0, t1) <= radius;
 }
 template<class T, int Size>
 bool TCapsule<T, Size>::LineCollide(const TLine<T, Size> &line, TRayCollisionInfo<T, Size>& collision) const
 {
-	return false;//TODO
+	TVec<T, Size> p0, p1, n0, n1;
+	T t0, t1;
+	bool result = CapsuleRayCollide(*this, line.ToRay(), p0, p1, n0, n1, t0, t1);
+	if (result)
+	{
+		collision.have_in = true;
+		collision.in_normal = n0;
+		collision.in_pos = p0;
+		collision.in_param = t0;
+
+		collision.have_out = true;
+		collision.out_normal = n1;
+		collision.out_pos = p1;
+		collision.out_param = t1;
+		return true;
+	}
+	else
+		return false;
 }
-
-
 
 template<class T>
 void DrawTrianglesSpecialized(const TCapsule<T, 2>& capsule, std::vector<TVec<T, 2> >& vertices, std::vector<unsigned int>& indices)
