@@ -185,7 +185,7 @@ bool AABBRayCollide(const TAABB<T, Size>& aabb, const TRay<T, Size> &ray, T cf, 
 	}
 	else
 		collision.have_out = false;
-	collision.param_direction = ray.dir;
+	//collision.param_direction = ray.dir;
 	return result;
 }
 

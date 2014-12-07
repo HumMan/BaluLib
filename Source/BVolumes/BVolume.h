@@ -11,7 +11,7 @@ struct TRayCollisionInfo
 	bool have_out;
 	TVec<T, Size> out_pos, out_normal;
 	T out_param;
-	TVec<T, Size> param_direction;
+	//TVec<T, Size> param_direction;
 };
 
 template < class T, int Size >

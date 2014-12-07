@@ -24,7 +24,7 @@ TMatrix<T, 3> GetOrientationSpecialized(const TCapsule<T, 3> capsule)
 	temp[1] = 1;
 	orient[0] = (capsule.segment.p1 - capsule.segment.p0).GetNormalized();
 	orient[1] = temp.Cross(orient[0]).GetNormalized();
-	if (orient[1].SqrLength()<0.0001)
+	if (orient[1].SqrLength() < 0.0001)
 	{
 		temp[1] = 0;
 		temp[2] = 1;
@@ -45,7 +45,7 @@ bool TCapsule<T, Size>::PointCollide(const TVec<T, Size>& point) const
 {
 	T t;
 	TVec<T, Size> nearest_point;
-	return DistanceBetweenPointSegment<T, Size>(point, segment, t, nearest_point)<radius;
+	return DistanceBetweenPointSegment<T, Size>(point, segment, t, nearest_point) < radius;
 }
 
 template<class T, int Size>
@@ -53,7 +53,7 @@ bool TCapsule<T, Size>::PointCollide(const TVec<T, Size>& point, TPointCollision
 {
 	T t;
 	collision.distance = DistanceBetweenPointSegment<T, Size>(point, segment, t, collision.nearest_point);
-	bool result = collision.distance<radius;
+	bool result = collision.distance < radius;
 	collision.normal = (point - collision.nearest_point)*(1 / collision.distance);
 	return result;
 }
@@ -67,17 +67,10 @@ bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 }
 
 template<class T, int Size>
-bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ray, TVec<T, Size>& p1, TVec<T, Size>& p2, TVec<T, Size>& n1, TVec<T, Size>& n2, bool& have_in, bool& have_out)
+bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ray, TVec<T, Size>& p0, TVec<T, Size>& p1, TVec<T, Size>& n0, TVec<T, Size>& n1, T& t0, T& t1)
 {
 	//http://blog.makingartstudios.com/?p=286
 
-	// Substituting equ. (1) - (6) to equ. (I) and solving for t' gives:
-	//
-	// t' = (t * dot(AB, d) + dot(AB, AO)) / dot(AB, AB); (7) or
-	// t' = t * m + n where 
-	// m = dot(AB, d) / dot(AB, AB) and 
-	// n = dot(AB, AO) / dot(AB, AB)
-	//
 	TVec<T, Size> AB = capsule.segment.p1 - capsule.segment.p0;
 	TVec<T, Size> AO = ray.pos - capsule.segment.p0;
 
@@ -88,12 +81,6 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 	T m = AB_dot_d / AB_dot_AB;
 	T n = AB_dot_AO / AB_dot_AB;
 
-	// Substituting (7) into (II) and solving for t gives:
-	//
-	// dot(Q, Q)*t^2 + 2*dot(Q, R)*t + (dot(R, R) - r^2) = 0
-	// where
-	// Q = d - AB * m
-	// R = AO - AB * n
 	TVec<T, Size> Q = ray.dir - (AB * m);
 	TVec<T, Size> R = AO - (AB * n);
 
@@ -101,19 +88,18 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 	T b = 2.0f * (Q*R);
 	T c = R*R - (capsule.radius * capsule.radius);
 
+	T discriminant = b * b - 4.0f * a * c;
+	if (discriminant < 0.0f)
+	{
+		return false;
+	}
+	T tmin = (-b - sqrt(discriminant)) / (2.0f * a);
+	T tmax = (-b + sqrt(discriminant)) / (2.0f * a);
+
+	T t_k0 = tmin * m + n;
+	T t_k1 = tmax * m + n;
 	if (a == 0.0f)
 	{
-		// Special case: AB and ray direction are parallel. If there is an intersection it will be on the end spheres...
-		// NOTE: Why is that?
-		// Q = d - AB * m =&gt;
-		// Q = d - AB * (|AB|*|d|*cos(AB,d) / |AB|^2) =&gt; |d| == 1.0
-		// Q = d - AB * (|AB|*cos(AB,d)/|AB|^2) =&gt;
-		// Q = d - AB * cos(AB, d) / |AB| =&gt;
-		// Q = d - unit(AB) * cos(AB, d)
-		//
-		// |Q| == 0 means Q = (0, 0, 0) or d = unit(AB) * cos(AB,d)
-		// both d and unit(AB) are unit vectors, so cos(AB, d) = 1 =&gt; AB and d are parallel.
-		// 
 		TSphere<T, Size> sphereA(capsule.segment.p0, capsule.radius);
 		TSphere<T, Size> sphereB(capsule.segment.p1, capsule.radius);
 
@@ -127,124 +113,105 @@ bool CapsuleRayCollide(const TCapsule<T, Size>& capsule, const TRay<T, Size> &ra
 
 		if (atmin < btmin)
 		{
-			p1 = ray.pos + (ray.dir * atmin);
+			p0 = ray.pos + (ray.dir * atmin);
+			n0 = p0 - capsule.segment.p0;
+			n0.Normalize();
+		}
+		else
+		{
+			p0 = ray.pos + (ray.dir * btmin);
+			n0 = p0 - capsule.segment.p1;
+			n0.Normalize();
+		}
+		if (atmax > btmax)
+		{
+			p1 = ray.pos + (ray.dir * atmax);
 			n1 = p1 - capsule.segment.p0;
 			n1.Normalize();
 		}
 		else
 		{
-			p1 = ray.pos + (ray.dir * btmin);
+			p1 = ray.pos + (ray.dir * btmax);
 			n1 = p1 - capsule.segment.p1;
 			n1.Normalize();
-		}
-		if (atmax > btmax)
-		{
-			p2 = ray.pos + (ray.dir * atmax);
-			n2 = p2 - capsule.segment.p0;
-			n2.Normalize();
-		}
-		else
-		{
-			p2 = ray.pos + (ray.dir * btmax);
-			n2 = p2 - capsule.segment.p1;
-			n2.Normalize();
 		}
 
 		return true;
 	}
-
-	T discriminant = b * b - 4.0f * a * c;
-	if (discriminant < 0.0f)
-	{ 	// The ray doesn't hit the infinite cylinder defined by (A, B). 	
-		// No intersection. 	
-		return false;
-	}
-	T tmin = (-b - sqrt(discriminant)) / (2.0f * a);
-	T tmax = (-b + sqrt(discriminant)) / (2.0f * a);
-
-	// Now check to see if K1 and K2 are inside the line segment defined by A,B
-	float t_k1 = tmin * m + n;
-	if (t_k1 < 0.0f) 	
+	if (t_k0 < 0)
 	{
-		// On sphere (A, r)... 		
 		TSphere<T, Size> s(capsule.segment.p0, capsule.radius);
 		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax) && stmin>0)
+		if (SphereRayCollide(s, ray, stmin, stmax))
 		{
-			p1 = ray.pos + (ray.dir * stmin);
+			p0 = ray.pos + (ray.dir * stmin);
+			n0 = p0 - capsule.segment.p0;
+			n0.Normalize();
+			t0 = stmin;
+		}
+		else
+			return false;
+	}
+	else if (t_k0 > 1)
+	{
+		TSphere<T, Size> s(capsule.segment.p1, capsule.radius);
+		T stmin, stmax;
+		if (SphereRayCollide(s, ray, stmin, stmax))
+		{
+			p0 = ray.pos + (ray.dir * stmin);
+			n0 = p0 - capsule.segment.p1;
+			n0.Normalize();
+			t0 = stmin;
+		}
+		else
+			return false;
+	}
+	else
+	{
+		p0 = ray.pos + (ray.dir * tmin);
+		TVec<T, Size> k = capsule.segment.p0 + AB * t_k0;
+		n0 = p0 - k;
+		n0.Normalize();
+		t0 = tmin;
+	}
+
+
+	if (t_k1 < 0)
+	{
+		TSphere<T, Size> s(capsule.segment.p0, capsule.radius);
+		T stmin, stmax;
+		if (SphereRayCollide(s, ray, stmin, stmax))
+		{
+			p1 = ray.pos + (ray.dir * stmax);
 			n1 = p1 - capsule.segment.p0;
 			n1.Normalize();
+			t1 = stmax;
 		}
 		else
 			return false;
 	}
-	else if (t_k1 > 1.0f)
+	else if (t_k1 > 1)
 	{
-		// On sphere (B, r)...
 		TSphere<T, Size> s(capsule.segment.p1, capsule.radius);
-
 		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax) && stmin>0)
+		if (SphereRayCollide(s, ray, stmin, stmax))
 		{
-			p1 = ray.pos + (ray.dir * stmin);
+			p1 = ray.pos + (ray.dir * stmax);
 			n1 = p1 - capsule.segment.p1;
 			n1.Normalize();
+			t1 = stmax;
 		}
 		else
 			return false;
 	}
-	else if (tmin>0)
+	else
 	{
-		// On the cylinder...
-		p1 = ray.pos + (ray.dir * tmin);
-
-		TVec<T, Size> k1 = capsule.segment.p0 + AB * t_k1;
-		n1 = p1 - k1;
+		p1 = ray.pos + (ray.dir * tmax);
+		TVec<T, Size> k = capsule.segment.p0 + AB * t_k1;
+		n1 = p1 - k;
 		n1.Normalize();
+		t1 = tmax;
 	}
-	else return false;
-
-	T t_k2 = tmax * m + n;
-	if (t_k2 < 0.0f)
-	{
-		// On sphere (A, r)... 	
-		TSphere<T, Size> s(capsule.segment.p0, capsule.radius);
-
-		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax)&& stmax>0)
-		{
-			p2 = ray.pos + (ray.dir * stmax);
-			n2 = p2 - capsule.segment.p0;
-			n2.Normalize();
-		}
-		else
-			return false;
-	}
-	else if (t_k2 > 1.0f)
-	{
-		// On sphere (B, r)...
-		TSphere<T, Size> s(capsule.segment.p1, capsule.radius);
-
-		T stmin, stmax;
-		if (SphereRayCollide(s, ray, stmin, stmax) && stmax>0)
-		{
-			p2 = ray.pos + (ray.dir * stmax);
-			n2 = p2 - capsule.segment.p1;
-			n2.Normalize();
-		}
-		else
-			return false;
-	}
-	else if (tmax>0)
-	{
-		p2 = ray.pos + (ray.dir * tmax);
-
-		TVec<T,Size> k2 = capsule.segment.p0 + AB * t_k2;
-		n2 = p2 - k2;
-		n2.Normalize();
-	}
-	else return false;
-
 	return true;
 }
 
@@ -252,17 +219,33 @@ template<class T, int Size>
 bool TCapsule<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
 {
 	TVec<T, Size> p0, p1, n0, n1;
-	bool result = CapsuleRayCollide(*this, ray, p0,p1,n0,n1, collision.have_in, collision.have_out);
+	T t0, t1;
+	bool result = CapsuleRayCollide(*this, ray, p0, p1, n0, n1, t0, t1);
 	if (result)
 	{
-		collision.have_in = true;
-		collision.in_normal = n0;
-		collision.in_pos = p0;
-		collision.have_out = true;
-		collision.out_normal = n1;
-		collision.out_pos = p1;
+		if (t0 > 0)
+		{
+
+			collision.have_in = true;
+			collision.in_normal = n0;
+			collision.in_pos = p0;
+			collision.in_param = t0;
+		}
+		else
+			collision.have_in = false;
+		if (t1 > 0)
+		{
+			collision.have_out = true;
+			collision.out_normal = n1;
+			collision.out_pos = p1;
+			collision.out_param = t1;
+		}
+		else
+			collision.have_out = false;
+		return collision.have_out;
 	}
-	return result;
+	else
+		return false;
 }
 
 template<class T, int Size>
@@ -336,17 +319,17 @@ void DrawTrianglesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T,
 	triangles[2] = TTri(2, 5, 1, 1, 1, 0);
 	triangles[3] = TTri(6, 2, 3, 1, 0, 1);
 
-	for (int i = 0; i<4; i++)
+	for (int i = 0; i < 4; i++)
 		Tesselate(vertices, ribs, triangles);
 
 	TMatrix<T, 3> orient = capsule.GetOrientation();
 
-	for (int i = vertices_first; i<vertices.size(); i++)
+	for (int i = vertices_first; i < vertices.size(); i++)
 		vertices[i] = capsule.segment.p0 + orient*vertices[i];
 
 	int indices_first = indices.size();
 	indices.resize(indices.size() + triangles.size() * 3);
-	for (int i = 0; i<triangles.size(); i++)
+	for (int i = 0; i < triangles.size(); i++)
 	{
 		indices[indices_first + i * 3 + 0] = ribs[triangles[i].rib[0]][triangles[i].inv_dir[0]];
 		indices[indices_first + i * 3 + 1] = ribs[triangles[i].rib[1]][triangles[i].inv_dir[1]];
@@ -379,14 +362,14 @@ void DrawLinesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T, 3> 
 	T step = M_PI / v_count;
 	T alpha0, alpha1;
 	int vertices_last_high = vertices.size();
-	for (int i = 0; i<v_count; i++)
+	for (int i = 0; i < v_count; i++)
 	{
 		alpha0 = i*step + (T)(M_PI*0.5);
 		alpha1 = alpha0 + step;
 		vertices.push_back(TVec<T, 3>(capsule.radius*cos(alpha0), capsule.radius*sin(alpha0), 0));
 		vertices.push_back(TVec<T, 3>(capsule.radius*cos(alpha1), capsule.radius*sin(alpha1), 0));
 	}
-	for (int i = 0; i<v_count; i++)
+	for (int i = 0; i < v_count; i++)
 	{
 		alpha0 = i*step + (T)(M_PI*0.5);
 		alpha1 = alpha0 + step;
@@ -405,7 +388,7 @@ void DrawLinesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T, 3> 
 
 	v_count = v_count * 2;
 	step = 2 * (T)M_PI / v_count;
-	for (int i = 0; i<v_count; i++)
+	for (int i = 0; i < v_count; i++)
 	{
 		alpha0 = i*step;
 		alpha1 = alpha0 + step;
@@ -418,7 +401,7 @@ void DrawLinesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T, 3> 
 	v_count = 4;
 	step = 2 * (T)M_PI / v_count;
 
-	for (int i = 0; i<v_count; i++)
+	for (int i = 0; i < v_count; i++)
 	{
 		alpha0 = i*step;
 		alpha1 = alpha0 + step;
@@ -428,7 +411,7 @@ void DrawLinesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T, 3> 
 
 	TMatrix<T, 3> orient = capsule.GetOrientation();
 
-	for (int i = vertices_last_high; i<vertices.size(); i++)
+	for (int i = vertices_last_high; i < vertices.size(); i++)
 		vertices[i] = capsule.segment.p0 + orient*vertices[i];
 }
 
@@ -528,7 +511,7 @@ bool TCapsule<T, Size>::CollideWith(const TSphere<T, Size>& v, bool& fully_in_sp
 
 
 
-template class TCapsule<float, 2>;
-template class TCapsule<float, 3>;
-template class TCapsule<double, 2>;
-template class TCapsule<double, 3>;
+template class TCapsule < float, 2 > ;
+template class TCapsule < float, 3 > ;
+template class TCapsule < double, 2 > ;
+template class TCapsule < double, 3 > ;
