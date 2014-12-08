@@ -20,6 +20,12 @@
     <Filter Include="Source Files\Collisions\Common">
       <UniqueIdentifier>{3b842534-045a-4ee5-98a8-d96213f011e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{72411c46-6dc9-4105-a291-51ab176e730b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Trees">
+      <UniqueIdentifier>{c165ad0b-460d-417d-9d35-fa20fe998867}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\baluLib.h">
@@ -40,31 +46,13 @@
     <ClInclude Include="Source\common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\fixed.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\keys.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\matrix.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\octree.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\primitives.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\quadtree.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\quaternion.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\stdfuncs.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\vec.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\BVolumes\AABB.h">
@@ -114,6 +102,27 @@
     </ClInclude>
     <ClInclude Include="Source\BVolumes\BVolume.h">
       <Filter>Source Files\BVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Trees\kdtree.h">
+      <Filter>Source Files\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Trees\octree.h">
+      <Filter>Source Files\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Trees\quadtree.h">
+      <Filter>Source Files\Trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\fixed.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\matrix.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\quaternion.h">
+      <Filter>Source Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\vec.h">
+      <Filter>Source Files\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -373,62 +373,66 @@ struct TRay
 			(plane.normal*plane.dist-pos)/
 			(plane.normal*dir);//TODO следует учесть что здесь не просто прямые, а лучи 
 	}
-	bool CylinderInters(
-		TVec<T,size> cyl_pos,TVec<T,size> cyl_dir,
-		double cyl_rad,double& lambda)
-	{
-		double d;
-		double t,s;
-		TVec<T,size> D,O;
-		double in,out;
-		TVec<T,size> RC=pos-cyl_pos;
-		TVec<T,size> n=dir.Cross(cyl_dir);
-		double ln=n.Length();
-		n/=ln;
-		d=fabs(RC*n);
-
-		if (d<=cyl_rad)
-		{
-			O=RC.Cross(cyl_dir);
-			t= - O*(n)/ln;
-			O=n.Cross(cyl_dir);
-			O.Normalize();
-			s= fabs( sqrt(cyl_rad*cyl_rad - d*d) / (dir*O) );
-			in=t-s;
-			out=t+s;
-			if (in<-0){
-				if (out<-0) return 0;
-				else lambda=out;
-			}
-			else
-				if (out<-0) {
-					lambda=in;
-				}
-				else
-					if (in<out) lambda=in;
-					else lambda=out;
-					return 1;
-		}
-		return 0;
-	}
-	bool PlaneInters(const TPlane<T,size>& plane,TVec<T,size>& x)
-	{
-		T t;
-		if(RayPlaneInters(plane,t))
-		{
-			x=pos+dir*t;
-			return true;
-		}
-		return false;
-	}
-	bool PlaneInters(const TPlane<T,size>& plane,T& t)
-	{
-		//TODO  вроде проще так t = (plane.dist - Vector3.Dot(pos,plane.normal)) / Vector3.Dot(plane.normal,dir);
-		t=plane.normal*(plane.normal*plane.dist-pos)/(plane.normal*dir);
-		return t>0;
-	}
+	
 };
 
+template<class T, int size>
+bool RayCylinderCollide(const TRay<T, size> ray, TVec<T, size> cyl_pos, TVec<T, size> cyl_dir, double cyl_rad, double& lambda)
+{
+	double d;
+	double t, s;
+	TVec<T, size> D, O;
+	double in, out;
+	TVec<T, size> RC = ray.pos - cyl_pos;
+	TVec<T, size> n = ray.dir.Cross(cyl_dir);
+	double ln = n.Length();
+	n /= ln;
+	d = fabs(RC*n);
+
+	if (d <= cyl_rad)
+	{
+		O = RC.Cross(cyl_dir);
+		t = -O*(n) / ln;
+		O = n.Cross(cyl_dir);
+		O.Normalize();
+		s = fabs(sqrt(cyl_rad*cyl_rad - d*d) / (ray.dir*O));
+		in = t - s;
+		out = t + s;
+		if (in<-0){
+			if (out<-0) return 0;
+			else lambda = out;
+		}
+		else
+			if (out<-0) {
+				lambda = in;
+			}
+			else
+				if (in<out) lambda = in;
+				else lambda = out;
+				return 1;
+	}
+	return 0;
+}
+
+template<class T, int size>
+bool RayPlaneCollide(const TRay<T, size> ray, const TPlane<T, size>& plane, TVec<T, size>& x)
+{
+	T t;
+	if (RayPlaneCollide(plane, t))
+	{
+		x = ray.pos + ray.dir*t;
+		return true;
+	}
+	return false;
+}
+
+template<class T, int size>
+bool RayPlaneCollide(const TRay<T, size> ray, const TPlane<T, size>& plane, T& t)
+{
+	//TODO  вроде проще так t = (plane.dist - Vector3.Dot(pos,plane.normal)) / Vector3.Dot(plane.normal,dir);
+	t = plane.normal*(plane.normal*plane.dist - ray.pos) / (plane.normal*ray.dir);
+	return t>0;
+}
 
 template<class T, int Size>
 T SegmentSegmentDistance(TSegment<T, Size> s0, TSegment<T, Size> s1)

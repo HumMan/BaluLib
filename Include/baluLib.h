@@ -18,12 +18,12 @@ inline int IntSizeOf(int x)
 }
 
 #include "../Source/stdfuncs.h"
-#include "../Source/vec.h"
+#include "../Source/Math/vec.h"
 #include "../Source/primitives.h"
 #include "../Source/common.h"
-#include "../Source/matrix.h"
-#include "../Source/fixed.h"
-#include "../Source/quaternion.h"
+#include "../Source/Math/matrix.h"
+#include "../Source/Math/fixed.h"
+#include "../Source/Math/quaternion.h"
 #include "../Source/arrays.h"
 //#include "../Source/bVolumes.h"
 #include "../Source/camera.h"

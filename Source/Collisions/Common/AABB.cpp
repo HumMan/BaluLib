@@ -566,7 +566,7 @@ bool TAABB<T, Size>::CollideWith(const TOBB<T, Size>& v)const
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TOBB<T, Size>& v, bool& fully_in_obb)const
 {
-	return Collide<T, Size>(v, *this, fully_in_obb);
+	return Collide<T, Size>(*this, v, fully_in_obb);
 }
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TCapsule<T, Size>& v)const
@@ -576,7 +576,7 @@ bool TAABB<T, Size>::CollideWith(const TCapsule<T, Size>& v)const
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TCapsule<T, Size>& v, bool& fully_in_capsule)const
 {
-	return Collide(v, *this, fully_in_capsule);
+	return Collide(*this, v, fully_in_capsule);
 }
 template<class T, int Size>
 bool TAABB<T, Size>::CollideWith(const TSphere<T, Size>& v)const

@@ -33,15 +33,16 @@
     <ClInclude Include="Source\Collisions\OBBAndSphere.h" />
     <ClInclude Include="Source\Collisions\SphereAndSphere.h" />
     <ClInclude Include="Source\common.h" />
-    <ClInclude Include="Source\fixed.h" />
     <ClInclude Include="Source\keys.h" />
-    <ClInclude Include="Source\matrix.h" />
-    <ClInclude Include="Source\octree.h" />
+    <ClInclude Include="Source\Math\fixed.h" />
+    <ClInclude Include="Source\Math\matrix.h" />
+    <ClInclude Include="Source\Math\quaternion.h" />
+    <ClInclude Include="Source\Math\vec.h" />
     <ClInclude Include="Source\primitives.h" />
-    <ClInclude Include="Source\quadtree.h" />
-    <ClInclude Include="Source\quaternion.h" />
     <ClInclude Include="Source\stdfuncs.h" />
-    <ClInclude Include="Source\vec.h" />
+    <ClInclude Include="Source\Trees\kdtree.h" />
+    <ClInclude Include="Source\Trees\octree.h" />
+    <ClInclude Include="Source\Trees\quadtree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp" />
