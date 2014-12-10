@@ -1,5 +1,7 @@
-
 #pragma once
+
+#include <type_traits>
+#include <assert.h>
 
 template<class T,int size>
 class TMatrix;

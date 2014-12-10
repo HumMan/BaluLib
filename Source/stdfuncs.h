@@ -1,5 +1,14 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <assert.h>
+
+inline int IntSizeOf(int x)
+{
+	return ((((x - 1)) / sizeof(int) + 1)*sizeof(int));
+}
+
 template<class T>
 inline T RadToDeg(T rad)
 {

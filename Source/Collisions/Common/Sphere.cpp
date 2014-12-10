@@ -7,6 +7,8 @@
 
 #include "../../BVolumes/Frustum.h"
 
+#include "../../stdfuncs.h"
+
 template<class T, int Size>
 bool TSphere<T, Size>::PointCollide(const TVec<T, Size>& point) const
 {

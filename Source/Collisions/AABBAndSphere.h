@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../stdfuncs.h"
+
 template<class T, int Size>
 bool Collide(const TAABB<T, Size>& v0, const TSphere<T, Size>& v1)
 {

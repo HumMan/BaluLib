@@ -1,6 +1,10 @@
 #pragma once
 
-#include <baluLib.h>
+#include <vector>
+
+#include "../Source/Math/vec.h"
+#include "../Source/Math/matrix.h"
+#include "../Source/stdfuncs.h"
 
 template<class T, int size>
 struct TRay;
