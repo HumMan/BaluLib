@@ -197,12 +197,12 @@ void DrawTrianglesSpecialized(const TSphere<T, 3>& sphere, std::vector<TVec<T, 3
 	for (int i = 0; i<4; i++)
 		Tesselate(vertices, ribs, triangles);
 
-	for (int i = vertices_first; i<vertices.size(); i++)
+	for (size_t i = vertices_first; i<vertices.size(); i++)
 		vertices[i] = sphere.pos + (vertices[i]).GetNormalized()*sphere.radius;
 
 	int indices_first = indices.size();
 	indices.resize(indices.size() + triangles.size() * 3);
-	for (int i = 0; i<triangles.size(); i++)
+	for (size_t i = 0; i<triangles.size(); i++)
 	{
 		indices[indices_first + i * 3 + 0] = ribs[triangles[i].rib[0]][triangles[i].inv_dir[0]];
 		indices[indices_first + i * 3 + 1] = ribs[triangles[i].rib[1]][triangles[i].inv_dir[1]];
@@ -250,7 +250,7 @@ void DrawLinesSpecialized(const TSphere<T, 3>& sphere, std::vector<TVec<T, 3> >&
 	//}
 
 	int v_count = 20;
-	T step = 2 * M_PI / v_count;
+	T step = 2 * (T)M_PI / v_count;
 	T alpha0, alpha1;
 	int vertices_last_size = vertices.size();
 	for (int i = 0; i<v_count; i++)
@@ -274,7 +274,7 @@ void DrawLinesSpecialized(const TSphere<T, 3>& sphere, std::vector<TVec<T, 3> >&
 		vertices.push_back(TVec<T, 3>(0, sphere.radius*cos(alpha0), sphere.radius*sin(alpha0)));
 		vertices.push_back(TVec<T, 3>(0, sphere.radius*cos(alpha1), sphere.radius*sin(alpha1)));
 	}
-	for (int i = vertices_last_size; i<vertices.size(); i++)
+	for (size_t i = vertices_last_size; i<vertices.size(); i++)
 		vertices[i] = sphere.pos + vertices[i];
 }
 

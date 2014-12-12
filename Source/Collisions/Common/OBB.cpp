@@ -122,7 +122,7 @@ void TOBB<T, Size>::DrawTriangles(std::vector<TVec<T, Size> >& vertices, std::ve
 {
 	int vertices_high = vertices.size();
 	local.DrawTriangles(vertices, indices);
-	for (int i = vertices_high; i < vertices.size(); i++)
+	for (size_t i = vertices_high; i < vertices.size(); i++)
 		vertices[i] = orient*vertices[i] + pos;
 }
 
@@ -131,7 +131,7 @@ void TOBB<T, Size>::DrawLines(std::vector<TVec<T, Size> >& vertices)const
 {
 	int vertices_high = vertices.size();
 	local.DrawLines(vertices);
-	for (int i = vertices_high; i < vertices.size(); i++)
+	for (size_t i = vertices_high; i < vertices.size(); i++)
 		vertices[i] = orient*vertices[i] + pos;
 }
 

@@ -76,7 +76,7 @@ void TFPSCamera::SetViewByMouse()
 	SetCursorPos(middle_pos);
 
 	TVec2 mouse_direction;
-	mouse_direction=TVec2(middle_pos[0]-mouse_pos[0],middle_pos[1]-mouse_pos[1])*mouse_sensitivity;
+	mouse_direction=TVec2((float)(middle_pos[0]-mouse_pos[0]),(float)(middle_pos[1]-mouse_pos[1]))*mouse_sensitivity;
 
 	pitch+=mouse_direction[1];
 	yaw+=mouse_direction[0];

@@ -403,12 +403,12 @@ void DrawTrianglesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T,
 
 	TMatrix<T, 3> orient = capsule.GetOrientation();
 
-	for (int i = vertices_first; i < vertices.size(); i++)
+	for (size_t i = vertices_first; i < vertices.size(); i++)
 		vertices[i] = capsule.segment.p0 + orient*vertices[i];
 
 	int indices_first = indices.size();
 	indices.resize(indices.size() + triangles.size() * 3);
-	for (int i = 0; i < triangles.size(); i++)
+	for (size_t i = 0; i < triangles.size(); i++)
 	{
 		indices[indices_first + i * 3 + 0] = ribs[triangles[i].rib[0]][triangles[i].inv_dir[0]];
 		indices[indices_first + i * 3 + 1] = ribs[triangles[i].rib[1]][triangles[i].inv_dir[1]];
@@ -438,7 +438,7 @@ template<class T>
 void DrawLinesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T, 3> >& vertices)
 {
 	int v_count = 20;
-	T step = M_PI / v_count;
+	T step = (T)M_PI / v_count;
 	T alpha0, alpha1;
 	int vertices_last_high = vertices.size();
 	for (int i = 0; i < v_count; i++)
@@ -490,7 +490,7 @@ void DrawLinesSpecialized(const TCapsule<T, 3>& capsule, std::vector<TVec<T, 3> 
 
 	TMatrix<T, 3> orient = capsule.GetOrientation();
 
-	for (int i = vertices_last_high; i < vertices.size(); i++)
+	for (size_t i = vertices_last_high; i < vertices.size(); i++)
 		vertices[i] = capsule.segment.p0 + orient*vertices[i];
 }
 

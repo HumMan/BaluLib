@@ -171,7 +171,7 @@ bool AABBRayCollide(const TAABB<T, Size>& aabb, const TRay<T, Size> &ray, T cf, 
 		collision.have_in = true;
 		collision.in_param = cf;
 		TVec<T, Size> normal(0);
-		normal[fcut] = fmin ? -1 : 1;
+		normal[fcut] = (T)(fmin ? -1 : 1);
 		collision.in_normal = normal;
 	}
 	else
@@ -182,7 +182,7 @@ bool AABBRayCollide(const TAABB<T, Size>& aabb, const TRay<T, Size> &ray, T cf, 
 		collision.have_out = true;
 		collision.out_param = cl;
 		TVec<T, Size> normal(0);
-		normal[lcut] = lmin ? -1 : 1;
+		normal[lcut] = (T)(lmin ? -1 : 1);
 		collision.out_normal = normal;
 	}
 	else
@@ -372,7 +372,7 @@ bool LineCollideSpecialized(const TAABB<T, 3>& aabb, const TLine<T, 3> &line)
 		pos_a = aabb.GetCenter();
 
 	TVec<T, 3> TT(line.p0 - pos_a);
-	T ra, rb, t;
+	T ra, t;
 
 	//проекции на 3 векторных произведения осей AABB и направления линии
 	for (int i = 0; i<3; i++)

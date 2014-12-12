@@ -442,7 +442,7 @@ template<class T, int Size>
 T SegmentSegmentDistance(TSegment<T, Size> s0, TSegment<T, Size> s1)
 {
 	//http://www.softsurfer.com/Archive/algorithm_0106/algorithm_0106.htm#dist3D_Segment_to_Segment()
-	const T SMALL_NUM = 0.000001;
+	const T SMALL_NUM = (T)0.000001;
 	TVec<T, Size>   u = s0.p1 - s0.p0;
 	TVec<T, Size>   v = s1.p1 - s1.p0;
 	TVec<T, Size>   w = s0.p0 - s1.p0;
@@ -503,8 +503,8 @@ T SegmentSegmentDistance(TSegment<T, Size> s0, TSegment<T, Size> s1)
 		}
 	}
 	// finally do the division to get sc and tc
-	sc = (abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
-	tc = (abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
+	sc = (abs(sN) < SMALL_NUM ? (T) 0.0 : sN / sD);
+	tc = (abs(tN) < SMALL_NUM ? (T) 0.0 : tN / tD);
 
 	// get the difference of the two closest points
 	TVec<T, Size>   dP = w + (u*sc) - (v*tc);  // = S1(sc) - S2(tc)
@@ -516,7 +516,7 @@ template<class T, int Size>
 T SegmentRayDistance(TSegment<T, Size> s0, TRay<T, Size> s1, T& s0_t, T& s1_t)
 {
 	//http://www.softsurfer.com/Archive/algorithm_0106/algorithm_0106.htm#dist3D_Segment_to_Segment()
-	const T SMALL_NUM = 0.000001;
+	const T SMALL_NUM = (T)0.000001;
 	TVec<T, Size>   u = s0.p1 - s0.p0;
 	TVec<T, Size>   v = s1.dir;
 	TVec<T, Size>   w = s0.p0 - s1.pos;
@@ -565,8 +565,8 @@ T SegmentRayDistance(TSegment<T, Size> s0, TRay<T, Size> s1, T& s0_t, T& s1_t)
 	}
 
 	// finally do the division to get sc and tc
-	sc = (abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
-	tc = (abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
+	sc = (abs(sN) < SMALL_NUM ? (T) 0.0 : sN / sD);
+	tc = (abs(tN) < SMALL_NUM ? (T)0.0 : tN / tD);
 
 	s0_t = sc;
 	s1_t = tc;
@@ -582,7 +582,7 @@ template<class T, int Size>
 T SegmentLineDistance(TSegment<T, Size> s0, TLine<T, Size> s1, T& s0_t, T& s1_t)
 {
 	//http://www.softsurfer.com/Archive/algorithm_0106/algorithm_0106.htm#dist3D_Segment_to_Segment()
-	const T SMALL_NUM = 0.000001;
+	const T SMALL_NUM = (T)0.000001;
 	TVec<T, Size>   u = s0.p1 - s0.p0;
 	TVec<T, Size>   v = s1.dir;
 	TVec<T, Size>   w = s0.p0 - s1.p0;
@@ -617,8 +617,8 @@ T SegmentLineDistance(TSegment<T, Size> s0, TLine<T, Size> s1, T& s0_t, T& s1_t)
 		}
 	}
 	// finally do the division to get sc and tc
-	sc = (abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
-	tc = (abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
+	sc = (abs(sN) < SMALL_NUM ? (T)0.0 : sN / sD);
+	tc = (abs(tN) < SMALL_NUM ? (T)0.0 : tN / tD);
 
 	s0_t = sc;
 	s1_t = tc;

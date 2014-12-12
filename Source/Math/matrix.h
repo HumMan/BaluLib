@@ -1,7 +1,7 @@
 #pragma once
 
 template<class T, int Size>
-class TPlane;
+struct TPlane;
 
 template<class T,int Size>
 class TMatrix
