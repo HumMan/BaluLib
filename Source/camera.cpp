@@ -1,5 +1,7 @@
 #include "baluLib.h"
 
+#include <windows.h>
+
 TFPSCamera::TFPSCamera(TVec3 use_pos,TVec3 use_dir,TVec3 use_up)
 {
 	active=false;
@@ -33,7 +35,7 @@ TMatrix4 TFPSCamera::GetView()
 
 void TFPSCamera::SetViewByKeyboard(float time)
 {
-	float s=(KeyDown(TBaluVirtKey::LShift)?speed*3:speed);//TODO обертка клавиатуры (константы клавиш из baluEngine и одновременно строки для них с пом. макросов)
+	float s=(KeyDown(VK_SHIFT)?speed*3:speed);
 	bool need_update=false;
 	if(KeyDown('A')){
 		need_update=true;

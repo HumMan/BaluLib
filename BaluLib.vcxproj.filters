@@ -46,9 +46,6 @@
     <ClInclude Include="Source\common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\keys.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\primitives.h">
       <Filter>Source Files</Filter>
     </ClInclude>

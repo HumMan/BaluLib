@@ -4,6 +4,8 @@
 
 #define MAX_PATH 260
 
+//http://rsdn.ru/forum/cpp/3027121.1
+
 namespace UtfConverter
 {
 	template<class T, class A> std::wstring to_unicode(

@@ -15,26 +15,6 @@
 #include <sys/time.h>
 #endif
 
-#define BALU_LIB_KEYS_BEGIN( ENUM_NAME ) \
-struct TKeyInfo{char* name;int internal_key;};\
-	const TKeyInfo KeyInfo[]= 
-
-#if defined(WIN32)
-#define BALU_LIB_KEY( name,internal_key_win,internal_key_linux) {#name,internal_key_win}
-#else
-#define BALU_LIB_KEY( name,internal_key_win,internal_key_linux) {#name,internal_key_linux}
-#endif
-
-#define BALU_LIB_KEYS_END() ;
-
-namespace TBaluVirtKey{
-#include "keys.h"
-}
-
-#undef BALU_LIB_KEYS_BEGIN
-#undef BALU_LIB_KEY
-#undef BALU_LIB_KEYS_END
-
 bool KeyDown(int key_char)
 {
 #if defined(WIN32)||defined(_WIN32)
@@ -48,16 +28,6 @@ bool KeyDown(int key_char)
 	int result=XGrabKey(display,key_char,0,window,1,1,1);
 	return result;
 #endif
-}
-
-bool KeyDown(char key_char)
-{
-	return KeyDown(int(key_char));
-}
-
-bool KeyDown(TBaluVirtKey::Enum key_char)
-{
-	return KeyDown(int(TBaluVirtKey::KeyInfo[key_char].internal_key));
 }
 
 TVec2i GetCursorPos()
@@ -78,47 +48,6 @@ void SetCursorPos(TVec2i pos)
 #endif
 }
 
-//
-//class TTime
-//{
-//	double dT,curr_fps;
-//	int frames;
-//	double prev_time,freq,curr_time;
-//	double fps;
-//public:
-//	void Start(){
-//		prev_time=GetTickCount()*0.001;
-//		curr_fps=0;
-//		fps=0;
-//		frames=0;
-//	}
-//	void Tick(){
-//		curr_time=GetTickCount()*0.001;
-//		dT=curr_time-prev_time;
-//		prev_time=curr_time;
-//		frames++;
-//		curr_fps+=dT;
-//		if(curr_fps>0.5f){//��������� FPS �� 0.5 �
-//			fps=frames/curr_fps;
-//			curr_fps=0;
-//			frames=0;
-//		}
-//	}
-//	bool ShowFPS(){
-//		return !frames;
-//	}
-//	double GetTick(){
-//		return dT;
-//	}
-//	double GetFPS(){
-//		return fps;
-//	}
-//	double GetCurrTime(){
-//		return curr_time;
-//	}
-//};
-
-
 unsigned long long TTime::GetTime()
 {
 #ifdef WIN32
@@ -131,6 +60,7 @@ unsigned long long TTime::GetTime()
 	return (int)(tv.tv_sec*1000 + (tv.tv_usec / 1000));
 #endif
 }
+
 double TTime::TimeDiff(unsigned long long curTime,unsigned long long prevTime)
 {
 #ifdef WIN32
@@ -139,6 +69,7 @@ double TTime::TimeDiff(unsigned long long curTime,unsigned long long prevTime)
 	return (curTime-prevTime)*0.001;
 #endif
 }
+
 void TTime::Start(){
 #ifdef WIN32
 	LARGE_INTEGER s;

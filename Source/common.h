@@ -1,19 +1,7 @@
 #pragma once
 
-#define BALU_LIB_KEYS_BEGIN( ENUM_NAME ) enum ENUM_NAME//:unsigned char
-#define BALU_LIB_KEY( element,internal_key_win,internal_key_linux ) element
-#define BALU_LIB_KEYS_END() ;
+extern bool KeyDown(int key_char);
 
-namespace TBaluVirtKey{
-#include "keys.h"
-}
-
-#undef BALU_LIB_KEYS_BEGIN
-#undef BALU_LIB_KEY
-#undef BALU_LIB_KEYS_END
-
-extern bool KeyDown(char key_char);
-extern bool KeyDown(TBaluVirtKey::Enum key_char);
 extern TVec2i GetCursorPos();
 extern void SetCursorPos(TVec2i pos);
 

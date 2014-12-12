@@ -33,7 +33,6 @@
     <ClInclude Include="Source\Collisions\OBBAndSphere.h" />
     <ClInclude Include="Source\Collisions\SphereAndSphere.h" />
     <ClInclude Include="Source\common.h" />
-    <ClInclude Include="Source\keys.h" />
     <ClInclude Include="Source\Math\fixed.h" />
     <ClInclude Include="Source\Math\matrix.h" />
     <ClInclude Include="Source\Math\quaternion.h" />
