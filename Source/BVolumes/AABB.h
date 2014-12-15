@@ -9,6 +9,24 @@ public:
 
 	TVec<T, Size> border[2]; //0-min 1-max
 
+	TVec<T, Size> GetLowerBound()
+	{
+		return border[0];
+	}
+	void SetLowerBound(TVec<T, Size> value)
+	{
+		border[0] = value;
+	}
+
+	TVec<T, Size> GetUpperBound()
+	{
+		return border[0];
+	}
+	void SetUpperBound(TVec<T, Size> value)
+	{
+		border[1] = value;
+	}
+
 	TAABB(){}
 	TAABB(const TVec<T, Size>& use_pos, const TVec<T, Size>& use_widths)
 	{
@@ -74,3 +92,5 @@ public:
 	virtual bool CollideWith(const TSphere<T, Size>& sphere) const;
 	virtual bool CollideWith(const TSphere<T, Size>& sphere, bool& fully_in_sphere) const;
 };
+
+typedef TAABB<float, 2>			TAABB2;

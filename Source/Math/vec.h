@@ -48,11 +48,23 @@ public:
 	 ((h>=2)?(op_a[2]op op_b[2]):0)sum_op\
 	 ((h>=3)?(op_a[3]op op_b[3]):0))\
 
+#define TVEC_BIN_OP_CMP_AND(h,op_a,op,op_b)\
+	(((h>=0)?(op_a[0]op op_b[0]):true)&&\
+	 ((h>=1)?(op_a[1]op op_b[1]):true)&&\
+	 ((h>=2)?(op_a[2]op op_b[2]):true)&&\
+	 ((h>=3)?(op_a[3]op op_b[3]):true))\
+
 #define TVEC_BIN_OP_SUM_VAL(h,op_a,op,val,sum_op)\
 	(((h>=0)?(op_a[0]op val):0)sum_op\
 	 ((h>=1)?(op_a[1]op val):0)sum_op\
 	 ((h>=2)?(op_a[2]op val):0)sum_op\
 	 ((h>=3)?(op_a[3]op val):0))\
+
+#define TVEC_BIN_OP_CMP_VAL_AND(h,op_a,op,val)\
+	(((h>=0)?(op_a[0]op val):true)&&\
+	 ((h>=1)?(op_a[1]op val):true)&&\
+	 ((h>=2)?(op_a[2]op val):true)&&\
+	 ((h>=3)?(op_a[3]op val):true))\
 
 #define TVEC_BIN_OP_SUM_FUNC(h,op_a,op,func,op_b,sum_op)\
 	(((h>=0)?(op_a[0]op func(op_b[0])):0)sum_op\
@@ -192,11 +204,11 @@ public:
 	}
 	bool operator==(TVec right)
 	{
-		return TVEC_BIN_OP_SUM(high,v,==,right.v,&&);
+		return TVEC_BIN_OP_CMP_AND(high, v, == , right.v);
 	}
 	bool operator!=(TVec right)
 	{
-		return TVEC_BIN_OP_SUM(high,v,!=,right.v,||);
+		return !(TVEC_BIN_OP_CMP_AND(high, v, == , right.v));
 	}
 
 	T operator[](int id)const
@@ -342,7 +354,7 @@ public:
 	}
 	bool IsZero()const
 	{
-		return TVEC_BIN_OP_SUM_VAL(high,v,==,0,&&);
+		return TVEC_BIN_OP_CMP_AND_VAL(high, v, == , 0);
 	}
 	static T AngleBetween(const TVec& v0,const TVec& v1)//returns minimal angle between vectors (unsigned)
 	{

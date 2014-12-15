@@ -151,6 +151,16 @@ inline T DistanceBetweenPointSegment(TVec<T,Size> point, TSegment<T,Size> segmen
 	return nearest_point.Distance(point);
 }
 
+template<class T, int Size>
+inline T DistanceBetweenPointSegment(TVec<T, Size> point, TSegment<T, Size> segment)
+{
+	TVec<T, Size> p01 = segment.p1 - segment.p0;
+	T t = (p01*(point - segment.p0)) / p01.SqrLength();
+	t = Clamp<T>(0, 1, t);
+	TVec<T, Size>  nearest_point = segment.p0 + p01*t;
+	return nearest_point.Distance(point);
+}
+
 template<class T,int Size>
 inline T DistanceBetweenRayPoint(TVec<T,Size> v, TVec<T,Size> ray_pos, TVec<T,Size> ray_dir, T& t, TVec<T,Size>& nearest_point)
 {
@@ -749,5 +759,60 @@ void Tesselate(std::vector<TVec<T, Size> >& vertices, std::vector<TVec2ui>& ribs
 			ribs.size() - 1 - 1,
 			ribs.size() - 1 - 0,
 			0, 0, 0);
+	}
+}
+
+template<class T>
+TVec<T, 2> LineLineIntersectionPoint(TSegment<T, 2> s0, TSegment<T, 2> s1)
+{
+	float A1 = s0.p1[1] - s0.p0[1];
+	float B1 = s0.p0[0] - s0.p1[0];
+	float C1 = A1*s0.p0[0] + B1* s0.p0[1];
+
+	// Get A,B,C of second line - points : ps2 to pe2
+	float A2 = s1.p1[1] - s1.p0[1];
+	float B2 = s1.p0[0] - s1.p1[0];
+	float C2 = A2*s1.p0[0] + B2* s1.p0[1];
+
+	// Get delta and check if the lines are parallel
+	float delta = A1*B2 - A2*B1;
+	//if (delta == 0)
+	//	throw new System.Exception("Lines are parallel");
+
+	// now return the Vector2 intersection point
+	return TVec(
+		(B2*C1 - B1*C2) / delta,
+		(A1*C2 - A2*C1) / delta
+		);
+}
+
+template <class T>
+bool SegmentSegmentCollide(TSegment<T, 2> s0, TSegment<T, 2> s1)
+{
+	TVec<T, 2> r0 = (s0.p1 - s0.p0).Cross();
+	TVec<T, 2> r1 = (s1.p1 - s1.p0).Cross();
+	return (r0*s1.p0 > 0 != r0*s1.p1) && (r1*s0.p0 > 0 != r1*s0.p1);
+}
+
+namespace MathUtils
+{
+
+	template <class T>
+	T Area(TVec<T, 2> a, TVec<T, 2> b, TVec<T, 2> c)
+	{
+		return a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]);
+	}
+	template <class T>
+	T VectorAngle(TVec<T, 2> p1, TVec<T, 2> p2)
+	{
+		T theta1 = atan2(p1[1], p1[0]);
+		T theta2 = atan2(p2[1], p2[0]);
+		T dtheta = theta2 - theta1;
+		while (dtheta > M_PI)
+			dtheta -= (2 * M_PI);
+		while (dtheta < -M_PI)
+			dtheta += (2 * M_PI);
+
+		return (dtheta);
 	}
 }

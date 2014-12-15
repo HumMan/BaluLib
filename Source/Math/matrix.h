@@ -3,6 +3,8 @@
 template<class T, int Size>
 struct TPlane;
 
+#include "vec.h"
+
 template<class T,int Size>
 class TMatrix
 {
@@ -284,6 +286,21 @@ public:
 	{
 		for(int i=0;i<Size;i++)
 			m[i]*=val;
+	}
+
+	friend bool operator==(const TMatrix &m0, const TMatrix &m1)
+	{
+		for (int i = 0; i < Size; i++)
+			if (m0[i] != m1[i])
+				return false;
+		return true;
+	}
+	friend bool operator!=(const TMatrix &m0, const TMatrix &m1)
+	{
+		for (int i = 0; i < Size; i++)
+			if (m0[i] != m1[i])
+				return true;
+		return false;
 	}
 	friend TVec<T,Size> operator*( const TMatrix &_m,const TVec<T,Size>& _v0)
 	{
