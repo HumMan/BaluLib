@@ -52,4 +52,5 @@ public:
 	virtual bool CollideWith(const TSphere<T, Size>& sphere, bool& fully_in_sphere) const;
 };
 
+typedef TOBB<float, 2>			TOBB2;
 
