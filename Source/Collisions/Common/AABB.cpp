@@ -65,7 +65,7 @@ bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 		}
 		else if (ray.pos[1]<border[0][1])return false;
 		TVec<T, Size>
-			size = GetSize(),
+			size = GetHalfSize(),
 			v = GetCenter() - ray.pos;
 		if (abs(v[1] * ray.dir[0] - v[0] * ray.dir[1])>size[0] * abs(ray.dir[1]) + size[1] * abs(ray.dir[0]))
 			return false;
@@ -86,7 +86,7 @@ bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray) const
 		}
 		else if (ray.pos[2]<border[0][2])return false;
 		TVec<T, Size>
-			size = GetSize(),
+			size = GetHalfSize(),
 			v = GetCenter() - ray.pos;
 		if (abs(v[2] * ray.dir[1] - v[1] * ray.dir[2])>size[1] * abs(ray.dir[2]) + size[2] * abs(ray.dir[1]))
 			return false;
@@ -203,7 +203,7 @@ bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane) const
 {
 	TVec<T, Size> plane_pos = plane.GetPos();
 	TVec<T, Size> aabb_pos = this->GetCenter();
-	TVec<T, Size> aabb_size = this->GetSize();
+	TVec<T, Size> aabb_size = this->GetHalfSize();
 
 	return (plane_pos - aabb_pos)*plane.normal < aabb_size.AbsScalarMul(plane.normal);
 }
@@ -214,7 +214,7 @@ bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionI
 	TVec<T, Size> plane_pos = plane.GetPos();
 	//TVec<T, Size> proj_dir = plane.dist >= 0 ? plane.normal : -plane.normal;
 	TVec<T, Size> aabb_pos = this->GetCenter();
-	TVec<T, Size> aabb_size = this->GetSize();
+	TVec<T, Size> aabb_size = this->GetHalfSize();
 	TVec<T, Size> tested_dir = plane_pos - aabb_pos;
 	//find nearest point on box
 	TVec<T, Size> nearest_point;
@@ -236,7 +236,7 @@ bool TAABB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionI
 template<class T>
 bool SegmentCollideSpecialized(const TAABB<T, 2>& aabb, const TSegment<T, 2> &segment)
 {
-	TVec<T, 2> a = aabb.GetSize(),
+	TVec<T, 2> a = aabb.GetHalfSize(),
 		b_dir = segment.GetDir(),
 		b = ((segment.p1 - segment.p0)*0.5).GetAbs(),
 		pos_a = aabb.GetCenter(),

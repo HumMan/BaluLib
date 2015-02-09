@@ -51,7 +51,7 @@ bool TFrustum<T, Size>::Overlaps(const TAABB<T, Size>& use_aabb) const
 {
 	TVec<T, Size> size, pos;
 	pos = use_aabb.GetCenter();
-	size = use_aabb.GetSize();
+	size = use_aabb.GetHalfSize();
 	for (int i = 0; i<planes_count; i++)
 	{
 		T dist = frustum[i].DistanceTo(pos),
@@ -65,7 +65,7 @@ bool TFrustum<T, Size>::Overlaps(const TAABB<T, Size>& use_aabb) const
 template<class T, int Size>
 bool TFrustum<T, Size>::Overlaps(const TOBB<T, Size>& use_obb) const
 {
-	TVec<T, Size> s(use_obb.local.GetSize());
+	TVec<T, Size> s(use_obb.local.GetHalfSize());
 	for (int i = 0; i<planes_count; i++)
 	{
 		if (frustum[i].DistanceTo(use_obb.pos)<
@@ -106,7 +106,7 @@ bool TFrustum<T, Size>::Overlaps(const TAABB<T, Size>& use_aabb, bool& fully_in_
 	int c = 0;
 	TVec<T, Size> size, pos;
 	pos = use_aabb.GetCenter();
-	size = use_aabb.GetSize();
+	size = use_aabb.GetHalfSize();
 	//float radius=size.SqrLength();
 	for (int i = 0; i<planes_count; i++)
 	{
@@ -123,7 +123,7 @@ template<class T, int Size>
 bool TFrustum<T, Size>::Overlaps(const TOBB<T, Size> &use_obb, bool& fully_in_frustum) const
 {
 	T s, d;
-	TVec<T, Size> obb_size(use_obb.local.GetSize());
+	TVec<T, Size> obb_size(use_obb.local.GetHalfSize());
 	int c = 0;
 	for (int i = 0; i<planes_count; i++)
 	{

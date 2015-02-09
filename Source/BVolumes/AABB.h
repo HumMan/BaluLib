@@ -28,12 +28,13 @@ public:
 	}
 
 	TAABB(){}
-	TAABB(const TVec<T, Size>& use_pos, const TVec<T, Size>& use_widths)
+	TAABB(const TVec<T, Size>& use_pos, const TVec<T, Size>& half_size)
 	{
-		border[0] = use_pos - use_widths;
-		border[1] = use_pos + use_widths;
+		border[0] = use_pos - half_size;
+		border[1] = use_pos + half_size;
 	}
-	TVec<T, Size> GetSize()const									{ return (border[1] - border[0])*0.5; }
+	TVec<T, Size> GetHalfSize()const								{ return (border[1] - border[0])*0.5; }
+	TVec<T, Size> GetSize()const								{ return (border[1] - border[0]); }
 	TVec<T, Size> GetPosition()const								{ return GetCenter(); }
 	TVec<T, Size> GetCenter()const								{ return (border[1] + border[0])*0.5; }
 	void Set(int use_bound, int use_dim, T use_val)				{ border[use_bound][use_dim] = use_val; }
