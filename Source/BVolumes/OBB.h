@@ -19,7 +19,7 @@ public:
 	void SetOrient(const TMatrix<T,Size>& use_orient)			{orient=use_orient;}
 	void SetAABB(const TAABB<T, Size>& use_aabb)				{ local = use_aabb; }
 	TVec<T,Size> GetPos()const									{return pos;}
-	TAABB<T,Size> GetAABB()const								{return TAABB<T,Size>(pos,orient.AbsMul(local.GetSize()));}
+	TAABB<T,Size> GetAABB()const								{return TAABB<T,Size>(pos,orient.AbsMul(local.GetHalfSize()));}
 	TAABB<T, Size> GetLocalAABB()const							{return local; }
 	TMatrix<T, Size> GetOrient()const							{ return orient; }
 

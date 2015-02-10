@@ -3,8 +3,8 @@
 template<class T, bool check_fully_in>
 bool CollideSpecialization(const TOBB<T, 2>& v0, const TAABB<T, 2>& v1, bool& obb_fully_in_aabb)
 {
-	TVec<T, 2> a = v1.GetSize(),
-		b = v0.local.GetSize(),
+	TVec<T, 2> a = v1.GetHalfSize(),
+		b = v0.local.GetHalfSize(),
 		pos_a = v1.GetCenter(),
 		pos_b = v0.pos;
 
@@ -55,8 +55,8 @@ bool CollideSpecialization(const TOBB<T, 2>& v0, const TAABB<T, 2>& v1, bool& ob
 template<class T, bool check_fully_in>
 bool CollideSpecialization(const TOBB<T, 3>& v0, const TAABB<T, 3>& v1, bool& obb_fully_in_aabb)
 {
-	TVec<T, 3> a = v1.GetSize(),
-		b = v0.local.GetSize(),
+	TVec<T, 3> a = v1.GetHalfSize(),
+		b = v0.local.GetHalfSize(),
 		pos_a = v1.GetCenter(),
 		pos_b = v0.pos;
 

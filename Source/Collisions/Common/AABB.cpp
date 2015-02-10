@@ -280,7 +280,7 @@ bool SegmentCollideSpecialized(const TAABB<T, 2>& aabb, const TSegment<T, 2> &se
 template<class T>
 bool SegmentCollideSpecialized(const TAABB<T, 3>& aabb, const TSegment<T, 3> &segment)
 {
-	TVec<T, 3> a = aabb.GetSize(),
+	TVec<T, 3> a = aabb.GetHalfSize(),
 		b_dir = segment.GetDir(),
 		b = ((segment.p1 - segment.p0)*0.5).GetAbs(),
 		pos_a = aabb.GetCenter(),
@@ -345,7 +345,7 @@ bool TAABB<T, Size>::SegmentCollide(const TSegment<T, Size> &segment, TRayCollis
 template<class T>
 bool LineCollideSpecialized(const TAABB<T, 2>& aabb, const TLine<T, 2> &line)
 {
-	TVec<T, 2> a = aabb.GetSize(),
+	TVec<T, 2> a = aabb.GetHalfSize(),
 		b_dir = line.dir,
 		pos_a = aabb.GetCenter();
 
@@ -367,7 +367,7 @@ bool LineCollideSpecialized(const TAABB<T, 2>& aabb, const TLine<T, 2> &line)
 template<class T>
 bool LineCollideSpecialized(const TAABB<T, 3>& aabb, const TLine<T, 3> &line)
 {
-	TVec<T, 3> a = aabb.GetSize(),
+	TVec<T, 3> a = aabb.GetHalfSize(),
 		b_dir = line.dir,
 		pos_a = aabb.GetCenter();
 

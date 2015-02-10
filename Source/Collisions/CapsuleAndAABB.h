@@ -3,7 +3,7 @@
 template<class T, bool check_capsule_fully_in_aabb>
 bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2> &capsule, bool& capsule_fully_in_aabb)
 {
-	TVec<T, 2> a = aabb.GetSize(),
+	TVec<T, 2> a = aabb.GetHalfSize(),
 		b_dir = capsule.segment.GetDir(),
 		b = ((capsule.segment.p1 - capsule.segment.p0)*0.5).GetAbs(),
 		pos_a = aabb.GetCenter(),
@@ -75,7 +75,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 template<class T, bool check_capsule_fully_in_aabb>
 bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3> &capsule, bool& capsule_fully_in_aabb)
 {
-	TVec<T, 3> a = aabb.GetSize(),
+	TVec<T, 3> a = aabb.GetHalfSize(),
 		b_dir = capsule.segment.GetDir(),
 		b = ((capsule.segment.p1 - capsule.segment.p0)*0.5).GetAbs(),
 		pos_a = aabb.GetCenter(),
