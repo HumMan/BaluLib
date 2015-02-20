@@ -794,6 +794,24 @@ bool SegmentSegmentCollide(TSegment<T, 2> s0, TSegment<T, 2> s1)
 	return (r0*s1.p0 > 0 != r0*s1.p1) && (r1*s0.p0 > 0 != r1*s0.p1);
 }
 
+//http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
+
+inline float sign(TVec2 p1, TVec2 p2, TVec2 p3)
+{
+	return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
+}
+
+inline bool PointInTriangle(TVec2 pt, TVec2 v1, TVec2 v2, TVec2 v3)
+{
+	bool b1, b2, b3;
+
+	b1 = sign(pt, v1, v2) < 0.0f;
+	b2 = sign(pt, v2, v3) < 0.0f;
+	b3 = sign(pt, v3, v1) < 0.0f;
+
+	return ((b1 == b2) && (b2 == b3));
+}
+
 namespace MathUtils
 {
 
