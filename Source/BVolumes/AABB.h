@@ -48,6 +48,14 @@ public:
 			else if (pos[k] < border[0][k])border[0][k] = pos[k];
 		}
 	}
+	void operator+=(const TAABB<T, Size>& box)
+	{
+		for (int k = 0; k<Size; k++)
+		{
+			if (box.border[1][k]>border[1][k])border[1][k] = box.border[1][k];
+			else if (box.border[0][k] < border[0][k])border[0][k] = box.border[0][k];
+		}
+	}
 	void Extend(TVec<T, Size> v)
 	{
 		TVec<T, Size> ext(v);
