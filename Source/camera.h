@@ -19,23 +19,29 @@ private:
 	TVec2i middle_pos;
 	float mouse_sensitivity;
 
-	void SetViewByKeyboard(float time);
-	void UpdateView();
+	
 public:	
+	void UpdateView();
+	enum class Key
+	{
+		Left, Up, Right, Down
+	};
+
+	void MouseMove(int x, int y);
+	void KeyDown(Key key, float time, float mult);
+
 	float GetYaw(){return yaw;}
 	float GetPitch(){return pitch;}
 	TFPSCamera(
 		TVec3 use_pos,TVec3 use_dir,TVec3 use_up);	
 	TMatrix4 GetView();
 	TMatrix3 GetOrient(){return cam_orient;}
-	void Update(float use_time);
 	bool IsActive(){return active;}
 	void Activate(int x,int y)
 	{
 		active=true;
 		middle_pos[0]=x;
 		middle_pos[1]=y;
-		SetCursorPos(middle_pos);
 	};
 	void Deactivate()
 	{

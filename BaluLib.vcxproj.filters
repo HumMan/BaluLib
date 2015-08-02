@@ -43,9 +43,6 @@
     <ClInclude Include="Source\camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\common.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\primitives.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -121,12 +118,12 @@
     <ClInclude Include="Source\Math\vec.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\common.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collisions\Common\Frustum.cpp">
@@ -143,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="Source\Collisions\Common\Sphere.cpp">
       <Filter>Source Files\Collisions\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\common.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,5 @@
 #include "baluLib.h"
 
-#include <windows.h>
-
 TFPSCamera::TFPSCamera(TVec3 use_pos,TVec3 use_dir,TVec3 use_up)
 {
 	active=false;
@@ -33,47 +31,33 @@ TMatrix4 TFPSCamera::GetView()
 	return view;
 }
 
-void TFPSCamera::SetViewByKeyboard(float time)
+void TFPSCamera::KeyDown(Key key, float time, float mult)
 {
-	float s=(KeyDown(VK_SHIFT)?speed*3:speed);
-	bool need_update=false;
-	if(KeyDown('A')){
-		need_update=true;
-		pos-=cam_orient[0]*s*time;
-	}
-	if(KeyDown('D')){
-		need_update=true;
-		pos+=cam_orient[0]*s*time;
-	}
-	if(KeyDown('S')){
-		need_update=true;
-		pos+=cam_orient[2]*s*time;
-	}
-	if(KeyDown('W')){
-		need_update=true;
-		pos-=cam_orient[2]*s*time;
-	}
-	if(need_update)
-		UpdateView();
-}
-
-void TFPSCamera::Update(float use_time)
-{
-	if (active)
+	float s = speed * mult;
+	switch (key)
 	{
-		SetViewByMouse();
-		SetViewByKeyboard(use_time);
+	case Key::Left:
+		pos -= cam_orient[0] * s*time;
+		break;
+	case Key::Right:
+		pos += cam_orient[0] * s*time;
+		break;
+	case Key::Up:
+		pos += cam_orient[2] * s*time;
+		break;
+	case Key::Down:
+		pos -= cam_orient[2] * s*time;
+		break;
 	}
 }
 
-void TFPSCamera::SetViewByMouse()
+void TFPSCamera::MouseMove(int x, int y)
 {
 	TVec2i mouse_pos;
 	TQuaternion temp;
 
-	mouse_pos=GetCursorPos();
+	mouse_pos = TVec2i(x, y);
 	if(mouse_pos==middle_pos)return;
-	SetCursorPos(middle_pos);
 
 	TVec2 mouse_direction;
 	mouse_direction=TVec2((float)(middle_pos[0]-mouse_pos[0]),(float)(middle_pos[1]-mouse_pos[1]))*mouse_sensitivity;
