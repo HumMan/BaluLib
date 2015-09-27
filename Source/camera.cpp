@@ -1,4 +1,10 @@
-#include "baluLib.h"
+#include "camera.h"
+
+#include <math.h>
+
+#include "Math\quaternion.h"
+
+using namespace BaluLib;
 
 TFPSCamera::TFPSCamera(TVec3 use_pos,TVec3 use_dir,TVec3 use_up)
 {

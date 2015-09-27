@@ -1,4 +1,4 @@
-#include <baluLib.h>
+#include "common.h"
 
 #include "string.h"
 
@@ -14,6 +14,7 @@
 #include <X11/keysymdef.h>
 #include <sys/time.h>
 #endif
+using namespace BaluLib;
 
 unsigned long long TTime::GetTime()
 {

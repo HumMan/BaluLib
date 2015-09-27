@@ -4,11 +4,9 @@
 #include "../Include/baluLib.h"
 #include <stdio.h>
 
+using namespace BaluLib;
+
 int main() {
-	while (true) {
-		if (KeyDown('W'))
-			break;
-	}
 	TAllocator<int, 200> v;
 	v.New();
 	TMatrix4 m1, m2, m3;
