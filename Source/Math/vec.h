@@ -3,6 +3,8 @@
 #include <type_traits>
 #include <assert.h>
 
+#include "../stdfuncs.h"
+
 namespace BaluLib
 {
 
@@ -277,14 +279,14 @@ namespace BaluLib
 		}
 
 	private:
-		template <class T, int size>
-		typename std::enable_if<size != 3>::type CrossSpec(const TVec<T, size>& v1, TVec<T, size>& result)const
+		template <class T1, int size1>
+		typename std::enable_if<size1 != 3>::type CrossSpec(const TVec<T1, size1>& v1, TVec<T1, size1>& result)const
 		{
 			static_assert(size == 3, "supports only 3d");
 		}
 
-		template <class T, int size>
-		typename std::enable_if<size == 3>::type CrossSpec(const TVec<T, size>& v1, TVec<T, size>& result)const
+		template <class T1, int size1>
+		typename std::enable_if<size1 == 3>::type CrossSpec(const TVec<T1, size1>& v1, TVec<T1, size1>& result)const
 		{
 			result = TVec<T, size>(
 				v[1] * v1[2] - v[2] * v1[1],
@@ -357,7 +359,7 @@ namespace BaluLib
 		}
 		bool IsZero()const
 		{
-			return TVEC_BIN_OP_CMP_AND_VAL(high, v, == , 0);
+			return TVEC_BIN_OP_CMP_VAL_AND(high, v, == , 0);
 		}
 		static T AngleBetween(const TVec& v0, const TVec& v1)//returns minimal angle between vectors (unsigned)
 		{
