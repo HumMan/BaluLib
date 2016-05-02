@@ -1,13 +1,6 @@
 #pragma once
 
-#include "../../stdfuncs.h"
-
-template<class T, int Size>
-bool Collide(const TAABB<T, Size>& v0, const TSphere<T, Size>& v1)
-{
-	T sqr_distance;
-	return Collide(v0, v1, sqr_distance);
-}
+#include "../stdfuncs.h"
 
 template<class T, int Size>
 bool Collide(const TAABB<T, Size>& v0, const TSphere<T, Size>& v1, bool& v1_fullin_v0)
@@ -61,3 +54,9 @@ bool Collide(const TAABB<T, Size>& v0, const TSphere<T, Size>& v1, T& sqr_distan
 	return v1.radius*v1.radius > sqr_distance;
 }
 
+template<class T, int Size>
+bool Collide(const TAABB<T, Size>& v0, const TSphere<T, Size>& v1)
+{
+	T sqr_distance;
+	return Collide(v0, v1, sqr_distance);
+}

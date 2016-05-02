@@ -786,7 +786,7 @@ namespace BaluLib
 		//	throw new System.Exception("Lines are parallel");
 
 		// now return the Vector2 intersection point
-		return TVec(
+		return TVec<T, 2>(
 			(B2*C1 - B1*C2) / delta,
 			(A1*C2 - A2*C1) / delta
 			);

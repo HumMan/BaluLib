@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-#include "Math\quaternion.h"
+#include "Math/quaternion.h"
 
 using namespace BaluLib;
 

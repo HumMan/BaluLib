@@ -3,6 +3,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <assert.h>
+#include <cstdlib>
+#include <cmath>
+#include <limits>
 
 namespace BaluLib
 {
@@ -56,63 +59,63 @@ namespace BaluLib
 	}
 
 	template<class T>
-	__forceinline T Clamp(T vmin, T vmax, T v)
+	inline T Clamp(T vmin, T vmax, T v)
 	{
 		return v <= vmax ? (v >= vmin ? v : vmin) : vmax;
 	}
 	template<class T>
-	__forceinline T ClampMax(T vmax, T v)
+	inline T ClampMax(T vmax, T v)
 	{
 		return v <= vmax ? v : vmax;
 	}
 
 	template<class T>
-	__forceinline T ClampMin(T vmin, T v)
+	inline T ClampMin(T vmin, T v)
 	{
 		return v >= vmin ? v : vmin;
 	}
 
 	template<class T>
-	__forceinline T Blend(T vmin, T vmax, T alpha)
+	inline T Blend(T vmin, T vmax, T alpha)
 	{
 		return vmin*(1 - alpha) + vmax*alpha;
 	}
 
 	template<class T>
-	__forceinline bool IsInMinMax(T v, T v1, T v2)
+	inline bool IsInMinMax(T v, T v1, T v2)
 	{
 		return(v >= v1) && (v <= v2);
 	}
 
 	template<class T>
-	__forceinline bool IsIn(T v, T v1, T v2)
+	inline bool IsIn(T v, T v1, T v2)
 	{
 		return((v >= v1) && (v <= v2)) || ((v >= v2) && (v <= v1));
 	}
 
 	template<class T>
-	__forceinline bool Overlay(T min1, T max1, T min2, T max2)
+	inline bool Overlay(T min1, T max1, T min2, T max2)
 	{
 		return max1 >= min2&&min1 < max2;
 	}
 
-	__forceinline int Rand(int i)
+	inline int Rand(int i)
 	{
 		return rand() % (i + 1);
 	}
 
-	__forceinline float Randf()
+	inline float Randf()
 	{
 		return rand()*(1.0f / RAND_MAX);
 	}
 
-	__forceinline float Randfs()
+	inline float Randfs()
 	{
 		return rand()*(2.0f / RAND_MAX) - 1.0f;
 	}
 
 	template<class T>
-	__forceinline void Swap(T &left, T &right)
+	inline void Swap(T &left, T &right)
 	{
 		T temp; temp = left; left = right; right = temp;
 	}

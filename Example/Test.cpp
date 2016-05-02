@@ -1,7 +1,7 @@
 // Test.cpp : Defines the entry point for the console application.
 //
 
-#include "../Include/baluLib.h"
+#include <baluLib.h>
 #include <stdio.h>
 
 using namespace BaluLib;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Math\vec.h"
-#include "Math\matrix.h"
+#include "Math/vec.h"
+#include "Math/matrix.h"
 
 namespace BaluLib
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\primitives.h"
+#include "../primitives.h"
 namespace BaluLib
 {
 

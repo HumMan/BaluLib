@@ -1,8 +1,13 @@
 #pragma once
 
+#include "stdfuncs.h"
+
 namespace BaluLib
 {
 
+	template<class T>
+	inline void Swap(T &left, T &right);
+	
 	template<class T, int size>
 	class TVec;
 
@@ -290,7 +295,7 @@ namespace BaluLib
 		{
 			assert(v_high != -1 && i >= 0 && i <= v_high);
 			assert(k >= 0 && k <= v_high);
-			::Swap(v[i], v[k]);
+			BaluLib::Swap(v[i], v[k]);
 		}
 		void Empty()
 		{
