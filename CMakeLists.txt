@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(BaluLib)
 
-file(GLOB_RECURSE BaluLib_SRC "Source"
-    "*.h"
-    "*.cpp"
+file(GLOB_RECURSE BaluLib_SRC
+    "Source/*.h"
+    "Source/*.cpp"
 )
 
 INCLUDE_DIRECTORIES("Include")
