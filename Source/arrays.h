@@ -236,9 +236,15 @@ namespace BaluLib
 			v_min = -1;
 			reserve = 5;
 		}
-		TVector() :v(NULL), v_high(-1), v_max(-1), v_min(-1), reserve(5)
+		TVector()
 		{
+			Init();
 			assert(capacity_percent >= 0 && capacity_percent <= 200);
+		}
+		TVector(int reserve)
+		{
+			Init();
+			SetReserve(reserve);
 		}
 		void SetReserve(int i)
 		{
@@ -577,7 +583,7 @@ namespace BaluLib
 		{
 			for (int i = 0; i < use_reserve; i++)
 			{
-				v.add();
+				v.Push();
 				free_v.Push(i);
 			}
 		}
@@ -588,7 +594,7 @@ namespace BaluLib
 			{
 				GetNewSpace();
 			}
-			v[temp = free_v.Pop()] = val;
+			v[temp = free_v.GetPop()] = val;
 			return temp;
 		}
 		int New()
