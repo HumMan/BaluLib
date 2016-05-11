@@ -48,10 +48,10 @@ namespace BaluLib
 	if(h>=3)op_a[3]op val;
 
 #define TVEC_BIN_OP_SUM(h,op_a,op,op_b,sum_op)\
-	(((h>=0)?(op_a[0]op op_b[0]):0)sum_op\
-	 ((h>=1)?(op_a[1]op op_b[1]):0)sum_op\
-	 ((h>=2)?(op_a[2]op op_b[2]):0)sum_op\
-	 ((h>=3)?(op_a[3]op op_b[3]):0))\
+	(((h>=0)?(op_a[0]op op_b[0]):T(0))sum_op\
+	 ((h>=1)?(op_a[1]op op_b[1]):T(0))sum_op\
+	 ((h>=2)?(op_a[2]op op_b[2]):T(0))sum_op\
+	 ((h>=3)?(op_a[3]op op_b[3]):T(0)))\
 
 #define TVEC_BIN_OP_CMP_AND(h,op_a,op,op_b)\
 	(((h>=0)?(op_a[0]op op_b[0]):true)&&\
@@ -60,10 +60,10 @@ namespace BaluLib
 	 ((h>=3)?(op_a[3]op op_b[3]):true))\
 
 #define TVEC_BIN_OP_SUM_VAL(h,op_a,op,val,sum_op)\
-	(((h>=0)?(op_a[0]op val):0)sum_op\
-	 ((h>=1)?(op_a[1]op val):0)sum_op\
-	 ((h>=2)?(op_a[2]op val):0)sum_op\
-	 ((h>=3)?(op_a[3]op val):0))\
+	(((h>=0)?(op_a[0]op val):T(0))sum_op\
+	 ((h>=1)?(op_a[1]op val):T(0))sum_op\
+	 ((h>=2)?(op_a[2]op val):T(0))sum_op\
+	 ((h>=3)?(op_a[3]op val):T(0)))\
 
 #define TVEC_BIN_OP_CMP_VAL_AND(h,op_a,op,val)\
 	(((h>=0)?(op_a[0]op val):true)&&\
@@ -72,10 +72,10 @@ namespace BaluLib
 	 ((h>=3)?(op_a[3]op val):true))\
 
 #define TVEC_BIN_OP_SUM_FUNC(h,op_a,op,func,op_b,sum_op)\
-	(((h>=0)?(op_a[0]op func(op_b[0])):0)sum_op\
-	 ((h>=1)?(op_a[1]op func(op_b[1])):0)sum_op\
-	 ((h>=2)?(op_a[2]op func(op_b[2])):0)sum_op\
-	 ((h>=3)?(op_a[3]op func(op_b[3])):0))\
+	(((h>=0)?(op_a[0]op func(op_b[0])):T(0))sum_op\
+	 ((h>=1)?(op_a[1]op func(op_b[1])):T(0))sum_op\
+	 ((h>=2)?(op_a[2]op func(op_b[2])):T(0))sum_op\
+	 ((h>=3)?(op_a[3]op func(op_b[3])):T(0)))\
 
 		explicit TVec(T v0)
 		{
