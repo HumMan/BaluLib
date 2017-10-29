@@ -377,7 +377,10 @@ namespace BaluLib
 		return Collide<T, Size>(*this, v, fully_in_sphere);
 	}
 
-
+	template bool SphereRayCollide<float, 2>(const TSphere<float,2>& sphere, const TRay<float,2> &ray, float& t0, float& t1);
+	template bool SphereRayCollide<float, 3>(const TSphere<float,3>& sphere, const TRay<float,3> &ray, float& t0, float& t1);
+	template bool SphereRayCollide<double, 2>(const TSphere<double,2>& sphere, const TRay<double,2> &ray, double& t0, double& t1);
+	template bool SphereRayCollide<double, 3>(const TSphere<double,3>& sphere, const TRay<double,3> &ray, double& t0, double& t1);
 
 	template class TSphere<float, 2>;
 	template class TSphere<float, 3>;

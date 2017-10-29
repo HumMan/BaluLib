@@ -295,8 +295,10 @@ namespace BaluLib
 		}
 
 	public:
-		TVec<T, size> Cross(const TVec<T, size>& v1)const		// i     j     k
-		{													// v[0]  v[1]  v[2]
+		TVec<T, size> Cross(const TVec<T, size>& v1)const		
+		{
+			// i     j     k
+			// v[0]  v[1]  v[2]
 			// v1[0] v1[1] v1[2]
 			TVec<T, size> result;
 			CrossSpec(v1, result);

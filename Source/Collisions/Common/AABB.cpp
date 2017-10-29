@@ -199,7 +199,16 @@ namespace BaluLib
 	bool TAABB<T, Size>::RayCollide(const TRay<T, Size> &ray, TRayCollisionInfo<T, Size>& collision) const
 	{
 		T cf = 0, cl = std::numeric_limits<T>().max();
-		return AABBRayCollide(*this, ray, cf, cl, collision);
+		bool result = AABBRayCollide(*this, ray, cf, cl, collision);
+		if (collision.have_in)
+		{
+			collision.in_pos = ray.pos + ray.dir*collision.in_param;
+		}
+		if (collision.have_out)
+		{
+			collision.out_pos = ray.pos + ray.dir*collision.out_param;
+		}
+		return result;
 	}
 
 	template<class T, int Size>
