@@ -1,15 +1,19 @@
 #pragma once
 
+#include "../Include/export.h"
+#include <memory>
 namespace BaluLib
 {
-
-	class TTime
+	class TTimePrivate;
+	class BALULIB_DLL_INTERFACE TTime
 	{
-		double dT, curr_fps;
-		int frames;
-		unsigned long long prev_time, freq, curr_time;
-		double fps;
+		TTimePrivate* p;
 	public:
+		TTime();
+		TTime(const TTime&);
+		void operator=(const TTime&);
+		~TTime();
+
 		unsigned long long GetTime();
 		double TimeDiff(unsigned long long curTime, unsigned long long prevTime);
 		void Start();

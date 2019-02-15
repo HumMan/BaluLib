@@ -3,73 +3,46 @@
 #include "Math/vec.h"
 #include "Math/matrix.h"
 
+#include "../Include/export.h"
+
 namespace BaluLib
 {
-
-	class TFPSCamera
+	class TFPSCameraPrivate;
+	class BALULIB_DLL_INTERFACE TFPSCamera
 	{
 	private:
-
-		float yaw,
-			pitch;
-		//TMatrix3 start_orient;
-		TMatrix4 view;
-		TMatrix3 cam_orient;
-		TVec3 pos;
-
-		bool active;
-		float speed;
-
-		void SetViewByMouse();
-
-		TVec2i middle_pos;
-		float mouse_sensitivity;
-
+		TFPSCameraPrivate* p;		
 
 	public:
-		void UpdateView();
+
+		TFPSCamera();
+		TFPSCamera(TVec3 use_pos, TVec3 use_dir, TVec3 use_up);
+		TFPSCamera(const TFPSCamera&);
+		void operator=(const TFPSCamera&);
+		~TFPSCamera();
+		
 		enum class Key
 		{
 			Left, Up, Right, Down, None
 		};
 
+		void UpdateView();
+
 		void MouseMove(int x, int y);
 		void KeyDown(Key key, float time, float mult);
 
-		float GetYaw(){ return yaw; }
-		float GetPitch(){ return pitch; }
-		TFPSCamera(
-			TVec3 use_pos, TVec3 use_dir, TVec3 use_up);
+		float GetYaw();
+		float GetPitch();
+		
 		TMatrix4 GetView();
-		TMatrix3 GetOrient(){ return cam_orient; }
-		bool IsActive(){ return active; }
-		void Activate(int x, int y)
-		{
-			active = true;
-			middle_pos[0] = x;
-			middle_pos[1] = y;
-		};
-		void Deactivate()
-		{
-			active = false;
-		};
-		TVec3 GetPos()const
-		{
-			return pos;
-		};
-		void SetPos(const TVec3& use_pos)
-		{
-			pos = use_pos;
-		};
-		TVec3 GetDir()const
-		{
-			return -cam_orient[2];
-		};
-		void SetDir(const TVec3& use_dir)
-		{
-			//TODO ������������� � yaw pitch
-			//dir=use_dir.GetNormalized();
-		};
+		TMatrix3 GetOrient();
+		bool IsActive();
+		void Activate(int x, int y);
+		TVec3 GetPos()const;
+		void SetPos(const TVec3& use_pos);
+		TVec3 GetDir()const;
+		void SetDir(const TVec3& use_dir);
+		void Deactivate();
 	};
 
 	template<class T>
@@ -100,6 +73,15 @@ namespace BaluLib
 			view.SetOffset(-(temp*(pos + target + off_global)));
 		}
 	public:
+
+		TOrbitCamera(TVec<T, 3> use_pos, TVec<T, 3> use_target, TVec<T, 3> use_up)
+		{
+			panning = false;
+			rotating = false;
+			zooming = false;
+			SetView(use_pos, use_target, use_up);
+		}
+
 		void SetView(TVec<T, 3> use_pos, TVec<T, 3> use_target, TVec<T, 3> use_up)
 		{
 			target = use_target;
@@ -111,13 +93,7 @@ namespace BaluLib
 			offset_y = 0;
 			UpdateView();
 		}
-		TOrbitCamera(TVec<T, 3> use_pos, TVec<T, 3> use_target, TVec<T, 3> use_up)
-		{
-			panning = false;
-			rotating = false;
-			zooming = false;
-			SetView(use_pos, use_target, use_up);
-		}
+		
 		TMatrix<T, 4> GetView()
 		{
 			return view;

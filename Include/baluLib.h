@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "export.h"
+
 #include "../Source/stdfuncs.h"
 #include "../Source/common.h"
 #include "../Source/Math/vec.h"

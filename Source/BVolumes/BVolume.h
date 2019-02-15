@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../Include/export.h"
+
 #include "../primitives.h"
 namespace BaluLib
 {

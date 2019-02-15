@@ -121,6 +121,7 @@
     <ClInclude Include="Source\common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\export.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
