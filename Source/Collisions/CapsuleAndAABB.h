@@ -23,7 +23,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 		ra = a[i];
 		//для отрезка проекцией будет его размер по соответсвующей оси
 		rb = b[i];
-		t = abs(TT[i]);
+		t = std::abs(TT[i]);
 		if (t > ra + rb + capsule.radius)
 			return false;
 		T curr_dist = t - ra - rb;

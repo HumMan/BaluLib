@@ -256,7 +256,7 @@ namespace BaluLib
 	{
 		T d0 = plane.DistanceTo(segment.p0);
 		T d1 = plane.DistanceTo(segment.p1);
-		return ((d0 > 0 != d1 > 0) || (abs(d0) < radius || abs(d1) < radius));
+                return ((d0 > 0) != (d1 > 0)) || (abs(d0) < radius || abs(d1) < radius);
 	}
 	template<class T, int Size>
 	bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const

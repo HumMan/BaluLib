@@ -227,7 +227,7 @@ namespace BaluLib
 		TVec<T, Size> plane_pos = plane.GetPos();
 		//TVec<T, Size> proj_dir = plane.dist >= 0 ? plane.normal : -plane.normal;
 		TVec<T, Size> aabb_pos = this->GetCenter();
-		TVec<T, Size> aabb_size = this->GetHalfSize();
+                //TVec<T, Size> aabb_size = this->GetHalfSize();
 		TVec<T, Size> tested_dir = plane_pos - aabb_pos;
 		//find nearest point on box
 		TVec<T, Size> nearest_point;

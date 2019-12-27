@@ -19,7 +19,7 @@ namespace BaluLib
 			{
 				result += w[k];
 			}
-			return result * 2.0;
+                        return (T)(result * 2.0);
 		}
 		bool Contains(const TAABB<T, Size>& box)const
 		{

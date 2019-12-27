@@ -426,10 +426,11 @@ namespace BaluLib
 				if (out < -0) {
 					lambda = in;
 				}
-				else
+				else {
 					if (in < out) lambda = in;
 					else lambda = out;
 					return 1;
+				}
 		}
 		return 0;
 	}
@@ -519,8 +520,8 @@ namespace BaluLib
 			}
 		}
 		// finally do the division to get sc and tc
-		sc = (abs(sN) < SMALL_NUM ? (T) 0.0 : sN / sD);
-		tc = (abs(tN) < SMALL_NUM ? (T) 0.0 : tN / tD);
+		sc = (std::abs(sN) < SMALL_NUM ? (T) 0.0 : sN / sD);
+		tc = (std::abs(tN) < SMALL_NUM ? (T) 0.0 : tN / tD);
 
 		// get the difference of the two closest points
 		TVec<T, Size>   dP = w + (u*sc) - (v*tc);  // = S1(sc) - S2(tc)

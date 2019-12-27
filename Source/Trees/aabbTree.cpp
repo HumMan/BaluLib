@@ -17,6 +17,10 @@
 */
 
 #include "aabbTree.h"
+
+#include <string.h>
+#include <float.h>
+
 using namespace BaluLib;
 
 const int b2_nullNode = -1;

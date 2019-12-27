@@ -75,6 +75,8 @@ public:
 		case TFPSCamera::Key::Down:
 			pos += cam_orient[2] * s*time;
 			break;
+                default:
+                    break;
 		}
 	}
 

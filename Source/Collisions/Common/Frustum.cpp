@@ -80,7 +80,6 @@ namespace BaluLib
 	template<class T, int Size>
 	bool TFrustum<T, Size>::Overlaps(const TSphere<T, Size>& sphere) const
 	{
-		int c = 0;
 		for (int i = 0; i < planes_count; i++){
 			if ((frustum[i].DistanceTo(sphere.pos)) < -sphere.radius)
 				return false;
@@ -91,7 +90,6 @@ namespace BaluLib
 	template<class T, int Size>
 	bool TFrustum<T, Size>::Overlaps(const TCapsule<T, Size>& capsule) const
 	{
-		int c = 0;
 		for (int i = 0; i < planes_count; i++){
 			if (frustum[i].DistanceTo(capsule.segment.p0) < -capsule.radius&&
 				frustum[i].DistanceTo(capsule.segment.p1) < -capsule.radius)
