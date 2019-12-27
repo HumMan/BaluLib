@@ -1,1 +1,0 @@
-//TODO заменить все деревья на DynamicTree из box2d и kdtree http://www.flipcode.com/archives/Raytracing_Topics_Techniques-Part_7_Kd-Trees_and_More_Speed.shtml

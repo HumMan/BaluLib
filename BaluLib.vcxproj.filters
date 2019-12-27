@@ -97,15 +97,6 @@
     <ClInclude Include="Source\BVolumes\BVolume.h">
       <Filter>Source Files\BVolumes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Trees\kdtree.h">
-      <Filter>Source Files\Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Trees\octree.h">
-      <Filter>Source Files\Trees</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Trees\quadtree.h">
-      <Filter>Source Files\Trees</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Math\fixed.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
@@ -122,6 +113,8 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\export.h" />
+    <ClInclude Include="Source\growableStack.h" />
+    <ClInclude Include="Source\Trees\aabbTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\camera.cpp">
@@ -145,5 +138,6 @@
     <ClCompile Include="Source\common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Trees\aabbTree.cpp" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,11 @@
 
 namespace BaluLib
 {
-
+	template <typename T>
+	inline T Max(T a, T b)
+	{
+		return a > b ? a : b;
+	}
 	inline int IntSizeOf(int x)
 	{
 		return ((((x - 1)) / sizeof(int) + 1)*sizeof(int));

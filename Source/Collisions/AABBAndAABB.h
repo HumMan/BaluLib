@@ -20,10 +20,12 @@ bool Collide(const TAABB<T,Size>& v0,const TAABB<T,Size>& v1, bool& v1_fully_in_
 	for(int i=0;i<Size;i++)
 	{
 		bool t0=v0.border[0][i]<v1.border[1][i];
-		if(!t0)return false;
+		if(!t0)
+			return false;
 		bool t1=v0.border[1][i]>v1.border[0][i];
-		if(!t1)return false;
-                v1_fully_in_v0&=(v0.border[0][i]>v1.border[0][i]&&v0.border[1][i]<v1.border[1][i]);
+		if(!t1)
+			return false;
+        v1_fully_in_v0&=(v0.border[0][i]>v1.border[0][i]&&v0.border[1][i]<v1.border[1][i]);
 	}
 	return true;
 }

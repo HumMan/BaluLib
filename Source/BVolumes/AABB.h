@@ -11,7 +11,23 @@ namespace BaluLib
 
 		TVec<T, Size> border[2]; //0-min 1-max
 
-		TVec<T, Size> GetLowerBound()
+		T GetPerimeter() const
+		{
+			auto w = border[1]-border[0];
+			T result = 0;
+			for (int k = 0; k < Size; k++)
+			{
+				result += w[k];
+			}
+			return result * 2.0;
+		}
+		bool Contains(const TAABB<T, Size>& box)const
+		{
+			bool fully_in_aabb;
+			CollideWith(box, fully_in_aabb);
+			return fully_in_aabb;
+		}
+		TVec<T, Size> GetLowerBound()const
 		{
 			return border[0];
 		}
@@ -20,7 +36,7 @@ namespace BaluLib
 			border[0] = value;
 		}
 
-		TVec<T, Size> GetUpperBound()
+		TVec<T, Size> GetUpperBound()const
 		{
 			return border[0];
 		}
@@ -41,8 +57,8 @@ namespace BaluLib
 		TVec<T, Size> GetCenter()const { return (border[1] + border[0])*0.5; }
 		void Set(int use_bound, int use_dim, T use_val) { border[use_bound][use_dim] = use_val; }
 		TVec<T, Size> operator[](int use_bound)const { return border[use_bound]; }
-
-		void operator+=(const TVec<T, Size>& pos)
+		/// Combine an position into this one
+		void Combine(const TVec<T, Size>& pos)
 		{
 			for (int k = 0; k < Size; k++)
 			{
@@ -50,12 +66,22 @@ namespace BaluLib
 				else if (pos[k] < border[0][k])border[0][k] = pos[k];
 			}
 		}
-		void operator+=(const TAABB<T, Size>& box)
+		/// Combine an AABB into this one
+		void Combine(const TAABB<T, Size>& box)
 		{
 			for (int k = 0; k < Size; k++)
 			{
 				if (box.border[1][k] > border[1][k])border[1][k] = box.border[1][k];
 				else if (box.border[0][k] < border[0][k])border[0][k] = box.border[0][k];
+			}
+		}
+		/// Combine two AABB into this one
+		void Combine(const TAABB<T, Size>& box0, const TAABB<T, Size>& box1)
+		{
+			for (int k = 0; k < Size; k++)
+			{
+				border[1][k] = Max(box0.border[1][k], box1.border[1][k]);
+				border[2][k] = Max(box0.border[2][k], box1.border[2][k]);
 			}
 		}
 		void Extend(TVec<T, Size> v)

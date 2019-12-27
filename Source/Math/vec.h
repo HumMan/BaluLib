@@ -350,15 +350,6 @@ namespace BaluLib
 		{
 			TVEC_BIN_OP_VAL(high, v, = , Randfs());
 		}
-		void MakeRandom(const TVec& dir, T focus_min, T focus_max)
-		{
-			//TODO сделать попроще просто прибавляя рандомный вектор к концу этого(ограничение 180 градусами при бесконечном векторе)
-			// или по другому
-			//TVec temp((dir[1]==0&&dir[2]==0)?TVec3(0,1,0):TVec3(1,0,0));
-			//float r=Randf();
-			//TVec3 cr(dir.GetRotated(dir.Cross(temp),(focus_min*r+focus_max*(1-r))*float(M_PI)/180.0f));
-			//return (cr.GetRotated(dir,rand()/float(RAND_MAX*2*M_PI))).GetNormalized();
-		}
 		bool IsZero()const
 		{
 			return TVEC_BIN_OP_CMP_VAL_AND(high, v, == , 0);
