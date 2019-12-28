@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 template<class T, bool check_capsule_fully_in_aabb>
 bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2> &capsule, bool& capsule_fully_in_aabb)
@@ -16,12 +16,12 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 	if (check_capsule_fully_in_aabb)
 		capsule_fully_in_aabb = true;
 
-	//проекции на оси AABB (т.е. X Y Z)
+	//РїСЂРѕРµРєС†РёРё РЅР° РѕСЃРё AABB (С‚.Рµ. X Y Z)
 	for (int i = 0; i<2; i++)
 	{
-		//для AABB проекцией будет его размер по соответсвующей оси
+		//РґР»СЏ AABB РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 		ra = a[i];
-		//для отрезка проекцией будет его размер по соответсвующей оси
+		//РґР»СЏ РѕС‚СЂРµР·РєР° РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 		rb = b[i];
 		t = std::abs(TT[i]);
 		if (t > ra + rb + capsule.radius)
@@ -46,7 +46,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 		}
 	}
 
-	//проекция на направление отрезка
+	//РїСЂРѕРµРєС†РёСЏ РЅР° РЅР°РїСЂР°РІР»РµРЅРёРµ РѕС‚СЂРµР·РєР°
 	{
 		ra = a.AbsScalarMul(b_dir);
 		rb = b.Length();
@@ -58,7 +58,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 			min_distance = curr_dist;
 	}
 
-	//расстояение от AABB до вершин отрезка
+	//СЂР°СЃСЃС‚РѕСЏРµРЅРёРµ РѕС‚ AABB РґРѕ РІРµСЂС€РёРЅ РѕС‚СЂРµР·РєР°
 	TPointCollisionInfo<T, 2> info0, info1;
 	aabb.PointCollide(capsule.segment.p0, info0);
 	aabb.PointCollide(capsule.segment.p1, info1);
@@ -88,12 +88,12 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 	if (check_capsule_fully_in_aabb)
 		capsule_fully_in_aabb = true;
 
-	//проекции на оси AABB (т.е. X Y Z)
+	//РїСЂРѕРµРєС†РёРё РЅР° РѕСЃРё AABB (С‚.Рµ. X Y Z)
 	for (int i = 0; i<3; i++)
 	{
-		//для AABB проекцией будет его размер по соответсвующей оси
+		//РґР»СЏ AABB РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 		ra = a[i];
-		//для отрезка проекцией будет его размер по соответсвующей оси
+		//РґР»СЏ РѕС‚СЂРµР·РєР° РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 		rb = b[i];
 		t = abs(TT[i]);
 		if (t > ra + rb + capsule.radius)
@@ -105,7 +105,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 			capsule_fully_in_aabb = capsule_fully_in_aabb && (t < ra - rb - capsule.radius);
 	}
 
-	//проекции на 3 векторных произведения осей AABB и направления отрезка
+	//РїСЂРѕРµРєС†РёРё РЅР° 3 РІРµРєС‚РѕСЂРЅС‹С… РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РѕСЃРµР№ AABB Рё РЅР°РїСЂР°РІР»РµРЅРёСЏ РѕС‚СЂРµР·РєР°
 	for (int i = 0; i<3; i++)
 	{
 		TVec<T, 3> temp(0);
@@ -122,7 +122,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 		}
 	}
 
-	//проекция на направление отрезка
+	//РїСЂРѕРµРєС†РёСЏ РЅР° РЅР°РїСЂР°РІР»РµРЅРёРµ РѕС‚СЂРµР·РєР°
 	{
 		ra = a.AbsScalarMul(b_dir);
 		rb = b.Length();
@@ -134,7 +134,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 			min_distance = curr_dist;
 	}
 	
-	//расстояение от AABB до вершин отрезка
+	//СЂР°СЃСЃС‚РѕСЏРµРЅРёРµ РѕС‚ AABB РґРѕ РІРµСЂС€РёРЅ РѕС‚СЂРµР·РєР°
 	TPointCollisionInfo<T, 3> info0, info1;
 	aabb.PointCollide(capsule.segment.p0, info0);
 	aabb.PointCollide(capsule.segment.p1, info1);

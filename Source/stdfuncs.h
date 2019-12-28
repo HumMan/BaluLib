@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -35,7 +35,7 @@ namespace BaluLib
 		return deg / 180.0*M_PI;
 	}
 
-	inline int f2i(float x)//округляет до целого
+	inline int f2i(float x)//РѕРєСЂСѓРіР»СЏРµС‚ РґРѕ С†РµР»РѕРіРѕ
 	{
 		const int magic = (150 << 23) | (1 << 22);
 		x += *(float*)&magic;

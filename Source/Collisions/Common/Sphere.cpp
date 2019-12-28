@@ -1,4 +1,4 @@
-#include "../../BVolumes/Sphere.h"
+﻿#include "../../BVolumes/Sphere.h"
 
 using namespace BaluLib;
 

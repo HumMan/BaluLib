@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Copyright (c) 2009 Erin Catto http://www.box2d.org
 *
 * This software is provided 'as-is', without any express or implied
@@ -705,7 +705,7 @@ int b2DynamicTree::GetMaxBalance() const
 
 		int child1 = node->child1;
 		int child2 = node->child2;
-		int balance = abs(m_nodes[child2].height - m_nodes[child1].height);
+		int balance = std::abs(m_nodes[child2].height - m_nodes[child1].height);
 		maxBalance = Max(maxBalance, balance);
 	}
 

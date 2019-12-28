@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 template<class T, int Size>
 bool Collide(const TAABB<T,Size>& v0,const TAABB<T,Size>& v1)

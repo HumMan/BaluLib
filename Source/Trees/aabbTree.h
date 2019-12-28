@@ -1,4 +1,4 @@
-/* Port of Box2d b2DynamicTree */
+﻿/* Port of Box2d b2DynamicTree */
 
 /*
 * Copyright (c) 2010 Erin Catto http://www.box2d.org

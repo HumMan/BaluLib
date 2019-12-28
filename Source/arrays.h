@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "stdfuncs.h"
 
@@ -328,7 +328,7 @@ namespace BaluLib
 			if (NeedResize(v_high + 1))
 			{
 				Resize(v_high + 1);
-				//ïðîâåðêà òîãî íå äîáàâëÿåì ëè ìû ýëåìåíò ìàññèâà ïåðåäàííûé ïî ññûëêå â ýòîò æå ìàññèâ
+				//Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ñ‚Ð¾Ð³Ð¾ Ð½Ðµ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ Ð»Ð¸ Ð¼Ñ‹ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ð¼Ð°ÑÑÐ¸Ð²Ð° Ð¿ÐµÑ€ÐµÐ´Ð°Ð½Ð½Ñ‹Ð¹ Ð¿Ð¾ ÑÑÑ‹Ð»ÐºÐµ Ð² ÑÑ‚Ð¾Ñ‚ Ð¶Ðµ Ð¼Ð°ÑÑÐ¸Ð²
 				assert(v == 0 || !(&val >= v && (&val <= v + v_max)));
 			}
 			else v_high += 1;
@@ -449,7 +449,7 @@ namespace BaluLib
 		if (v_high == new_high)return;
 		if (new_high < -1)assert(false);
 
-		int r = int(new_high*(float(capacity_percent) / 100)) + reserve;//TODO óìíîæàåì áîëüøîå ÷èñëî íà áîëüøîå ïîëó÷àåì ïåðåïîëíåíèå, ïîýòîìó float
+		int r = int(new_high*(float(capacity_percent) / 100)) + reserve;//TODO ÑƒÐ¼Ð½Ð¾Ð¶Ð°ÐµÐ¼ Ð±Ð¾Ð»ÑŒÑˆÐ¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð½Ð° Ð±Ð¾Ð»ÑŒÑˆÐ¾Ðµ Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð¿ÐµÑ€ÐµÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ, Ð¿Ð¾ÑÑ‚Ð¾Ð¼Ñƒ float
 		v_max = new_high + r;
 		v_min = new_high - r;
 		if (v_min < -1)v_min = -1;
@@ -506,7 +506,7 @@ namespace BaluLib
 				for (int i = last_high + 1; i <= new_high; i++)
 					v[i] = new T(*arr.v[i]);
 			}
-			//TODO à ãäå ïðèñâàèâàíèå ýëåìåíòîâ? DONE ïðîâåðèòü
+			//TODO Ð° Ð³Ð´Ðµ Ð¿Ñ€Ð¸ÑÐ²Ð°Ð¸Ð²Ð°Ð½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð²? DONE Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ÑŒ
 
 		}
 		bool operator==(const TVectorList<T>& arr)const

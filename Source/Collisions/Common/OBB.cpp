@@ -1,4 +1,4 @@
-#include "../../BVolumes/OBB.h"
+п»ї#include "../../BVolumes/OBB.h"
 
 using namespace BaluLib;
 
@@ -55,11 +55,11 @@ namespace BaluLib
 	template<class T, int Size>
 	bool TOBB<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
 	{
-		//преобразуем плоскость из глобальной СК в СК OBB
+		//РїСЂРµРѕР±СЂР°Р·СѓРµРј РїР»РѕСЃРєРѕСЃС‚СЊ РёР· РіР»РѕР±Р°Р»СЊРЅРѕР№ РЎРљ РІ РЎРљ OBB
 		TVec<T, Size> new_normal = orient.TransMul(plane.normal);
 		TVec<T, Size> new_pos = orient.TransMul(plane.GetPos() - pos);
 		bool result = local.PlaneCollide(TPlane<T, Size>(new_pos, new_normal));
-		//результаты в СК OBB, необходимо преобразовать в глобальную СК
+		//СЂРµР·СѓР»СЊС‚Р°С‚С‹ РІ РЎРљ OBB, РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ РІ РіР»РѕР±Р°Р»СЊРЅСѓСЋ РЎРљ
 		collision.nearest_point = orient* collision.nearest_point + pos;
 		collision.plane_point = orient* collision.plane_point + pos;
 		collision.normal = orient * collision.normal;

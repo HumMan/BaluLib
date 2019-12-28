@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 namespace BaluLib
 {
 	template<class T, int f_bits = 8, bool precise = false>

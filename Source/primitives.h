@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <vector>
 
@@ -15,16 +15,16 @@ namespace BaluLib
 	template<class T, int size>
 	struct TPlane
 	{
-		//эквивалентно уравнению плоскости ax + by + cz + d = 0 т.е. normal*v + dist = 0
+		//СЌРєРІРёРІР°Р»РµРЅС‚РЅРѕ СѓСЂР°РІРЅРµРЅРёСЋ РїР»РѕСЃРєРѕСЃС‚Рё ax + by + cz + d = 0 С‚.Рµ. normal*v + dist = 0
 		TVec<T, size> normal;
 		T dist;
 
 		TPlane(){}
 
-		TPlane(const TVec<T, 4>& v)//используется в TFrustum - создание плоскости из не нормализованного уравнения ax+by+cz+d=0, где вектор v соответствует (a,b,c,d)
+		TPlane(const TVec<T, 4>& v)//РёСЃРїРѕР»СЊР·СѓРµС‚СЃВ¤ РІ TFrustum - СЃРѕР·РґР°РЅРёРµ РїР»РѕСЃРєРѕСЃС‚Рё РёР· РЅРµ РЅРѕСЂРјР°Р»РёР·РѕРІР°РЅРЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёВ¤ ax+by+cz+d=0, РіРґРµ РІРµРєС‚РѕСЂ v СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ (a,b,c,d)
 		{
 			static_assert(size == 3, "supports only 3d");
-			//вектор нормали плоскости (a,b,c) необходимо нормализовать
+			//РІРµРєС‚РѕСЂ РЅРѕСЂРјР°Р»Рё РїР»РѕСЃРєРѕСЃС‚Рё (a,b,c) РЅРµРѕР±С…РѕРґРёРјРѕ РЅРѕСЂРјР°Р»РёР·РѕРІР°С‚СЊ
 			T t = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 			normal[0] = v[0] / t;
 			normal[1] = v[1] / t;
@@ -34,21 +34,21 @@ namespace BaluLib
 
 		TPlane(const TVec<T, 3>& v0,
 			const TVec<T, 3>& v1,
-			const TVec<T, 3>& v2)//плоскость по трем точкам
+			const TVec<T, 3>& v2)//РїР»РѕСЃРєРѕСЃС‚СЊ РїРѕ С‚СЂРµРј С‚РѕС‡РєР°Рј
 			:normal((v1 - v0).Cross(v2 - v0).GetNormalized()), dist(-(v0*normal))
 		{
 			static_assert(size == 3, "supports only 3d");
 		}
 
 		TPlane(const TVec<T, size>& use_pos,
-			const TVec<T, size>& use_normal)//по нормали и точке принадлежащей плоскости
+			const TVec<T, size>& use_normal)//РїРѕ РЅРѕСЂРјР°Р»Рё Рё С‚РѕС‡РєРµ РїСЂРёРЅР°РґР»РµР¶Р°С‰РµР№ РїР»РѕСЃРєРѕСЃС‚Рё
 			:normal(use_normal), dist(-use_pos*use_normal){}
 
-		T DistanceTo(const TVec<T, size>& v)const // T>0 если pos со стороны нормали плоскости
+		T DistanceTo(const TVec<T, size>& v)const // T>0 РµСЃР»Рё pos СЃРѕ СЃС‚РѕСЂРѕРЅС‹ РЅРѕСЂРјР°Р»Рё РїР»РѕСЃРєРѕСЃС‚Рё
 		{
 			return normal*v + dist;
 		}
-		TVec<T, size> Mirror(const TVec<T, size>& v)const//отражение точки относительно плоскости
+		TVec<T, size> Mirror(const TVec<T, size>& v)const//РѕС‚СЂР°Р¶РµРЅРёРµ С‚РѕС‡РєРё РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РїР»РѕСЃРєРѕСЃС‚Рё
 		{
 			return v + (normal*(v*normal + dist)) * 2;
 		}
@@ -110,26 +110,26 @@ namespace BaluLib
 
 	template<class T>
 	bool IsCCWMove(T a0, T a1, T& dist)
-		//result - направление наикратчайшего перемещения из a0 в a1
-		//dist - величина и знак перемещения (+ это CCW)
+		//result - РЅР°РїСЂР°РІР»РµРЅРёРµ РЅР°РёРєСЂР°С‚С‡Р°Р№С€РµРіРѕ РїРµСЂРµРјРµС‰РµРЅРёВ¤ РёР· a0 РІ a1
+		//dist - РІРµР»РёС‡РёРЅР° Рё Р·РЅР°Рє РїРµСЂРµРјРµС‰РµРЅРёВ¤ (+ СЌС‚Рѕ CCW)
 	{
 		a0 = To0_360Space(a0);
 		a1 = To0_360Space(a1);
-		T dist_0 = abs(a0 - a1);
-		T dist_1 = abs(2 * M_PI - abs(dist_0));
+		T dist_0 = std::abs(a0 - a1);
+		T dist_1 = std::abs(2 * M_PI - std::abs(dist_0));
 
 		bool result = (dist_0<dist_1) ? (a1>a0) : (a1 < a0);
 		dist = (result ? 1.0 : -1.0)*min(dist_0, dist_1);
 		return result;
 	}
 
-	//TODO привести в нормальный вид, т.к. некторое функции уже имеются в bVolumes и сделать шаблонными и через тангенс
+	//TODO РїСЂРёРІРµСЃС‚Рё РІ РЅРѕСЂРјР°Р»СЊРЅС‹Р№ РІРёРґ, С‚.Рє. РЅРµРєС‚РѕСЂРѕРµ С„СѓРЅРєС†РёРё СѓР¶Рµ РёРјРµСЋС‚СЃВ¤ РІ bVolumes Рё СЃРґРµР»Р°С‚СЊ С€Р°Р±Р»РѕРЅРЅС‹РјРё Рё С‡РµСЂРµР· С‚Р°РЅРіРµРЅСЃ
 	template<class T>
 	inline T AngleFromDir(const TVec<T, 2>& v)
-		// v -  нормализованный вектор направления
-		// result - угол в радианах (-pi,pi)
+		// v -  РЅРѕСЂРјР°Р»РёР·РѕРІР°РЅРЅС‹Р№ РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёВ¤
+		// result - СѓРіРѕР» РІ СЂР°РґРёР°РЅР°С… (-pi,pi)
 	{
-		//assert(abs(v.Length()-1)<0.0000001);
+		//assert(std::abs(v.Length()-1)<0.0000001);
 		return (v[1] >= 0 ? 1 : -1)*acos(v[0]);
 	}
 
@@ -143,7 +143,7 @@ namespace BaluLib
 		return dist_vector.Length();
 	}
 
-	///t - от 0 до 1 (где 0 это p0, 1 это p1)
+	///t - РѕС‚ 0 РґРѕ 1 (РіРґРµ 0 СЌС‚Рѕ p0, 1 СЌС‚Рѕ p1)
 	template<class T, int Size>
 	inline T DistanceBetweenPointSegment(TVec<T, Size> point, TSegment<T, Size> segment, T& t, TVec<T, Size>& nearest_point)
 	{
@@ -258,8 +258,8 @@ namespace BaluLib
 	}
 
 
-	//точки сферы задаются в порядке против часовой стрелки
-	template<class T>//TODO нифига не сфера для нее надо 4 точки это окружность
+	//С‚РѕС‡РєРё СЃС„РµСЂС‹ Р·Р°РґР°СЋС‚СЃВ¤ РІ РїРѕСЂВ¤РґРєРµ РїСЂРѕС‚РёРІ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРё
+	template<class T>//TODO РЅРёС„РёРіР° РЅРµ СЃС„РµСЂР° РґР»В¤ РЅРµРµ РЅР°РґРѕ 4 С‚РѕС‡РєРё СЌС‚Рѕ РѕРєСЂСѓР¶РЅРѕСЃС‚СЊ
 	void CircleBy3Points(TVec<T, 3> p0, TVec<T, 3> p1, TVec<T, 3> p2, TVec<T, 3> &circle_pos)
 	{
 
@@ -276,7 +276,7 @@ namespace BaluLib
 		circle_pos = p02 + dir0*t;
 	}
 
-	template<class T>//TODO нифига не сфера для нее надо 4 точки это окружность
+	template<class T>//TODO РЅРёС„РёРіР° РЅРµ СЃС„РµСЂР° РґР»В¤ РЅРµРµ РЅР°РґРѕ 4 С‚РѕС‡РєРё СЌС‚Рѕ РѕРєСЂСѓР¶РЅРѕСЃС‚СЊ
 	void CircleBy3Points(TVec<T, 2> p0, TVec<T, 2> p1, TVec<T, 2> p2, TVec<T, 2> &circle_pos)
 	{
 
@@ -292,8 +292,8 @@ namespace BaluLib
 		circle_pos = p02 + dir0*t;
 	}
 
-	//если в одной плоскости то ложь
-	template<class T>//TODO нифига не сфера для нее надо 4 точки это окружность
+	//РµСЃР»Рё РІ РѕРґРЅРѕР№ РїР»РѕСЃРєРѕСЃС‚Рё С‚Рѕ Р»РѕР¶СЊ
+	template<class T>//TODO РЅРёС„РёРіР° РЅРµ СЃС„РµСЂР° РґР»В¤ РЅРµРµ РЅР°РґРѕ 4 С‚РѕС‡РєРё СЌС‚Рѕ РѕРєСЂСѓР¶РЅРѕСЃС‚СЊ
 	bool SphereBy4Points(TVec<T, 3> p1, TVec<T, 3> p2, TVec<T, 3> p3, TVec<T, 3> p4, TVec<T, 3> &sphere_pos, T &radius)
 	{
 		TMatrix<T, 4> m11(
@@ -333,7 +333,7 @@ namespace BaluLib
 		T m14_det = m14.GetDet();
 		T m15_det = m15.GetDet();
 
-		if (abs(m11_det) < 0.00001)return false;
+		if (std::abs(m11_det) < 0.00001)return false;
 		sphere_pos[0] = 0.5*m12_det / m11_det;
 		sphere_pos[1] = -0.5*m13_det / m11_det;
 		sphere_pos[2] = 0.5*m14_det / m11_det;
@@ -347,14 +347,14 @@ namespace BaluLib
 		TVec<T, size> pos, dir;
 
 		TRay(){}
-		TRay(const TVec<T, size>& use_pos, const TVec<T, size>& use_dir)//по точке и направлению(должно быть нормализованным - чтобы работали все методы)
+		TRay(const TVec<T, size>& use_pos, const TVec<T, size>& use_dir)//РїРѕ С‚РѕС‡РєРµ Рё РЅР°РїСЂР°РІР»РµРЅРёСЋ(РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРѕСЂРјР°Р»РёР·РѕРІР°РЅРЅС‹Рј - С‡С‚РѕР±С‹ СЂР°Р±РѕС‚Р°Р»Рё РІСЃРµ РјРµС‚РѕРґС‹)
 			:pos(use_pos), dir(use_dir)
 		{
-			assert(abs(use_dir.Length() - 1) < (T)0.00001);
+			assert(std::abs(use_dir.Length() - 1) < (T)0.00001);
 		}
 		bool RayPlaneInters(const TRay& ray, const TPlane<T, size>& plane, TVec<T, size>& x)
 		{
-			//TODO  вроде проще так t = (plane.dist - Vector3.Dot(pos,plane.normal)) / Vector3.Dot(plane.normal,dir);
+			//TODO  РІСЂРѕРґРµ РїСЂРѕС‰Рµ С‚Р°Рє t = (plane.dist - Vector3.Dot(pos,plane.normal)) / Vector3.Dot(plane.normal,dir);
 			float t = plane.normal*(plane.normal*plane.dist - ray.pos) / (plane.normal*ray.dir);
 			if (t > 0)
 			{
@@ -391,7 +391,7 @@ namespace BaluLib
 			TPlane<T, size> plane(otherRay.pos, ((otherRay.dir.Cross(dir)).Cross(otherRay.dir)).GetNormalized());
 			return plane.normal*
 				(plane.normal*plane.dist - pos) /
-				(plane.normal*dir);//TODO следует учесть что здесь не просто прямые, а лучи 
+				(plane.normal*dir);//TODO СЃР»РµРґСѓРµС‚ СѓС‡РµСЃС‚СЊ С‡С‚Рѕ Р·РґРµСЃСЊ РЅРµ РїСЂРѕСЃС‚Рѕ РїСЂВ¤РјС‹Рµ, Р° Р»СѓС‡Рё
 		}
 
 	};
@@ -407,7 +407,7 @@ namespace BaluLib
 		TVec<T, size> n = ray.dir.Cross(cyl_dir);
 		double ln = n.Length();
 		n /= ln;
-		d = fabs(RC*n);
+		d = std::fabs(RC*n);
 
 		if (d <= cyl_rad)
 		{
@@ -415,7 +415,7 @@ namespace BaluLib
 			t = -O*(n) / ln;
 			O = n.Cross(cyl_dir);
 			O.Normalize();
-			s = fabs(sqrt(cyl_rad*cyl_rad - d*d) / (ray.dir*O));
+			s = std::fabs(sqrt(cyl_rad*cyl_rad - d*d) / (ray.dir*O));
 			in = t - s;
 			out = t + s;
 			if (in < -0){
@@ -450,7 +450,7 @@ namespace BaluLib
 	template<class T, int size>
 	bool RayPlaneCollide(const TRay<T, size> ray, const TPlane<T, size>& plane, T& t)
 	{
-		//TODO  вроде проще так t = (plane.dist - Vector3.Dot(pos,plane.normal)) / Vector3.Dot(plane.normal,dir);
+		//TODO  РІСЂРѕРґРµ РїСЂРѕС‰Рµ С‚Р°Рє t = (plane.dist - Vector3.Dot(pos,plane.normal)) / Vector3.Dot(plane.normal,dir);
 		t = plane.normal*(plane.normal*plane.dist - ray.pos) / (plane.normal*ray.dir);
 		return t > 0;
 	}
@@ -582,8 +582,8 @@ namespace BaluLib
 		}
 
 		// finally do the division to get sc and tc
-		sc = (abs(sN) < SMALL_NUM ? (T) 0.0 : sN / sD);
-		tc = (abs(tN) < SMALL_NUM ? (T)0.0 : tN / tD);
+		sc = (std::abs(sN) < SMALL_NUM ? (T) 0.0 : sN / sD);
+		tc = (std::abs(tN) < SMALL_NUM ? (T)0.0 : tN / tD);
 
 		s0_t = sc;
 		s1_t = tc;
@@ -634,8 +634,8 @@ namespace BaluLib
 			}
 		}
 		// finally do the division to get sc and tc
-		sc = (abs(sN) < SMALL_NUM ? (T)0.0 : sN / sD);
-		tc = (abs(tN) < SMALL_NUM ? (T)0.0 : tN / tD);
+		sc = (std::abs(sN) < SMALL_NUM ? (T)0.0 : sN / sD);
+		tc = (std::abs(tN) < SMALL_NUM ? (T)0.0 : tN / tD);
 
 		s0_t = sc;
 		s1_t = tc;
@@ -694,8 +694,8 @@ namespace BaluLib
 		}
 
 		// finally do the division to get sc and tc
-		sc = (abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
-		tc = (abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
+		sc = (std::abs(sN) < SMALL_NUM ? 0.0 : sN / sD);
+		tc = (std::abs(tN) < SMALL_NUM ? 0.0 : tN / tD);
 
 		// get the difference of the two closest points
 		TVec<T, Size>   dP = w + (u*sc) - (v*tc);  // = S1(sc) - S2(tc)
@@ -741,7 +741,7 @@ namespace BaluLib
 		{
 			TTri tri = triangles[i];
 
-			//ребра треугольника посередине
+			//СЂРµР±СЂР° С‚СЂРµСѓРіРѕР»СЊРЅРёРєР° РїРѕСЃРµСЂРµРґРёРЅРµ
 			ribs.push_back(TVec2ui(ribs[tri.rib[0] * 2 + 0][1], ribs[tri.rib[1] * 2 + 0][1]));
 			ribs.push_back(TVec2ui(ribs[tri.rib[1] * 2 + 0][1], ribs[tri.rib[2] * 2 + 0][1]));
 			ribs.push_back(TVec2ui(ribs[tri.rib[2] * 2 + 0][1], ribs[tri.rib[0] * 2 + 0][1]));

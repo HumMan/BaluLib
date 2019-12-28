@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "AABB.h"
 #include "OBB.h"
@@ -16,7 +16,7 @@ namespace BaluLib
 		{
 			planes_count = Size * 2
 		};
-		// плоскости области видимости left, right, bottom, top, near, far
+		// РїР»РѕСЃРєРѕСЃС‚Рё РѕР±Р»Р°СЃС‚Рё РІРёРґРёРјРѕСЃС‚Рё left, right, bottom, top, near, far
 		TPlane<T, Size> frustum[planes_count];
 
 		TFrustum(){}

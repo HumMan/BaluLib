@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 template<class T, int Size>
 bool Collide(const TCapsule<T, Size>& capsule, const TSphere<T, Size>& sphere)

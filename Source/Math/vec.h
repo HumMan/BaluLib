@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <type_traits>
 #include <assert.h>
@@ -271,10 +271,10 @@ namespace BaluLib
 		TVec GetAbs()const
 		{
 			TVec result;
-			if (high >= 0)result[0] = abs(v[0]);
-			if (high >= 1)result[1] = abs(v[1]);
-			if (high >= 2)result[2] = abs(v[2]);
-			if (high >= 3)result[3] = abs(v[3]);
+			if (high >= 0)result[0] = std::abs(v[0]);
+			if (high >= 1)result[1] = std::abs(v[1]);
+			if (high >= 2)result[2] = std::abs(v[2]);
+			if (high >= 3)result[3] = std::abs(v[3]);
 			return result;
 		}
 
@@ -310,20 +310,20 @@ namespace BaluLib
 			return TVec<T, 2>(
 				-v[1], v[0]);
 		}
-		//angle - угол поворота в радианах
+		//angle - СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РІ СЂР°РґРёР°РЅР°С…
 		TVec GetRotated(T angle)const
 		{
 			TVec dir(cos(angle), sin(angle));
 			TMatrix<T, 2> m(dir, dir.Cross());
 			return m*(*this);
 		}
-		//angle - угол поворота в радианах
+		//angle - СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РІ СЂР°РґРёР°РЅР°С…
 		TVec GetRotated(const TVec& axis, T angle)const
 		{
 			if (angle)
 			{
 				//TVec ax=axis.GetNormalized();
-				//assert(abs(axis.Length()-1)<0.0000001);
+				//assert(std::abs(axis.Length()-1)<0.0000001);
 				TVec proj = axis*(axis*(*this));
 				return proj + axis.Cross(*this)*sin(angle) + (*this - proj)*cos(angle);
 			}

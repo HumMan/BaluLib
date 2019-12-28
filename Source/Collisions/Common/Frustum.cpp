@@ -1,11 +1,11 @@
-#include "../../BVolumes/Frustum.h"
+п»ї#include "../../BVolumes/Frustum.h"
 
 namespace BaluLib
 {
 	template<class T, int Size>
 	TFrustum<T, Size>::TFrustum(const TMatrix<T, 4>& clip)
 	{
-		//извлечение уравнений плоскостей из матрицы проекции
+		//РёР·РІР»РµС‡РµРЅРёРµ СѓСЂР°РІРЅРµРЅРёР№ РїР»РѕСЃРєРѕСЃС‚РµР№ РёР· РјР°С‚СЂРёС†С‹ РїСЂРѕРµРєС†РёРё
 		//http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
 
 		static_assert(Size == 3, "supports only 3d");

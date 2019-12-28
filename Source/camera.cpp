@@ -191,6 +191,6 @@ TVec3 TFPSCamera::GetDir()const
 
 void TFPSCamera::SetDir(const TVec3& use_dir)
 {
-	//TODO ������������� � yaw pitch
+	//TODO yaw pitch
 	//dir=use_dir.GetNormalized();
 };

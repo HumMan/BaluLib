@@ -1,4 +1,4 @@
-#include "../../BVolumes/AABB.h"
+п»ї#include "../../BVolumes/AABB.h"
 
 using namespace BaluLib;
 
@@ -40,7 +40,7 @@ namespace BaluLib
 				nearest_point[i] = border[0][i];
 				is_in = false;
 			}
-			else if (abs(point[i] - border[0][i])>abs(point[i] - border[1][i]))
+			else if (std::abs(point[i] - border[0][i])>std::abs(point[i] - border[1][i]))
 				nearest_point[i] = border[1][i];
 			else
 				nearest_point[i] = border[0][i];
@@ -71,7 +71,7 @@ namespace BaluLib
 			TVec<T, Size>
 				size = GetHalfSize(),
 				v = GetCenter() - ray.pos;
-			if (abs(v[1] * ray.dir[0] - v[0] * ray.dir[1])>size[0] * abs(ray.dir[1]) + size[1] * abs(ray.dir[0]))
+			if (std::abs(v[1] * ray.dir[0] - v[0] * ray.dir[1])>size[0] * std::abs(ray.dir[1]) + size[1] * std::abs(ray.dir[0]))
 				return false;
 			return true;
 		}
@@ -92,11 +92,11 @@ namespace BaluLib
 			TVec<T, Size>
 				size = GetHalfSize(),
 				v = GetCenter() - ray.pos;
-			if (abs(v[2] * ray.dir[1] - v[1] * ray.dir[2])>size[1] * abs(ray.dir[2]) + size[2] * abs(ray.dir[1]))
+			if (std::abs(v[2] * ray.dir[1] - v[1] * ray.dir[2])>size[1] * std::abs(ray.dir[2]) + size[2] * std::abs(ray.dir[1]))
 				return false;
-			if (abs(v[0] * ray.dir[2] - v[2] * ray.dir[0]) > size[0] * abs(ray.dir[2]) + size[2] * abs(ray.dir[0]))
+			if (std::abs(v[0] * ray.dir[2] - v[2] * ray.dir[0]) > size[0] * std::abs(ray.dir[2]) + size[2] * std::abs(ray.dir[0]))
 				return false;
-			if (abs(v[0] * ray.dir[1] - v[1] * ray.dir[0]) > size[0] * abs(ray.dir[1]) + size[1] * abs(ray.dir[0]))
+			if (std::abs(v[0] * ray.dir[1] - v[1] * ray.dir[0]) > size[0] * std::abs(ray.dir[1]) + size[1] * std::abs(ray.dir[0]))
 				return false;
 			return true;
 		}
@@ -108,7 +108,7 @@ namespace BaluLib
 	{
 		f_curr_cut = false;
 		l_curr_cut = false;
-		if (abs(dir) < 0.000000001)
+		if (std::abs(dir) < 0.000000001)
 		{
 			return IsIn(start, first, last);
 		}
@@ -257,32 +257,32 @@ namespace BaluLib
 
 		TVec<T, 2> TT((pos_b - pos_a));
 		T ra, rb, t;
-		//проекции на оси AABB (т.е. X Y)
+		//РїСЂРѕРµРєС†РёРё РЅР° РѕСЃРё AABB (С‚.Рµ. X Y)
 		for (int i = 0; i < 2; i++)
 		{
-			//для AABB проекцией будет его размер по соответсвующей оси
+			//РґР»СЏ AABB РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 			ra = a[i];
-			//для отрезка проекцией будет его размер по соответсвующей оси
+			//РґР»СЏ РѕС‚СЂРµР·РєР° РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 			rb = b[i];
-			t = abs(TT[i]);
+			t = std::abs(TT[i]);
 			if (t > ra + rb)
 				return false;
 		}
 
-		//проекции на направление отрезка повернутое на 90 градусов
+		//РїСЂРѕРµРєС†РёРё РЅР° РЅР°РїСЂР°РІР»РµРЅРёРµ РѕС‚СЂРµР·РєР° РїРѕРІРµСЂРЅСѓС‚РѕРµ РЅР° 90 РіСЂР°РґСѓСЃРѕРІ
 	{
 		TVec<T, 2> proj = b_dir.Cross();
 		ra = a.AbsScalarMul(proj);
-		t = abs(TT*proj);
+		t = std::abs(TT*proj);
 		if (t > ra)
 			return false;
 	}
 
-	//проекция на направление отрезка
+	//РїСЂРѕРµРєС†РёСЏ РЅР° РЅР°РїСЂР°РІР»РµРЅРёРµ РѕС‚СЂРµР·РєР°
 	{
 		ra = a.AbsScalarMul(b_dir);
 		rb = b.Length();
-		t = abs(TT * b_dir);
+		t = std::abs(TT * b_dir);
 		if (t > ra + rb)
 			return false;
 	}
@@ -301,19 +301,19 @@ namespace BaluLib
 
 		TVec<T, 3> TT((pos_b - pos_a));
 		T ra, rb, t;
-		//проекции на оси AABB (т.е. X Y Z)
+		//РїСЂРѕРµРєС†РёРё РЅР° РѕСЃРё AABB (С‚.Рµ. X Y Z)
 		for (int i = 0; i < 3; i++)
 		{
-			//для AABB проекцией будет его размер по соответсвующей оси
+			//РґР»СЏ AABB РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 			ra = a[i];
-			//для отрезка проекцией будет его размер по соответсвующей оси
+			//РґР»СЏ РѕС‚СЂРµР·РєР° РїСЂРѕРµРєС†РёРµР№ Р±СѓРґРµС‚ РµРіРѕ СЂР°Р·РјРµСЂ РїРѕ СЃРѕРѕС‚РІРµС‚СЃРІСѓСЋС‰РµР№ РѕСЃРё
 			rb = b[i];
-			t = abs(TT[i]);
+			t = std::abs(TT[i]);
 			if (t > ra + rb)
 				return false;
 		}
 
-		//проекции на 3 векторных произведения осей AABB и направления отрезка
+		//РїСЂРѕРµРєС†РёРё РЅР° 3 РІРµРєС‚РѕСЂРЅС‹С… РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РѕСЃРµР№ AABB Рё РЅР°РїСЂР°РІР»РµРЅРёСЏ РѕС‚СЂРµР·РєР°
 		for (int i = 0; i < 3; i++)
 		{
 			TVec<T, 3> temp(0);
@@ -321,17 +321,17 @@ namespace BaluLib
 			{
 				TVec<T, 3> proj = temp.Cross(b_dir);
 				ra = a.AbsScalarMul(proj);
-				t = abs(TT*proj);
+				t = std::abs(TT*proj);
 				if (t > ra)
 					return false;
 			}
 		}
 
-		//проекция на направление отрезка
+		//РїСЂРѕРµРєС†РёСЏ РЅР° РЅР°РїСЂР°РІР»РµРЅРёРµ РѕС‚СЂРµР·РєР°
 	{
 		ra = a.AbsScalarMul(b_dir);
 		rb = b.Length();
-		t = abs(TT * b_dir);
+		t = std::abs(TT * b_dir);
 		if (t > ra + rb)
 			return false;
 	}
@@ -365,11 +365,11 @@ namespace BaluLib
 		TVec<T, 2> TT(line.p0 - pos_a);
 		T ra, t;
 
-		//проекции на направление линии повернутое на 90 градусов
+		//РїСЂРѕРµРєС†РёРё РЅР° РЅР°РїСЂР°РІР»РµРЅРёРµ Р»РёРЅРёРё РїРѕРІРµСЂРЅСѓС‚РѕРµ РЅР° 90 РіСЂР°РґСѓСЃРѕРІ
 		{
 			TVec<T, 2> proj = b_dir.Cross();
 			ra = a.AbsScalarMul(proj);
-			t = abs(TT*proj);
+			t = std::abs(TT*proj);
 			if (t > ra)
 				return false;
 		}
@@ -387,7 +387,7 @@ namespace BaluLib
 		TVec<T, 3> TT(line.p0 - pos_a);
 		T ra, t;
 
-		//проекции на 3 векторных произведения осей AABB и направления линии
+		//РїСЂРѕРµРєС†РёРё РЅР° 3 РІРµРєС‚РѕСЂРЅС‹С… РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РѕСЃРµР№ AABB Рё РЅР°РїСЂР°РІР»РµРЅРёСЏ Р»РёРЅРёРё
 		for (int i = 0; i < 3; i++)
 		{
 			TVec<T, 3> temp(0);
@@ -395,7 +395,7 @@ namespace BaluLib
 			{
 				TVec<T, 3> proj = temp.Cross(b_dir);
 				ra = a.AbsScalarMul(proj);
-				t = abs(TT*proj);
+				t = std::abs(TT*proj);
 				if (t > ra)
 					return false;
 			}

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "vec.h"
 
@@ -106,21 +106,21 @@ namespace BaluLib
 			TVec<T, Size> t;
 			if (Size == 2)
 			{
-				t[0] = v0[0] * abs(m[0][0]) + v0[1] * abs(m[1][0]);
-				t[1] = v0[0] * abs(m[0][1]) + v0[1] * abs(m[1][1]);
+				t[0] = v0[0] * std::abs(m[0][0]) + v0[1] * std::abs(m[1][0]);
+				t[1] = v0[0] * std::abs(m[0][1]) + v0[1] * std::abs(m[1][1]);
 			}
 			if (Size == 3)
 			{
-				t[0] = v0[0] * abs(m[0][0]) + v0[1] * abs(m[1][0]) + v0[2] * abs(m[2][0]);
-				t[1] = v0[0] * abs(m[0][1]) + v0[1] * abs(m[1][1]) + v0[2] * abs(m[2][1]);
-				t[2] = v0[0] * abs(m[0][2]) + v0[1] * abs(m[1][2]) + v0[2] * abs(m[2][2]);
+				t[0] = v0[0] * std::abs(m[0][0]) + v0[1] * std::abs(m[1][0]) + v0[2] * std::abs(m[2][0]);
+				t[1] = v0[0] * std::abs(m[0][1]) + v0[1] * std::abs(m[1][1]) + v0[2] * std::abs(m[2][1]);
+				t[2] = v0[0] * std::abs(m[0][2]) + v0[1] * std::abs(m[1][2]) + v0[2] * std::abs(m[2][2]);
 			}
 			if (Size == 4)
 			{
-				t[0] = v0[0] * abs(m[0][0]) + v0[1] * abs(m[1][0]) + v0[2] * abs(m[2][0]) + v0[3] * abs(m[3][0]);
-				t[1] = v0[0] * abs(m[0][1]) + v0[1] * abs(m[1][1]) + v0[2] * abs(m[2][1]) + v0[3] * abs(m[3][1]);
-				t[2] = v0[0] * abs(m[0][2]) + v0[1] * abs(m[1][2]) + v0[2] * abs(m[2][2]) + v0[3] * abs(m[3][2]);
-				t[3] = v0[0] * abs(m[0][3]) + v0[1] * abs(m[1][3]) + v0[2] * abs(m[2][3]) + v0[3] * abs(m[3][3]);
+				t[0] = v0[0] * std::abs(m[0][0]) + v0[1] * std::abs(m[1][0]) + v0[2] * std::abs(m[2][0]) + v0[3] * std::abs(m[3][0]);
+				t[1] = v0[0] * std::abs(m[0][1]) + v0[1] * std::abs(m[1][1]) + v0[2] * std::abs(m[2][1]) + v0[3] * std::abs(m[3][1]);
+				t[2] = v0[0] * std::abs(m[0][2]) + v0[1] * std::abs(m[1][2]) + v0[2] * std::abs(m[2][2]) + v0[3] * std::abs(m[3][2]);
+				t[3] = v0[0] * std::abs(m[0][3]) + v0[1] * std::abs(m[1][3]) + v0[2] * std::abs(m[2][3]) + v0[3] * std::abs(m[3][3]);
 			}
 			return t;
 		}

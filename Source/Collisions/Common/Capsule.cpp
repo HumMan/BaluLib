@@ -1,4 +1,4 @@
-#include "../../BVolumes/Capsule.h"
+﻿#include "../../BVolumes/Capsule.h"
 
 using namespace BaluLib;
 
@@ -256,14 +256,14 @@ namespace BaluLib
 	{
 		T d0 = plane.DistanceTo(segment.p0);
 		T d1 = plane.DistanceTo(segment.p1);
-                return ((d0 > 0) != (d1 > 0)) || (abs(d0) < radius || abs(d1) < radius);
+                return ((d0 > 0) != (d1 > 0)) || (std::abs(d0) < radius || std::abs(d1) < radius);
 	}
 	template<class T, int Size>
 	bool TCapsule<T, Size>::PlaneCollide(const TPlane<T, Size> &plane, TPlaneCollisionInfo<T, Size>& collision) const
 	{
 		T d0 = plane.DistanceTo(segment.p0);
 		T d1 = plane.DistanceTo(segment.p1);
-		if (abs(d0) < abs(d1))
+		if (std::abs(d0) < std::abs(d1))
 		{
 			if (d0 > 0)
 			{
@@ -276,8 +276,8 @@ namespace BaluLib
 				collision.nearest_point = segment.p0 + plane.normal * radius;
 			}
 			collision.normal = plane.normal;
-			collision.distance = abs(d0) - radius;
-			return abs(d0) < radius;
+			collision.distance = std::abs(d0) - radius;
+			return std::abs(d0) < radius;
 		}
 		else
 		{
@@ -292,8 +292,8 @@ namespace BaluLib
 				collision.nearest_point = segment.p1 + plane.normal * radius;
 			}
 			collision.normal = plane.normal;
-			collision.distance = abs(d1) - radius;
-			return abs(d1) < radius;
+			collision.distance = std::abs(d1) - radius;
+			return std::abs(d1) < radius;
 		}
 	}
 	template<class T, int Size>

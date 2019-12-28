@@ -1,4 +1,4 @@
-/* Port of Box2d growableStack */
+﻿/* Port of Box2d growableStack */
 
 /*
 * Copyright (c) 2010 Erin Catto http://www.box2d.org
