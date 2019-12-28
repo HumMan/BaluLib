@@ -80,7 +80,7 @@ int b2DynamicTree::AllocateNode()
 		b2TreeNode* oldNodes = m_nodes;
 		m_nodeCapacity *= 2;
 		m_nodes = (b2TreeNode*)b2Alloc(m_nodeCapacity * sizeof(b2TreeNode));
-		memcpy((void*)m_nodes, oldNodes, m_nodeCount * sizeof(b2TreeNode));
+		memcpy((void*)m_nodes, (void*)oldNodes, m_nodeCount * sizeof(b2TreeNode));
 		b2Free(oldNodes);
 
 		// Build a linked list for the free list. The parent
