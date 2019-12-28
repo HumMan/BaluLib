@@ -37,7 +37,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 		{
 			TVec<T, 2> proj = b_dir.Cross();
 			ra = a.AbsScalarMul(proj);
-			t = abs(TT*proj);
+			t = std::abs(TT*proj);
 			if (t > ra + capsule.radius)
 				return false;
 			T curr_dist = t - ra;
@@ -50,7 +50,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 2>& aabb, const TCapsule<T, 2>
 	{
 		ra = a.AbsScalarMul(b_dir);
 		rb = b.Length();
-		t = abs(TT * b_dir);
+		t = std::abs(TT * b_dir);
 		if (t > ra + rb + capsule.radius)
 			return false;
 		T curr_dist = t - ra - rb;
@@ -95,7 +95,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 		ra = a[i];
 		//для отрезка проекцией будет его размер по соответсвующей оси
 		rb = b[i];
-		t = abs(TT[i]);
+		t = std::abs(TT[i]);
 		if (t > ra + rb + capsule.radius)
 			return false;
 		T curr_dist = t - ra - rb;
@@ -113,7 +113,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 		{
 			TVec<T, 3> proj = temp.Cross(b_dir);
 			ra = a.AbsScalarMul(proj);
-			t = abs(TT*proj);
+			t = std::abs(TT*proj);
 			if (t > ra + capsule.radius)
 				return false;
 			T curr_dist = t - ra;
@@ -126,7 +126,7 @@ bool CapsuleAABBCollideSpecialized(const TAABB<T, 3>& aabb, const TCapsule<T, 3>
 	{
 		ra = a.AbsScalarMul(b_dir);
 		rb = b.Length();
-		t = abs(TT * b_dir);
+		t = std::abs(TT * b_dir);
 		if (t > ra + rb + capsule.radius)
 			return false;
 		T curr_dist = t - ra - rb;

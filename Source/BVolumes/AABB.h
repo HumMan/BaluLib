@@ -80,8 +80,8 @@ namespace BaluLib
 		{
 			for (int k = 0; k < Size; k++)
 			{
+				border[0][k] = Max(box0.border[0][k], box1.border[0][k]);
 				border[1][k] = Max(box0.border[1][k], box1.border[1][k]);
-				border[2][k] = Max(box0.border[2][k], box1.border[2][k]);
 			}
 		}
 		void Extend(TVec<T, Size> v)

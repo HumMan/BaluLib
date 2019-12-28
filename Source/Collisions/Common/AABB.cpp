@@ -154,10 +154,10 @@ namespace BaluLib
 		bool result = true;
 		int fcut = -1, lcut = -1;
 		bool fmin = false, lmin = false;
-		for (int i = 0; i < Size&&result; i++)
+		for (int i = 0; i < Size && result; i++)
 		{
-			bool f_curr_cut, f_cut_min;
-			bool l_curr_cut, l_cut_min;
+			bool f_curr_cut = false, f_cut_min = false;
+			bool l_curr_cut = false, l_cut_min = false;
 			result = result&&CollideAxis<T>(ray.pos[i], aabb.border[0][i], aabb.border[1][i], ray.dir[i], cf, cl, f_curr_cut, f_cut_min, l_curr_cut, l_cut_min);
 			if (f_curr_cut)
 			{

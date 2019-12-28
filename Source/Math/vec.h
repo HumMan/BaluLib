@@ -71,12 +71,6 @@ namespace BaluLib
 	 ((h>=2)?(op_a[2]op val):true)&&\
 	 ((h>=3)?(op_a[3]op val):true))\
 
-#define TVEC_BIN_OP_SUM_FUNC(h,op_a,op,func,op_b,sum_op)\
-	(((h>=0)?(op_a[0]op func(op_b[0])):T(0))sum_op\
-	 ((h>=1)?(op_a[1]op func(op_b[1])):T(0))sum_op\
-	 ((h>=2)?(op_a[2]op func(op_b[2])):T(0))sum_op\
-	 ((h>=3)?(op_a[3]op func(op_b[3])):T(0)))\
-
 		explicit TVec(T v0)
 		{
 			TVEC_BIN_OP_VAL(high, v, = , v0);
@@ -234,7 +228,12 @@ namespace BaluLib
 		}
 		T AbsScalarMul(const TVec& v1)const
 		{
-			return TVEC_BIN_OP_SUM_FUNC(high, v, *, abs, v1, +);
+			return (
+				((high >= 0) ? (v[0] * std::abs(v1[0])) : T(0)) +
+				((high >= 1) ? (v[1] * std::abs(v1[1])) : T(0)) +
+				((high >= 2) ? (v[2] * std::abs(v1[2])) : T(0)) +
+				((high >= 3) ? (v[3] * std::abs(v1[3])) : T(0))
+			);
 		}
 		T SqrLength()const
 		{

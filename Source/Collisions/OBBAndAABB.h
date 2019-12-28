@@ -24,7 +24,7 @@ bool CollideSpecialization(const TOBB<T, 2>& v0, const TAABB<T, 2>& v1, bool& ob
 	{
 		ra = a[i];
 		rb = b.AbsScalarMul(Rt[i]);
-		t = abs(TT[i]);
+		t = std::abs(TT[i]);
 		if (t > ra + rb)
 		{
 			if (check_fully_in)
@@ -45,7 +45,7 @@ bool CollideSpecialization(const TOBB<T, 2>& v0, const TAABB<T, 2>& v1, bool& ob
 	{
 		ra = a.AbsScalarMul(R[k]);
 		rb = b[k];
-		t = abs(TT* R[k]);
+		t = std::abs(TT* R[k]);
 		if (t > ra + rb)
 			return false;
 	}
@@ -75,7 +75,7 @@ bool CollideSpecialization(const TOBB<T, 3>& v0, const TAABB<T, 3>& v1, bool& ob
 	{
 		ra = a[i];
 		rb = b.AbsScalarMul(Rt[i]);
-		t = abs(TT[i]);
+		t = std::abs(TT[i]);
 		if (t > ra + rb)
 		{
 			if (check_fully_in)
@@ -96,7 +96,7 @@ bool CollideSpecialization(const TOBB<T, 3>& v0, const TAABB<T, 3>& v1, bool& ob
 	{
 		ra = a.AbsScalarMul(R[k]);
 		rb = b[k];
-		t = abs(TT * R[k]);
+		t = std::abs(TT * R[k]);
 		if (t > ra + rb)
 			return false;
 	}
@@ -110,7 +110,7 @@ bool CollideSpecialization(const TOBB<T, 3>& v0, const TAABB<T, 3>& v1, bool& ob
 			TVec<T, 3> proj = temp.Cross(R[k]);
 			ra = a.AbsScalarMul(proj);
 			rb = b.AbsScalarMul(Rt*proj);
-			t = abs(TT*proj);
+			t = std::abs(TT*proj);
 			if (t > ra + rb)
 				return false;
 		}

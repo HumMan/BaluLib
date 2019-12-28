@@ -407,7 +407,7 @@ namespace BaluLib
 		TVec<T, size> n = ray.dir.Cross(cyl_dir);
 		double ln = n.Length();
 		n /= ln;
-		d = std::fabs(RC*n);
+		d = std::abs(RC*n);
 
 		if (d <= cyl_rad)
 		{
@@ -415,7 +415,7 @@ namespace BaluLib
 			t = -O*(n) / ln;
 			O = n.Cross(cyl_dir);
 			O.Normalize();
-			s = std::fabs(sqrt(cyl_rad*cyl_rad - d*d) / (ray.dir*O));
+			s = std::abs(sqrt(cyl_rad*cyl_rad - d*d) / (ray.dir*O));
 			in = t - s;
 			out = t + s;
 			if (in < -0){
